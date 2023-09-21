@@ -1,0 +1,9 @@
+1) The Elements of Statistical Learning, 2nd Edition. (TEoSL)
+2) Pattern Recognition and Machine Learning by Bishop. 
+3) Foundations of Machine Learning by Mohri
+4) Introduction to Machine Learning with Python by Muller & Guido
+5) Hands-on Machine Learning with Scikit-Learn and TensorFlow
+6) 
+
+https://youtu.be/jGwO_UgTS7I?si=TcRudZ_jwvuylEkv - CS229 Lecture 1 - Stanford Machine Learning
+https://youtu.be/4b4MUYve_U8?si=GvrB1HdXNJ66JWNE - CS229 Lecture 2 - Stanford Machine Learning
