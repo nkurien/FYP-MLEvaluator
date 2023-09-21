@@ -6,13 +6,13 @@ This is bound to change soon, as I add more moments of research to the diary. Mu
 
 (Prior to this, I was planning for 5 different project titles, will fill this later. Much research was done on ML fundamentals, algorithms and theory here.)
 
-18th September -- 
+-- 18th September -- 
 
 Allocated supervisor and informed by supervisor of my project title (allocated on 15th September). Supervisor will be Prof. Zhiyuan Luo.
 Project will be Comparison of Machine Learning Algorithms.
 
--- Made notes and research on "Breaking the ties" with K-NN algorithms
--- Made notes and basic research on Uniformity with Decision Trees, noted measures of uniformity (Gini, Entropy, Info Gain) - will need to read more about these soon.
+- Made notes and research on "Breaking the ties" with K-NN algorithms
+- Made notes and basic research on Uniformity with Decision Trees, noted measures of uniformity (Gini, Entropy, Info Gain) - will need to read more about these soon.
 ^^ Both points are highly relevant for the early deliverables.
 
 Watching CS229 ML lecture video given by Andrew Ng at Stanford, 2018: https://youtu.be/jGwO_UgTS7I?si=TcRudZ_jwvuylEkv
@@ -20,7 +20,8 @@ Very easy to absorb lecture on overview of different types of ML. My project so 
 
 
 
-19th September --
+-- 19th September --
+
 Attended Project Talk given by Dr Argyrios, covered 2 presentations. Useful talk, Argyrios clarified to me personally that LaTeX Project Plan can be in any format, isn't an institution-locked layout.
 Heavy emphasis on focusing on project plan.
 
@@ -28,7 +29,8 @@ As of writing, the outline of plan is somewhat structured, but much work needs t
 
 Will meet Prof. Zhiyuan on 25th, guidance given on how to access his office
 
-20th September --
+-- 20th September --
+
 Started tying to plan my meeting with Prof. Zhiyuan. Many questions to ask, just trying to find the right questions. Noted that there are various paths I can take this project, now considering if I should exclusively focus on Classification.
 Noted that it's difficult to research on Classification without needing to read into Regression techniques. There's also lots of notation to digest.
 
@@ -55,4 +57,14 @@ Exchanged emails with the library services today but book isn't available physic
 GitLab repo is online! Aiming to put this diary on there.
 
 -Research on using OverLeaf (LaTex editor) in sync with GitLab such that I can track version history of my reports. Also research on Git, branches and recapping version control studies. Emailed Prof. Argyrios for confirmation of repo, as well as gitlab classes and slides from earlier talk. 
+
+-- 21st September -- 
+
+Made various changes and commits to repo last night and this morning, it now contains folders for this diary and the project plan I'm working on in LaTeX. I've been pushing to master(or main) lately and it doesn't feel right to me - so now that I've made my repo somewhat easy to navigate, I'm making a branch to continue research on: plan
+
+I'll use the planning branch up until my Project Plan is complete, I can then use my repo to explore my research and put proof of concept programs for the algorithms together while I'm still trying to define my project. This branch will represent my initial development phase. I've spent a lot of time last night and this morning keeping up to date with git conventions such that everything is done orderly. Creating this branch felt like the natural thing to do in this formative phase of my project. My intention is to merge the plan branch with main around when the Project Plan is complete and submitted, marking the beginning of development (and likely, a new dev branch).
+
+I purchased a pocketbook for meetings and ideas with my supervisor
+
+I will spend today looking at sci-kit learn and trying to play with library functions that have implements knn and decision trees already. I have barely looked into datasets yet and I must do so, this will likely define the direction of my project. Still need to look into whether Classification is what I want to exclusively work on. I will also work on my Project Plan, this should be a priority.
 
