@@ -1,0 +1,58 @@
+Diary (Updated 20/09/23)
+
+This is bound to change soon, as I add more moments of research to the diary. Much of my notes prior to Week 1 have been handwritten, I hope to transcribe more onto here in due time.
+(Also testing GitLab as I push this up).
+
+
+(Prior to this, I was planning for 5 different project titles, will fill this later. Much research was done on ML fundamentals, algorithms and theory here.)
+
+18th September -- 
+
+Allocated supervisor and informed by supervisor of my project title (allocated on 15th September). Supervisor will be Prof. Zhiyuan Luo.
+Project will be Comparison of Machine Learning Algorithms.
+
+-- Made notes and research on "Breaking the ties" with K-NN algorithms
+-- Made notes and basic research on Uniformity with Decision Trees, noted measures of uniformity (Gini, Entropy, Info Gain) - will need to read more about these soon.
+^^ Both points are highly relevant for the early deliverables.
+
+Watching CS229 ML lecture video given by Andrew Ng at Stanford, 2018: https://youtu.be/jGwO_UgTS7I?si=TcRudZ_jwvuylEkv
+Very easy to absorb lecture on overview of different types of ML. My project so far seems to be directed towards Supervised Learning-Classification
+
+
+
+19th September --
+Attended Project Talk given by Dr Argyrios, covered 2 presentations. Useful talk, Argyrios clarified to me personally that LaTeX Project Plan can be in any format, isn't an institution-locked layout.
+Heavy emphasis on focusing on project plan.
+
+As of writing, the outline of plan is somewhat structured, but much work needs to be done.
+
+Will meet Prof. Zhiyuan on 25th, guidance given on how to access his office
+
+20th September --
+Started tying to plan my meeting with Prof. Zhiyuan. Many questions to ask, just trying to find the right questions. Noted that there are various paths I can take this project, now considering if I should exclusively focus on Classification.
+Noted that it's difficult to research on Classification without needing to read into Regression techniques. There's also lots of notation to digest.
+
+- Understood the functionality of parameters (theta) alongside features/inputs (x). Learning a lot on notation in ML. The algorithms given in the brief seem to be more-or-less non-parametric, however - though I could be mistaken.
+- Research on kernel functions and how they transform data into a different representation such that data is easier to evaluate and more separable. I understand this very superficially. Need to read more on examples: Linear, Polynomial, Gaussian (RBF) and Sigmoid Kernels.
+- Some basic research on Multi-Class Support Vector Machines("one-vs-all", "one-vs-rest"). Complicated for now, will be useful for final deliverables. Also tribute to Vapnik. 
+- Research on RSS (Residual Sum of Squares) Criterion - not sure if relevant to KNN/Trees/Classification algorithms, seems moreso relevant to linear regression
+Started watching CS229 Lecture 2, very useful information on notation by Andrew Ng, mostly focused on Regression however: https://youtu.be/4b4MUYve_U8?si=GvrB1HdXNJ66JWNE
+
+- Some concerns that I'm mostly focused on theory and not so much on implementation. Started digging around sci-kit learn documentation today: https://scikit-learn.org/stable/modules/tree.html - will continue to get familiar in upcoming days.
+
+Upon arrival at campus, I've borrowed 5 books from library physically:
+1) The Elements of Statistical Learning, 2nd Edition. (TEoSL)
+2) Pattern Recognition and Machine Learning by Bishop. 
+3) Foundations of Machine Learning by Mohri
+4) Introduction to Machine Learning with Python by Muller & Guido
+5) Hands-on Machine Learning with Scikit-Learn and TensorFlow
+
+Primarily I've been using (1) TEoSL as reference and using the others, or the internet to decipher concepts or notation when it's difficult to at first glance.
+I've not been using (4) yet but I think it will be vital as I start making proof of concept programs. 
+Today found out from Prof. Vovk via Moodle that a new textbook has been released online: An Introduction to Statistical Learning with Applications in Python, 2023. It seems to be a simpler version of TEoSL, so it might be the perfect resource for me. I'm in luck!
+Exchanged emails with the library services today but book isn't available physically, they've provided me an online copy. 
+
+GitLab repo is online! Aiming to put this diary on there.
+
+-Research on using OverLeaf (LaTex editor) in sync with GitLab such that I can track version history of my reports. Also research on Git, branches and recapping version control studies. Emailed Prof. Argyrios for confirmation of repo, as well as gitlab classes and slides from earlier talk. 
+
