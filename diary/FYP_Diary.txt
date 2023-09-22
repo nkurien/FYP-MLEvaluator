@@ -1,7 +1,6 @@
 Diary (Updated 20/09/23)
 
 This is bound to change soon, as I add more moments of research to the diary. Much of my notes prior to Week 1 have been handwritten, I hope to transcribe more onto here in due time.
-(Also testing GitLab as I push this up).
 
 
 (Prior to this, I was planning for 5 different project titles, will fill this later. Much research was done on ML fundamentals, algorithms and theory here.)
@@ -43,11 +42,11 @@ Started watching CS229 Lecture 2, very useful information on notation by Andrew 
 - Some concerns that I'm mostly focused on theory and not so much on implementation. Started digging around sci-kit learn documentation today: https://scikit-learn.org/stable/modules/tree.html - will continue to get familiar in upcoming days.
 
 Upon arrival at campus, I've borrowed 5 books from library physically:
-1) The Elements of Statistical Learning, 2nd Edition. (TEoSL)
-2) Pattern Recognition and Machine Learning by Bishop. 
-3) Foundations of Machine Learning by Mohri
-4) Introduction to Machine Learning with Python by Muller & Guido
-5) Hands-on Machine Learning with Scikit-Learn and TensorFlow
+(1) The Elements of Statistical Learning, 2nd Edition. (TEoSL)
+(2) Pattern Recognition and Machine Learning by Bishop. 
+(3) Foundations of Machine Learning by Mohri
+(4) Introduction to Machine Learning with Python by Muller & Guido. (MLwP)
+(5) Hands-on Machine Learning with Scikit-Learn and TensorFlow
 
 Primarily I've been using (1) TEoSL as reference and using the others, or the internet to decipher concepts or notation when it's difficult to at first glance.
 I've not been using (4) yet but I think it will be vital as I start making proof of concept programs. 
@@ -68,3 +67,10 @@ I purchased a pocketbook for meetings and ideas with my supervisor
 
 I will spend today looking at sci-kit learn and trying to play with library functions that have implements knn and decision trees already. I have barely looked into datasets yet and I must do so, this will likely define the direction of my project. Still need to look into whether Classification is what I want to exclusively work on. I will also work on my Project Plan, this should be a priority.
 
+-- 22nd September --
+
+Yesterday I continued reading about kernel functions and SVMs and honestly - found myself overwhelmed with theory and how much I still need to understand, let alone bring to the meeting on 25th. I think I need to focus more now on implementation. I'll work on the simplest ML algorithms and focus on implementing them and assessing them, further theory can wait I think.
+I aim to now focus on working through the exercises in MLwP and get familiar with working with datasets.
+Yesterday I also found Kaggle as a useful resource for datasets. Kaggle is the largest open-source ML community and it's highly likely I'll use their resources in this project, along wiht UCI and Delve, as long as the data isn't too difficult to process.
+
+Also thinking of turning these diary files into markdown format for easier use.
