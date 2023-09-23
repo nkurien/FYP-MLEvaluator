@@ -19,7 +19,8 @@ Borrowed Physical Books from library
 
 Digital books:
 1) An Introduction to Statistical Learning with Applications in Python
-  - new book! Not gone through yet but will likely be very useful, as it's supposed to be a simpler version of TEoSL.  
+  - new book! Not gone through yet but will likely be very useful, as it's supposed to be a simpler version of TEoSL.
+  - Link: https://hastie.su.domains/ISLP/ISLP_website.pdf
 
 Videos I've found helpful:
   https://youtu.be/jGwO_UgTS7I?si=TcRudZ_jwvuylEkv - CS229 Lecture 1 - Stanford Machine Learning

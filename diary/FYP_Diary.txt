@@ -1,4 +1,4 @@
-Diary (Updated 20/09/23)
+Diary (Updated 23/09/23)
 
 This is bound to change soon, as I add more moments of research to the diary. Much of my notes prior to Week 1 have been handwritten, I hope to transcribe more onto here in due time.
 
@@ -74,3 +74,12 @@ I aim to now focus on working through the exercises in MLwP and get familiar wit
 Yesterday I also found Kaggle as a useful resource for datasets. Kaggle is the largest open-source ML community and it's highly likely I'll use their resources in this project, along wiht UCI and Delve, as long as the data isn't too difficult to process.
 
 Also thinking of turning these diary files into markdown format for easier use.
+
+Setting up python and Jupyter on macOS surprisingly time-consuming.
+
+-- 23rd September --
+
+Been playing with GUI elements today, tkinter and pyqt5 - I've not really decided how the end-product of this project is going to look and function, so I started investigating this today.
+Wasted a ton of time configuring python environments.
+
+Spent good amount of time today planning for meeting, have a decent outline of things to cover. In the process, have structured my approach to tackling the project a little better.
