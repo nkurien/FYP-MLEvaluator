@@ -1,4 +1,4 @@
-Diary (Updated 23/09/23)
+Diary (Updated 24/09/23)
 
 This is bound to change soon, as I add more moments of research to the diary. Much of my notes prior to Week 1 have been handwritten, I hope to transcribe more onto here in due time.
 
@@ -83,3 +83,13 @@ Been playing with GUI elements today, tkinter and pyqt5 - I've not really decide
 Wasted a ton of time configuring python environments.
 
 Spent good amount of time today planning for meeting, have a decent outline of things to cover. In the process, have structured my approach to tackling the project a little better.
+
+-- 24th September --
+
+Wrote meeting outline for supervisor before tomorrow's meeting, during the process did a lot of research on model evaluation concepts and metrics
+
+Sent email with a decent amount of detail, very much looking forward to the meeting. I feel this has been a productive week but I need to make many decisions still on how I'm going to tackle this project.
+
+Will likely change these to .MD files tomorrow and perhaps make a research folder. Hoping to start implementing Jupyter Notbook projects next week.
+
+My priority next week however, will be my project plan. 
