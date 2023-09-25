@@ -1,4 +1,4 @@
-(Updated 22/09/23)
+(Updated 25/09/23)
 The purpose of this document is mostly for self-reference, so I can find resources corresponding the specific research easily. It also serves as a way for me to show where I'm researching from.
 
 Borrowed Physical Books from library
@@ -16,7 +16,7 @@ Borrowed Physical Books from library
 5) Hands-on Machine Learning with Scikit-Learn and TensorFlow
 6) Machine Learning by Tom M. Mitchell. 1997.
   Also here: https://www.cs.cmu.edu/~tom/files/MachineLearningTomMitchell.pdf
-  - Chapter 5 (pg 128 - 153): Really great chapter on model performance metrics
+    - Chapter 5 (pg 128 - 153): Really great chapter on model performance metrics
   I think this book is generally more helpful for Classification models
 
 Digital books:

@@ -1,4 +1,4 @@
-Diary (Updated 24/09/23)
+Diary (Updated 25/09/23)
 
 This is bound to change soon, as I add more moments of research to the diary. Much of my notes prior to Week 1 have been handwritten, I hope to transcribe more onto here in due time.
 
