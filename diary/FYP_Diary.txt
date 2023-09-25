@@ -93,3 +93,10 @@ Sent email with a decent amount of detail, very much looking forward to the meet
 Will likely change these to .MD files tomorrow and perhaps make a research folder. Hoping to start implementing Jupyter Notbook projects next week.
 
 My priority next week however, will be my project plan. 
+
+-- 25th September -- 
+
+Met supervisor! Meeting was thoroughly helpful. Main takeaway from meeting was to 'keep it simple'. I will focus on Nearest Neighbours for now and try implementing the simplest variation of this algorithm in handwritten form. Doing this will allow me to fully understand the algorithm at its core.
+I'll likely just focus on simple implementations of Nearest Neighbours, Decision Trees and perhaps Logistic Regression - I need to read more into this.
+
+My priority is the Plan right now, I think I know which reports to focus on for this term at least. I should start with mathematical implementations of the algorithms to further my understanding - and this might help while I'm creating the Plan. I should then get started on building the algorithm and can structure my approach in SE terms via the Plan too. It's clearer to me now that the Plan is a tool to help me, rather than just a deliverable for assessment.
