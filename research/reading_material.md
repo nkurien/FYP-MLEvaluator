@@ -35,3 +35,6 @@ The purpose of this document is mostly for self-reference, so I can find resourc
 ## Articles/Online Posts I've found helpful:
   https://neptune.ai/blog/how-to-compare-machine-learning-models-and-algorithms - Comparing ML algorithms (seems more practically-focused than the books) would need to apply methods that correspond with algorithms I pick.
   https://towardsdatascience.com/how-to-compare-machine-learning-algorithms-ccc266c4777 simpler article, but nice description of Bias and Variance here.
+
+## Papers
+T. Cover and P. Hart, "Nearest neighbor pattern classification," in IEEE Transactions on Information Theory, vol. 13, no. 1, pp. 21-27, January 1967, doi: [link](10.1109/TIT.1967.1053964)
