@@ -2,6 +2,8 @@
 
 \usepackage{titling}
 \usepackage{graphicx}
+\usepackage[numbers]{natbib}
+
 
 % Define custom title format
 \renewcommand{\maketitle}{
@@ -10,7 +12,7 @@
     {\Large Project Plan}\par
     \vspace{10pt}
     Nathan Kurien\par
-    CS3821: BSc Final Project\par
+    CS3821: BSc Final Project \par
     \hrule % Horizontal line
     \vspace{20pt}
     \includegraphics[width=0.5\linewidth]{logo-large-cropped.png}
@@ -40,22 +42,29 @@ Machine learning (ML) has taken the world by storm in recent times. In the era o
 Supervised Learning algorithms exist to solve regression and classification tasks, and this project will focus primarily on classification. Within the ML landscape, classification algorithms play a critical role in tasks such as image recognition, spam filtering, medical diagnosis, and more. \par
 Classification problems involve using an algorithm, and a given set of inputs used as trained features, to classify any given input with a predefined label. In other words, Classification problems involve searching for a discrete target value, often among a subset of discrete values, whereas Regression problems involve finding a continuous target value. \par
 In this project, the aims will be to focus specifically on Classification problems solved by Supervised Learning, evaluate how they function, and compare how several algorithms perform amongst each other. \par
-The first algorithm I'll be exploring will be the Nearest Neighbours algorithm, one of the simplest learning algorithms. I'll be building an implementation of this algorithm along with a Decision Tree algorithm implementation. \par
-
+The first algorithm I'll be exploring will be the Nearest Neighbours algorithm, one of the simplest learning algorithms. I'll be attempting to compare this implementation with an implementation of the Decision Tree algorithm implementation. \par
+This project aims to focus on the simplest examples of supervised learning classifiers and examine their application, performance and caveats. I hope to use performance metrics, such as accuracy, precision and F1 scores, to evaluate the bias and variance of these algorithms. I also hope to extend these evaluations by adding alterations to my algorithms and using more complex datasets. \par
+I intend on using openly available datasets found on the UCI Repository\cite{uci}, including the Delve datasets, as well as datasets from open-source communities such as Kaggle, OpenML and huggingface for further training. Datasets from the latter are likely to require more preprocessing and normalisation.
 
 
 
 \section{Milestones}
+Listed below are a set of deliverables I hope to undertake in the process of putting together my project. \par 
+Along with reports and programs, I've included a success criteria section for both terms. I've noticed while planning this project that it's quite easy to get carried away with theory and dive deeper and deeper into algorithms without focusing on implementation. In the success criteria, I hope to clearly define what is essential to deliver in order for me to deliver a working project in due time. 
 \subsection{First Term}
 \subsubsection{Reports}
 % Describe the milestones for the first term, including reports.
 Report 1: Nearest Neighbour Algorithms - In this report I hope to discuss the theory behind nearest neighbour algorithms, 1-Nearest Neighbour and K-Nearest Neighbour, and further details behind how they function. \par 
-Report 2: Decision Tree Algorithms - In this report I hope the discuss the theory behind the Decision Tree algorithm and explore its measures of uniformity. \par
+Report 2: Decision Tree Algorithms - In this report, I hope to discuss the theory behind the Decision Tree algorithm and explore its measures of uniformity. \par
 (Extensions on metrics and SVMs) Ensemble Learning? Kernel Methods?
 
 \subsubsection{Programs}
 % Describe the milestones for the first term, including programs.
 Proof of Concept Programs in Python
+
+\subsubsection{Success Criteria}
+\subsubsection{Further Extensions}
+
 
 \subsection{Second Term}
 \subsubsection{Reports}
@@ -66,21 +75,17 @@ Proof of Concept Programs in Python
 % Describe the milestones for the second term, including programs.
 [Details of second-term program milestones]
 
+\subsubsection{Success Criteria}
+
 \section{Risks and Mitigations}
 % Discuss potential risks associated with your project and how you plan to mitigate them.
-[Discussion of project risks and mitigations]
+Even best-laid plans often go astray, and in this section I hope to list possible difficulties I may face as I undertake this project, along with contingency plans and mitigations in the hopes to reduce great losses.
 
-\section{Bibliography}
-% List the sources that helped you decide on your project plan.
-\begin{itemize}
-  \item Source 1
-  \item Source 2
-  \item Source 3
-  % Add more sources as needed
-\end{itemize}
 
 \section{Planning and Time-Scales}
 % Provide details on the planning and time-scales for your project.
 [Project planning and time-scales]
+\bibliographystyle{IEEEtranN}
+\bibliography{bibliography.bib}
 
 \end{document}
