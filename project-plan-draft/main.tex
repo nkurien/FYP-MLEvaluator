@@ -60,16 +60,31 @@ Along with reports and programs, I've included a success criteria section for bo
 \subsection{First Term}
 \subsubsection{Reports}
 % Describe the milestones for the first term, including reports.
-Report 1: Nearest Neighbour Algorithms - In this report I hope to discuss the theory behind nearest neighbour algorithms, 1-Nearest Neighbour and K-Nearest Neighbour, and further details behind how they function. \par 
-Report 2: Decision Tree Algorithms - In this report, I hope to discuss the theory behind the Decision Tree algorithm and explore its measures of uniformity. \par
+\textbf{Report 1:} Nearest Neighbour Algorithms - In this report I hope to discuss the theory behind nearest neighbour algorithms, 1-Nearest Neighbour and K-Nearest Neighbour, and further details behind how they function. \par 
+\noindent \textbf{Report 2:} Decision Tree Algorithms - In this report, I hope to discuss the theory behind the Decision Tree algorithm and explore its measures of uniformity. \par
+\vspace{2mm}
 I sense that completing both of these reports will fulfill my understanding of the inner workings of these algorithms, and will supplement my interim report at the end of the year. \par
 
 \subsubsection{Programs}
 % Describe the milestones for the first term, including programs.
-I will begin by implementing Proof of Concept programs in Python, starting very simple, and then expanding as I begin to expand both on the algorithms, and the complexity of my datasets.
+I will begin by implementing Proof of Concept programs in Python, starting very simple, and then expanding as I begin to expand both on the algorithms, and the complexity of my datasets. My PoC Programs will be listed as follows, in three sections: \par
+\textbf{Nearest Neighbours}
+\begin{itemize}
+    \item 1-NN algorithm implemented on very small synthetic dataset - in essence, coordinates on a 2-dimensional axis. The algorithm will essentially calculate Euclidean Distance between two points and set a solid starting point for development.
+    \item 1-NN algorithm implemented on the infamous iris~\cite{irisdata} dataset from the UCI repository~\cite{uci}, starting on two classes and a single feature, and then eventually implemented more features and classes from the dataset.
+    \item Implement K-neighbours:
+    \begin{itemize}
+        \item Starting with k=3 - and find differences with results from the iris dataset
+        \item Increase value for k, towards k=10. 
+        \item Find cases when tie-breaking is necessary i.e. when k is even
+    \end{itemize}
+    \item Introduce tie-breaking policies in the algorithm
+    \item At this point, introduce performance metrics from PoC programs made in \textit{model validation}.
+    \item Also, the algorithm at this point should be able to handle larger and more complex datasets.
+\end{itemize}
 
 \subsubsection{Success Criteria}
-By the end of the first term, I should have implemented two algorithms
+By the end of the first term, it is essential that I have implemented both algorithms, K-Nearest Neighbours and 
 \subsubsection{Further Extensions}
 (Extensions on metrics and SVMs) Ensemble Learning? Kernel Methods?
 
@@ -108,8 +123,15 @@ Building these algorithms from scratch can quite easily become a convoluted proc
 I intend to use Object-Oriented Programming techniques where applicable to give the software a relatively clear architecture that can be built upon and extended effectively. I intend to create UML diagrams to outline the structure of the models, as well as how data is handled by the model. Where applicable, I hope to use unit test programs, as is standard in Test Driven Development, upon the models to keep track of functionality as more and more subroutines are added over time. \par
 Making effective use of my GitLab repository will be helpful in staying on top of software complexity too, I will likely make use of branches when extending my algorithms' functionality. \par
 \subsection{GUI Challenges}
+Implementing a user interface to the project is likely to add complexity to the project and be quite time-consuming. Python GUI libraries can also occasionally come with their own hosts of compatibility issues. \par
+Reflecting on the goals and scope of the project, I feel that implementing a user interface is not a priority matter and can be implemented further down the line - potentially even in the second term of the year. Delaying this implementation allows me to focus on the algorithms and their performance. \par
+For now, PyQT5 will be the expected GUI library to be used, but TKinter~\cite{tkinter} would be a decent backup just in case I have issues with the former option.
 \subsection{Data Availability and Quality}
+Assessing the functionality of these algorithms will require a sufficient amount of suitable data to work on for Classification tasks. Hence, it is critical that I find enough datasets to work on suitably. \par
+For this reason, I've looked into open-source communities where contributors have made datasets publicly available, and have been thoroughly reviewed by other engineers. This may also be a suitable extension for me if I want to try stretching my models. \par
+I honestly think the likelihood of this risk is quite low considering how much data is available online, but it seems to be a worthy thing to consider in the grand scheme of things. \par
 \subsection{Project Scope Creep}
+This is a highly extensible project. The project title allows for a large amount of flexibility
 \subsection{Time Management}
 
 \pagebreak
