@@ -48,7 +48,7 @@ As a further study, I also plan to investigate the robustness of the K-Nearest N
 The models will ultimately be implemented in Python~\cite{python3}, creating the data structures using Lists and NumPy~\cite{numpy}, and using various existing libraries as points of reference. Sci-kit Learn~\cite{scikit-learn} is a highly regarded Python library by data scientists and includes various implementations of the models I hope to build. I will initiate research in this project by utilising this library to further my understanding of how these models function and how they should be evaluated. \par
 Jupyter notebooks~\cite{jupyter} will be used initially while the models are in development. They will also be tremendously useful for building visualisations and validating the models. Later on in development, I hope to implement these models in a standalone interface that can take datasets as inputs and provide useful insights on the performance of chose models on this data. Creating the interface will potentially be implemented using Python libraries such as PyQt5~\cite{pyqt5}. There are vast amounts of resources I've found helpful in deciphering the theory behind this project. \par
 I intend on using openly available datasets found on the UCI Repository~\cite{uci}, including the Delve datasets specified for Classification, and this may be sufficient to evaluate the performance of these chosen algorithms. If I choose to extend further, I could use datasets from open-source communities such as Kaggle~\cite{kaggle}, OpenML~\cite{OpenML2013} and huggingface~\cite{huggingface} for further training. Datasets from the latter are likely to require more preprocessing and normalisation.  \par
-Within this project, I hope to uncover and harness skills within data mining and machine learning that are proving invaluable and immensely relevant in the current climate of technological advancement. This project aims to delve into the core fundamentals of statistical learning and optimisiing such techniques to find valuable insights. Within industry, as investment into this field skyrockets, I believe that insights made in this project will be valuable in many applications in industry. 
+Within this project, I hope to uncover and harness skills within data mining and machine learning that are proving invaluable and immensely relevant in the current climate of technological advancement. This project aims to delve into the core fundamentals of statistical learning and optimisiing such techniques to find valuable insights. Within industry, as investment into this field skyrockets, I believe that insights made in this project will be valuable in many applications. I am deeply grateful to be working on a project with such great relevance in the current atmosphere, and believe it will help me with my personal aims moving forwards. 
 
 
 \pagebreak
@@ -90,46 +90,110 @@ I will begin by implementing Proof of Concept programs in Python, starting very 
         \item A tree classifier class that follows the CART algorithm will recursively partition the dataset into various subsets until the optimum Gini impurity is found. This PoC program should explore how to do that.
     \end{itemize}
     \item Visualisation - Before an interface is implemented, and while a library isn't being used, it would be wise to investigate how to visualise the tree using the console output.
-    \item Once the program has progressed this far, overfitting will rapidly become an issue. Adding splitting criterion hyperparameters will be useful at this point. Adding a 
+    \item Once the program has progressed this far, overfitting will rapidly become an issue. Adding splitting criterion hyperparameters will be useful at this point. Adding a maximum depth will be my first step into implementing this.
+    \begin{itemize}
+        \item There are a wide number of extensions I can go into, when it comes to reducing overfitting on trees, such as pruning techniques and implementing forests
+    \end{itemize}
+\end{itemize}
+\textbf{Model Validation}
+\begin{itemize}
+    \item Start a program that can perform a train-test-split on a dataset, similar to that of Scikit-Learn
+    \item Produce small programs that can calculate metrics such as accuracy, precision, recall and f-score after the training process.
+    \item Implement K-folds Cross-Validation - program that can split dataset into various subsets and cycle through each data set for training + testing
+    \begin{itemize}
+        \item The assessment phase during each iteration can be extended with various different metric calculations, including robustness for KNN and feature importance for DTs
+    \end{itemize}
 \end{itemize}
 \subsubsection{Success Criteria}
 By the end of the first term, it is essential that I have implemented both algorithms, K-Nearest Neighbours and 
-\subsubsection{Further Extensions}
-(Extensions on metrics and SVMs) Ensemble Learning? Kernel Methods?
+Decision Trees, in some manner using Jupyter Notebooks, as well as using any form of model validation techniques to determine performance metrics of both algorithms. This is what I'd call an essential deliverable before the interim review, and I think it's feasible with the time and preparation given, and necessary compromises made.
 
 \subsection{Second Term}
+My goals in the second term will become clearer as the term comes closer, but I've made my priorities clear below.
 \subsubsection{Reports}
-% Describe the milestones for the second term, including reports.
-[Details of second-term report milestones]
+The priority in second term will be working on the final report. However, I think it's possible to also potentially make a report covering Model Validation Techniques and Algorithm Performance Metrics. \par
+This will greatly depend on how much was delivered in the First Term and how much time can be allocated to more reports in the Second Term.
 
 \subsubsection{Programs}
 % Describe the milestones for the second term, including programs.
-[Details of second-term program milestones]
-
+We make the heavy assumption that the First Term goals were delivered, the emphasis on the Second Term will then be to focus on delivering the algorithms on a standalone interface. \par
+Assuming that the data structures are implemented end-to-end, second term may also allow some room to add extensions and further study into these algorithms with larger datasets, more performance testing and further algorithm optimisation.
 \subsubsection{Success Criteria}
+In essence, I hope to produce a fully object-oriented user interface that will provide meaningful evaluations of the model performances for both Nearest Neighbours and CART algorithms, at the very least. There's a hope that by this point, several extensions have been applied upon this - but this would be my bare minimum for a successful project delivered. 
 \pagebreak
 \section{Planning and Time-Scales}
 % Provide details on the planning and time-scales for your project.
 Now that we've covered various deliverables and milestones to mark my progress with the project, this section will cover the projected timeline of when these items will be delivered, with a balance of caution and optimism. \par
 \vspace{10mm}
-\begin{tabular}{|c|c|c|c|}
+\subsection{Term 1 Timeline}
+\begin{tabular}{|c|p{10cm}|}
 \hline
-Timeframe & Implementation & Reports & Research \\
+Timeframe & Tasks \\
 \hline
-Week 1 (Oct 2 - 6) & Data 1 & Report 1 & Research 1 \\
-Week 2 (Oct 9 - 13) & 1NN on simple data & Begin NN report & Research 2 \\
-Week 3 (Oct 16 - 20) & \makecell{1NN on iris data \\ Work on multiple classes} & Report 3 & Research 3 \\
-Week 4 (Oct 23 - 27) & Data 4 & Report 4 & Research 4 \\
-Week 5 (Oct 30 - Nov 3) & Data 5 & Report 5 & Research 5 \\
-Week 6 (Nov 6 - 10) & Data 6 & Report 6 & Research 6 \\
-Week 7 (Nov 13 - 17) & Data 7 & Report 7 & Research 7 \\
-Week 8 (Nov 20 - 24) & Data 8 & Report 8 & Research 8 \\
-Week 9 (Nov 27 - Dec 1) & Data 9 & Report 9 & Research 9 \\
-Pres. Week (Dec 4 - 8) & Data 10 & Report 10 & Research 10 \\
+Week 1 (Oct 2 - 6) & 
+\makecell[l]{Focus on implementing Project Plan \\
+Handwritten example of NN algorithm \\
+Test out Scikit-Learn classifier functions in Jupyter Notebooks } \\
+\hline
+Week 2 (Oct 9 - 13) & 
+\makecell[l]{1NN on simple dataset \\
+Design NN data structures and UML diagrams \\
+Begin PoC Programs. Fully test DTs and NN on Scikit-Learn} \\
+\hline
+Week 3 (Oct 16 - 20) & 
+\makecell[l]{1NN on iris data, Work on multi-class data \\
+Begin implementing K-Neighbours on Iris data \\
+Demonstate KNN in Jupyter Notebooks, Start basic DTs} \\
+\hline
+Week 4 (Oct 23 - 27) & 
+\makecell[l]{Complete NN Report - 29th October \\
+Start working on DTs on Iris Data with binary classification \\
+Begin working on hold out test set validation programs} \\
+\hline
+Week 5 (Oct 30 - Nov 3) & 
+\makecell[l]{Start DT Report \\
+Continue working on DT data handling with missing values \\
+Start working on cross validation programs and test on KNN} \\
+\hline
+Week 6 (Nov 6 - 10) & 
+\makecell[l]{Use hold out tests on Decision Trees \\
+ Implement K-folds Cross Validation on both algorithms \\
+Continue working on report} \\
+\hline
+Week 7 (Nov 13 - 17) & 
+\makecell[l]{Complete DT Report - 18th November \\
+Deal with any issues that have arisen over previous weeks \\
+Use different datasets from UCI (e.g breast cancer)} \\
+\hline
+Week 8 (Nov 20 - 24) & 
+\makecell[l]{ Focus on completing Interim Report \\
+Amend any issues with supplementary reports if not yet finished \\
+Draw meaningful tests and conclusions from } \\
+\hline
+Week 9 (Nov 27 - Dec 1) & 
+\makecell[l]{Work on Interim Report \\
+Prepare for Demonstration and Presentation \\
+Finalise project work + prepare for submission} \\
+\hline
+Pres. Week (Dec 4 - 8) & 
+\makecell[l]{Presentation Week!\\
+Submit project, and present work \\
+Make demo and presentation} \\
 \hline
 \end{tabular}
 
+\subsection{Term 2 Timeline}
+It's rather challenging to build a detailed timeline for the next year, without context on the success of the first term, nor the progress made during the Christmas break. To allow for contingency planning, I've kept planning for Term 2 to be very sparse and open to changes - with just a few deadlines in mind.
+\begin{itemize}
+    \item Week 1 (9th January) - Start working on final report and review goals and progress
+    \item Week 4 (3rd February) - Produce a working standalone user interface that's capable of visualising datasets that have been fitted in both algorithms
+    \item Week 6 (16th February) - Complete any complementary reports made in conjunction (Performance Metrics/Validation Techniques)
+    \item Week 8 (1st March) - Start work on posters and final demos
+\end{itemize}
+This timeline is admittedly open and sparse, but I see it as strategic in response to a very rigorous timeline for the first term. I'll be able to respond to feedback and issues made during the interim report in good time.
 
+\subsection{Weekly Reviews}
+I intend on reviewing my progress twice every week, once on Monday 8.30am and once on Friday 5.30pm. These reviews will allow me to keep track of progress and reassess my goals and targets for the upcoming week. These reviews will be made on my project diary.
 \pagebreak
 \section{Risks and Mitigations}
 % Discuss potential risks associated with your project and how you plan to mitigate them.
@@ -159,8 +223,13 @@ Assessing the functionality of these algorithms will require a sufficient amount
 For this reason, I've looked into open-source communities where contributors have made datasets publicly available, and have been thoroughly reviewed by other engineers. This may also be a suitable extension for me if I want to try stretching my models. \par
 I honestly think the likelihood of this risk is quite low considering how much data is available online, but it seems to be a worthy thing to consider in the grand scheme of things. \par
 \subsection{Project Scope Creep}
-This is a highly extensible project. This project title allows for a large scope, and whilst this brings flexibility, it also makes it extremely easy to get carried away by extensions and added features - rather than focusing on the core deliverables and goals of the project.
+This is a highly extensible project. This project title allows for a large scope, and whilst this brings flexibility, it also makes it extremely easy to get carried away by extensions and added features - rather than focusing on the core deliverables and goals of the project. \par
+This has quite a high likelihood of affecting my project - however I think it can be mitigated quite effectively by regularly reviewing my progress at the start and end of every working week, assessing my goals and targets and reminding myself of where priorities need to be made to deliver a final working product in time. 
 \subsection{Time Management}
+The most obvious and self-explanatory of risks in any of these projects will be simply staying on top of time management. I hope that much of the mitigations mentioned in previous risks will supplement, what is likely, the most common pitfall for every student that embarks on such a project. \par
+The weekly reviews and diary entries will be important for myself to reassess priorities and make amends before issues get bigger. It is also worth mentioning that if software complexity takes a toll, libraries are there to be used as a last resort. Simplifying the scope of the project is always an option whilst still delivering the core objectives of comparing algorithm performances \par
+My first term timeline is intentionally rigorous such that a working deliverable manifests itself early. Conversely, my second term timeline is noticeably flexible - such that I can catch any issues that will surely arise prior to the interim report - and make alterations quickly. \par
+The final thing I'd like to remind myself, is that it's always possible to ask for help - an oft-overlooked solution when there's desperate need for redirection.
 
 \pagebreak
 \bibliographystyle{IEEEtranN}
