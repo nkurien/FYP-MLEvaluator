@@ -3,7 +3,7 @@
 \usepackage{titling}
 \usepackage{graphicx}
 \usepackage[numbers]{natbib}
-
+\usepackage{makecell} 
 
 % Define custom title format
 \renewcommand{\maketitle}{
@@ -82,7 +82,16 @@ I will begin by implementing Proof of Concept programs in Python, starting very 
     \item At this point, introduce performance metrics from PoC programs made in \textit{model validation}.
     \item Also, the algorithm at this point should be able to handle larger and more complex datasets.
 \end{itemize}
-
+\textbf{Decision Trees}
+\begin{itemize}
+    \item Start on simple synthetic dataset containing features and labels and build a very basic decision tree classifier to classify data points based on their features
+    \begin{itemize}
+        \item Initially, a Decision Tree Node class will be created which should store information about the split criterion - which will likely expand as the algorithm is extended with more hyperparameters
+        \item A tree classifier class that follows the CART algorithm will recursively partition the dataset into various subsets until the optimum Gini impurity is found. This PoC program should explore how to do that.
+    \end{itemize}
+    \item Visualisation - Before an interface is implemented, and while a library isn't being used, it would be wise to investigate how to visualise the tree using the console output.
+    \item Once the program has progressed this far, overfitting will rapidly become an issue. Adding splitting criterion hyperparameters will be useful at this point. Adding a 
+\end{itemize}
 \subsubsection{Success Criteria}
 By the end of the first term, it is essential that I have implemented both algorithms, K-Nearest Neighbours and 
 \subsubsection{Further Extensions}
@@ -101,7 +110,26 @@ By the end of the first term, it is essential that I have implemented both algor
 \pagebreak
 \section{Planning and Time-Scales}
 % Provide details on the planning and time-scales for your project.
-Now that we've covered various deliverables and milestones to mark my progress with the project, this section will cover the projected timeline of when these items will be delivered, with a balance of caution and optimism.
+Now that we've covered various deliverables and milestones to mark my progress with the project, this section will cover the projected timeline of when these items will be delivered, with a balance of caution and optimism. \par
+\vspace{10mm}
+\begin{tabular}{|c|c|c|c|}
+\hline
+Timeframe & Implementation & Reports & Research \\
+\hline
+Week 1 (Oct 2 - 6) & Data 1 & Report 1 & Research 1 \\
+Week 2 (Oct 9 - 13) & 1NN on simple data & Begin NN report & Research 2 \\
+Week 3 (Oct 16 - 20) & \makecell{1NN on iris data \\ Work on multiple classes} & Report 3 & Research 3 \\
+Week 4 (Oct 23 - 27) & Data 4 & Report 4 & Research 4 \\
+Week 5 (Oct 30 - Nov 3) & Data 5 & Report 5 & Research 5 \\
+Week 6 (Nov 6 - 10) & Data 6 & Report 6 & Research 6 \\
+Week 7 (Nov 13 - 17) & Data 7 & Report 7 & Research 7 \\
+Week 8 (Nov 20 - 24) & Data 8 & Report 8 & Research 8 \\
+Week 9 (Nov 27 - Dec 1) & Data 9 & Report 9 & Research 9 \\
+Pres. Week (Dec 4 - 8) & Data 10 & Report 10 & Research 10 \\
+\hline
+\end{tabular}
+
+
 \pagebreak
 \section{Risks and Mitigations}
 % Discuss potential risks associated with your project and how you plan to mitigate them.
@@ -131,7 +159,7 @@ Assessing the functionality of these algorithms will require a sufficient amount
 For this reason, I've looked into open-source communities where contributors have made datasets publicly available, and have been thoroughly reviewed by other engineers. This may also be a suitable extension for me if I want to try stretching my models. \par
 I honestly think the likelihood of this risk is quite low considering how much data is available online, but it seems to be a worthy thing to consider in the grand scheme of things. \par
 \subsection{Project Scope Creep}
-This is a highly extensible project. The project title allows for a large amount of flexibility
+This is a highly extensible project. This project title allows for a large scope, and whilst this brings flexibility, it also makes it extremely easy to get carried away by extensions and added features - rather than focusing on the core deliverables and goals of the project.
 \subsection{Time Management}
 
 \pagebreak
