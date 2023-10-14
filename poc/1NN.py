@@ -20,6 +20,7 @@ class NearestNeighbour:
 
     def _predict_point(self, point):
         distances = [self._euclidean_distance(point, x) for x in self.X_training_data]
+        print(distances)
         nearest = np.argmin(distances)
 
         return self.y_training_labels[nearest]
