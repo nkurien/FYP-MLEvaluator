@@ -1,5 +1,5 @@
 # Project Diary 
-_(Updated 27/09/23)_
+_(Updated 17/10/23)_
 
 This is bound to change soon, as I add more moments of research to the diary. Much of my notes prior to Week 1 have been handwritten, I hope to transcribe more onto here in due time.
 
@@ -114,3 +114,16 @@ I've forgotten to mention that I've been using a 6th physical book by Tom Mitche
 Following the previous FYP talk, I've started using Google Scholar to find papers to use as references - and already found some great authoritative texts on the NN algorithm. \
 I aim to make real headway on the Plan today and I really hope to complete some kind of draft by tomorrow, such that I can get early feedback from my supervisor. Today I really need to make some executive decisions on the direction and goals of my project. \
 I've decided it may be wise to include some kind of _success criteria_ in my Abstract, such that I can make critical goals to deliver for the interim review. This project is so open to expansions that it's important to define what should be expected by the end of this. Creating a set of possible expansions may make it more flexible. Once I start assigning a time-frame to this project, it'll become clearer.
+
+### 15th October
+It's been a while since the last diary entry.
+Unfortunately, I may have underestimated how challenging it would be to balance the project with the other modules I'll be studying.\
+The week following my last entry was entirely focused on implementing my Project Plan and submitting something that motivated and outlined my approach to the project sufficiently.\
+The week after this should have been focused on developing my proof of concept programs, designing my UMLs and beginning my Nearest Neighbours report. Unfortunately, last week was not fruitful and I'll have to spend this week catching up with my outline immediately.
+
+### 16th October
+I've made small progress with the NN algorithm proof of concept and it works as expected. The labs in my machine learning module have been very useful with learning python syntactic sugar and dealing with datasets in Jupyter Notebooks. I'd like to somehow implement some kind of unit testing this week that I can carry forwards for the rest of term.\
+The repo needs to progress to a new branch for development and I hope to do this immediately after this entry. I'll be transferring from the 'plan' branch to a 'dev-poc' branch, updating the main branch in the process. It's likely that this will be the first of many dev branches in the overall process.\
+I'll need to update my README too with all the new structure I have put in place.\
+I'll likely setup some structuring of my interim and supplementary reports(NN) this week.\
+I'll move forwards with haste, and hopefully hear feedback on my outline soon, just to find if it's too ambitious, though I feel I'm already seeing that it is. 
