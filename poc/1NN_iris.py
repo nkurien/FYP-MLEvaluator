@@ -1,4 +1,5 @@
 import numpy as np
+from sklearn.datasets import load_iris
 
 class OneNearestNeighbour:
     def __init__(self):
@@ -27,16 +28,6 @@ class OneNearestNeighbour:
 
     def _euclidean_distance(self, p1, p2):
         return np.sqrt((p1[0] - p2[0])**2 + (p1[1] - p2[1])**2)
-
-data = [ (1,2), (2,3), (3,4) ] # 2-dimensional coordinates
-labels = [ 'a', 'b', 'a' ]     # labels
-
-nn = OneNearestNeighbour()
-nn.fit(data, labels)
-
-test_data = [ (2.5,3.5) ] # Should classify as b - close to (2,3)
-print(nn.predict(test_data))  
-
-
-
     
+iris = load_iris()
+print(iris)
