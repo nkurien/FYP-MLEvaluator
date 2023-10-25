@@ -20,7 +20,7 @@ class OneNearestNeighbour:
 
     def _predict_point(self, point):
         distances = [self._euclidean_distance(point, x) for x in self.X_training_data]
-        print(distances)
+        # print(distances)
         nearest = np.argmin(distances)
 
         return self.y_training_labels[nearest]
@@ -35,7 +35,7 @@ nn = OneNearestNeighbour()
 nn.fit(data, labels)
 
 test_data = [ (2.5,3.5) ] # Should classify as b - close to (2,3)
-print(nn.predict(test_data))  
+#print(nn.predict(test_data))  
 
 
 
