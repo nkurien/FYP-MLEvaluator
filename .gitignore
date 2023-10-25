@@ -1,2 +1,4 @@
 #MacOS system file
 .DS_STORE
+
+__pycache__/
