@@ -26,7 +26,7 @@ class OneNearestNeighbour:
         return self.y_training_labels[nearest]
 
     def _euclidean_distance(self, p1, p2):
-        return np.sqrt((p1[0] - p2[0])**2 + (p1[1] - p2[1])**2)
+        return np.sqrt(np.sum((np.array(p1) - np.array(p2))**2))
 
 data = [ (1,2), (2,3), (3,4) ] # 2-dimensional coordinates
 labels = [ 'a', 'b', 'a' ]     # labels
