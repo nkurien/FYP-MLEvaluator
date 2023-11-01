@@ -10,16 +10,18 @@ def shuffle_data(X, y, seed=None):
 
     return X[data_num], y[data_num]
 
-def train_test_split(X, y, test_size=0.5, shuffle=True, seed=None):
-    if shuffle:
-        X, y = shuffle_data(X, y, seed)
+def train_test_split(X, y, test_size=0.25, seed=None):  # Default test_size is now 0.25
+    # Shuffle is now done by default
+    X, y = shuffle_data(X, y, seed)
 
     num_samples = len(y)
     
     if 0 <= test_size < 1:
         train_ratio = num_samples - int(num_samples * test_size)
+        print(test_size)
     elif 1 <= test_size < num_samples:
         train_ratio = num_samples - test_size
+        print(test_size)
     else:
         raise ValueError("Invalid test_size value")
 

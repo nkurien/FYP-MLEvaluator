@@ -39,4 +39,4 @@ class KNearestNeighbours:
         return majority_label
 
     def _euclidean_distance(self, p1, p2):
-        return np.sqrt(np.sum((p1 - p2)**2))
+        return np.sqrt(np.sum((np.array(p1) - np.array(p2))**2))
