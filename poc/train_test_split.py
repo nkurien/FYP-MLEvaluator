@@ -18,10 +18,8 @@ def train_test_split(X, y, test_size=0.25, seed=None):  # Default test_size is n
     
     if 0 <= test_size < 1:
         train_ratio = num_samples - int(num_samples * test_size)
-        print(test_size)
     elif 1 <= test_size < num_samples:
         train_ratio = num_samples - test_size
-        print(test_size)
     else:
         raise ValueError("Invalid test_size value")
 
