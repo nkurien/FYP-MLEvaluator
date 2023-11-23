@@ -2,7 +2,7 @@ import numpy as np
 import sys
 sys.path.append("..")
 from train_test_split import train_test_split as split
-from OneNN import OneNearestNeighbour
+from one_nn import OneNearestNeighbour
 from sklearn.datasets import load_iris
 
 # loading iris data using sklearn

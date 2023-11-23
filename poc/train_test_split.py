@@ -1,7 +1,9 @@
 import numpy as np
 
+'''Splits dataset into training and test sets '''
 
 def shuffle_data(X, y, seed=None):
+    '''Shuffles data samples'''
     if seed is not None:
         np.random.seed(seed)
 
@@ -11,6 +13,7 @@ def shuffle_data(X, y, seed=None):
     return X[data_num], y[data_num]
 
 def train_test_split(X, y, test_size=0.25, seed=None):  # Default test_size is now 0.25
+    '''Splits dataset into training and test sets'''
     # Shuffle is now done by default
     X, y = shuffle_data(X, y, seed)
 
