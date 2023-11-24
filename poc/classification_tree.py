@@ -96,7 +96,7 @@ class ClassificationTree :
         left, right = node['groups']
         del(node['groups'])
         # Check for no split
-        if not left or not right:
+        if not left or not right :
             node['left'] = node['right'] = self.to_terminal(left + right)
             return
         
@@ -106,13 +106,13 @@ class ClassificationTree :
             return
         
         # Process left child
-        if len(left) <= min_size:
+        if len(left) <= min_size or self.is_homogeneous(left):
             node['left'] = self.to_terminal(left)
         else:
             node['left'] = self.get_split(left)
             self.split(node['left'], max_depth, min_size, depth + 1)
         # Process right child
-        if len(right) <= min_size:
+        if len(right) <= min_size or self.is_homogeneous(right):
             node['right'] = self.to_terminal(right)
         else:
             node['right'] = self.get_split(right)
@@ -147,6 +147,12 @@ class ClassificationTree :
         else:
             print(f"{'|   ' * depth}--> Class: {node}")
     
+    def is_homogeneous(self, group):
+        """Check if all samples in the tree node belong to the same class."""
+        classes = [row[-1] for row in group]
+        return len(set(classes)) == 1
+
+    
     
 
     
@@ -160,10 +166,10 @@ tree_classifier.fit(X, y)
 # Assuming tree_classifier is your trained ClassificationTree instance
 #tree_classifier.print_tree(feature_names=iris.feature_names)
 
-X_train, X_test, y_train, y_test = split(X, y, seed=2548)
+X_train, X_test, y_train, y_test = split(X, y, seed=2108)
 print("training size =", X_train.shape)
 print("test size =", X_test.shape)
-tree_train = ClassificationTree(max_depth= 4, min_size =2)
+tree_train = ClassificationTree(max_depth= 10, min_size =2)
 tree_train.fit(X_train,y_train)
 #print(tree_train)
 tree_train.print_tree(feature_names=iris.feature_names)
