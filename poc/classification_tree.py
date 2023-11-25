@@ -4,7 +4,7 @@ from train_test_split import train_test_split as split
 
 class ClassificationTree :
     # Constructor to initialize the classification tree with max depth and minimum size for splitting.
-    def __init__(self, max_depth, min_size):
+    def __init__(self, max_depth=20, min_size=1):
         self.max_depth = max_depth
         self.min_size = min_size
         self.root = None
@@ -151,28 +151,3 @@ class ClassificationTree :
         """Check if all samples in the tree node belong to the same class."""
         classes = [row[-1] for row in group]
         return len(set(classes)) == 1
-
-    
-    
-
-    
-
-iris = load_iris()
-X, y = iris.data, iris.target
-
-tree_classifier = ClassificationTree(max_depth=3, min_size=1)
-# Fit the classifier to the dataset
-tree_classifier.fit(X, y)
-# Assuming tree_classifier is your trained ClassificationTree instance
-#tree_classifier.print_tree(feature_names=iris.feature_names)
-
-X_train, X_test, y_train, y_test = split(X, y, seed=2108)
-print("training size =", X_train.shape)
-print("test size =", X_test.shape)
-tree_train = ClassificationTree(max_depth= 10, min_size =2)
-tree_train.fit(X_train,y_train)
-#print(tree_train)
-tree_train.print_tree(feature_names=iris.feature_names)
-pred = tree_train.predict(X_test)
-print(pred)
-print(np.mean(pred == y_test))
