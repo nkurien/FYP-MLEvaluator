@@ -151,3 +151,19 @@ class ClassificationTree :
         """Check if all samples in the tree node belong to the same class."""
         classes = [row[-1] for row in group]
         return len(set(classes)) == 1
+    
+    def get_depth(self, node=None):
+        if node is None:
+            node = self.root
+
+        # Check if the node is a leaf
+        if not isinstance(node, dict):
+            return 0  # Depth of a leaf node is 0
+
+        # Recursively find the depth of the left and right subtrees
+        left_depth = self.get_depth(node['left'])
+        right_depth = self.get_depth(node['right'])
+
+        # The depth of the node is the greater of the depths of its subtrees, plus one
+        return max(left_depth, right_depth) + 1
+
