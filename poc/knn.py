@@ -75,9 +75,19 @@ class KNearestNeighbours:
 
         # Get labels of the k-nearest points
         k_labels = [self.y_training_labels[idx] for idx, dist in k_nearest]
+
+        # Count the occurrences of each label
+        label_counts = {}
+        for label, dist in k_labels:
+            if label in label_counts:
+                label_counts[label][0] += 1  # Increase count
+                label_counts[label][1] = min(label_counts[label][1], dist)  # Store the minimum distance
+            else:
+                label_counts[label] = [1, dist]  # Initialize count and distance
+
+        # Find the label with the maximum count and if there's a tie, choose the one with the smallest distance
+        majority_label = max(label_counts, key=lambda x: (label_counts[x][0], -label_counts[x][1]))
         
-        # Majority vote
-        majority_label = max(set(k_labels), key=k_labels.count)
         return majority_label
 
     def _euclidean_distance(self, p1, p2):
