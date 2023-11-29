@@ -32,6 +32,10 @@ class ClassificationTree :
 
         Combines X and y into a single dataset and builds the decision tree.
         """
+        if len(X) == 0 or len(y) == 0:
+            raise ValueError("Cannot fit a tree with an empty dataset")
+
+
         dataset = np.column_stack((X, y)).tolist()
         #print(dataset)
         self.root = self.build_tree(dataset, self.max_depth, self.min_size)
