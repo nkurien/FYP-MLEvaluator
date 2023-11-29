@@ -1,8 +1,6 @@
 import numpy as np
 import train_test_split as split
-from sklearn.datasets import load_iris
-import knn
-import classification_tree
+
 
 def _k_folds(X, y, k=5, seed=None) :
     """
@@ -50,13 +48,6 @@ def _k_folds(X, y, k=5, seed=None) :
 
     return folds
 
-iris = load_iris()
-X = iris.data
-y = iris.target
-folds = _k_folds(X,y, 10)
-
-knn_iris = knn.KNearestNeighbours(10)
-tree_iris = classification_tree.ClassificationTree(8)
 
 def k_folds_accuracy_scores(model, X, y, k=5, seed=None):
     """
@@ -94,6 +85,4 @@ def k_folds_accuracy_score(model, X, y, k=5, seed=None):
     """
     return np.mean(k_folds_accuracy_scores(model, X, y, k, seed))
 
-print(k_folds_accuracy_score(knn_iris,X,y,20,2108))
-print(k_folds_accuracy_score(tree_iris,X,y,20,2108))
 
