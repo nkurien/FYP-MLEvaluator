@@ -1,0 +1,365 @@
+\documentclass[letterpaper,10pt]{article}
+
+\usepackage{titling}
+\usepackage{graphicx}
+\usepackage[numbers]{natbib}
+\usepackage{makecell}
+\usepackage{appendix}
+\usepackage{markdown}
+\usepackage{listings}
+
+
+% Define custom title format
+\renewcommand{\maketitle}{
+  \thispagestyle{empty}
+  \begin{center}
+    {\LARGE\textbf{Comparison of Machine Learning Algorithms}}\par
+    {\Large Interim Report}\par
+    \vspace{10pt}
+    Nathan Kurien\par
+    CS3822: BSc Final Project \par
+    \hrule % Horizontal line
+    \vspace{20pt}
+    \includegraphics[width=0.5\linewidth]{logo-large-cropped.png}
+    \vspace{30pt}
+    \begin{tabular}{c}
+      Supervised by: Prof. Zhiyuan Luo \\
+      Department of Computer Science \\
+      Royal Holloway University of London
+    \end{tabular}
+  \end{center}
+  \pagebreak
+}
+
+\title{Comparison of Machine Learning Algorithms}
+\author{Nathan Kurien}
+\date{20/10/2023} % Date
+
+\begin{document}
+
+\maketitle
+
+
+% Abstract
+\begin{abstract}
+\pagenumbering{roman}
+This project undertakes a comparative analysis of two fundamental machine learning algorithms for classification tasks: K-Nearest Neighbors and Decision Trees, with a focus on the CART algorithm. Employing Python and Jupyter Notebooks, the project aims to evaluate their accuracy and performance characteristics. Initial efforts have centered on developing proof-of-concept programs to grasp the fundamental workings of these algorithms. K-Folds Cross-Validation has been utilized to assess their performance on small datasets with continuous data, revealing interesting variations in accuracy influenced by the choice of k in K-Nearest Neighbors and the maximum depths in Decision Trees. \par
+Moving forward, the project will delve deeper into these insights, optimizing the models and introducing more complex datasets to comprehensively evaluate their performance across diverse scenarios. This endeavour not only seeks to enhance understanding in the fields of data mining and machine learning but also aims to contribute valuable insights and methodologies relevant in today's rapidly advancing technological environment.
+
+
+\end{abstract}
+\newpage
+\setcounter{tocdepth}{2}
+\tableofcontents
+
+\newpage
+\section*{Report Navigation Guide}
+
+\newpage
+\section{Introduction}
+\pagenumbering{arabic}
+\subsection{Machine Learning and Classification Tasks}
+Machine learning (ML) has taken the world by storm in recent times. In the era of unprecedented data generation, ML has emerged as a pivotal technology with profound implications for industries and everyday life. It underpins significant advancements in various sectors, including healthcare, finance, transportation, and more, by enabling intelligent systems that can learn from data and make informed decisions. \par
+In our daily lives, the influence of machine learning is both subtle and profound. It powers the personalized recommendations we receive on streaming services like Netflix and Spotify, tailoring entertainment to our tastes~\cite{NetflixRecommendations,SpotifyPlaylistGen}. When we shop online, ML algorithms analyze our purchasing habits to suggest products we might like, enhancing our shopping experience~\cite{MediaRecommendationSystemsSurvey}. Even our interactions with smartphones, from voice assistants like Siri and Google Assistant to predictive text and search, are driven by machine learning technologies, making them more intuitive and responsive to our needs~\cite{GoogleAssistantLookAndTalk, SiriML}.
+\par
+Beyond these conveniences, machine learning drives significant developments in critical areas. In healthcare, it aids in the early diagnosis of diseases~\cite{diabetesclassification}, personalized treatment plans~\cite{PersonalisedMedicineDeepLearning}, and even in drug discovery, ~\cite{DrugDiscoveryDeepLearning} revolutionizing patient care and outcomes. In the realm of finance, machine learning algorithms detect fraudulent activities and automate trading, providing more secure and efficient financial services. In transportation, from optimizing logistics and delivery routes to the development of autonomous vehicles, ML is at the forefront, promising safer and more efficient transport systems. \par
+At the heart of all of this are classification tasks, which are central to many ML applications. Classification involves assigning categories or labels to data points based on their features, a task that is fundamental in pattern recognition, decision-making, and predictive modelling. From identifying fraudulent transactions to diagnosing medical conditions, the ability to accurately classify data is crucial.
+\par
+The significance of machine learning is not only growing in the realms of convenience and efficiency but also gaining traction as a key driver of global innovation. It is at the centre of research and development across industries, pushing the boundaries of what technology can achieve. Countries and companies are investing heavily in AI and ML research, recognizing their potential to spur economic growth, enhance competitiveness, and solve some of the world's most pressing challenges, from climate change to healthcare.
+\par
+Machine learning, with its ability to analyze vast amounts of data and learn from it, is not just a technological advancement but a transformative force reshaping how we live, work, and interact with the world around us. As it continues to evolve, its impact is set to become even more profound, making its understanding and application an essential facet of modern life.
+
+\subsection{Breakthrough and Developments in Machine Learning}
+The landscape of machine learning has been significantly reshaped with the advent of deep learning, an advanced subset of neural networks. Deep learning models, particularly Convolutional Neural Networks (CNNs), have revolutionized image processing and analysis ~\cite{CNNImageClassification}. They have enabled machines to achieve near or even surpass human-level accuracy in tasks like image recognition and classification. Recurrent Neural Networks (RNNs), another pivotal development in this domain, have been instrumental in processing sequential data, making significant strides in speech recognition and natural language processing~\cite{RNNSequentialLearning} .\par
+Natural Language Processing (NLP) has witnessed transformative changes with the introduction of models like BERT and GPT ~\cite{BERT_NLP, NLP_Transformer}. These transformer-based models have set new benchmarks in understanding and generating human language. Their applications range from sophisticated chatbots to advanced systems for language translation, offering a level of context-awareness previously unattainable in machine learning. \par
+Reinforcement learning, a type of machine learning concerned with how agents ought to take actions in an environment to maximize cumulative reward, has seen groundbreaking successes. The development of algorithms like those used in DeepMind's AlphaGo and AlphaZero represents a significant leap in this area. These systems not only learned to play complex games like Go and Chess but also developed strategies that were innovative and unconventional, showcasing the potential of AI to discover solutions that humans might not conceive. \par
+Computer vision has been another area where deep learning has made a substantial impact. Real-time object detection systems like YOLO have changed the landscape of visual recognition tasks. These systems can identify and classify multiple objects in images and videos with remarkable speed and accuracy. Facial recognition technology, powered by deep learning, has also advanced, finding applications in security, authentication, and personal identification. \par
+The breakthroughs mentioned above have generated a large amount of attention in news and media, and outlines the prospects of this field looking ahead. My project, of course, will be focused on the pure and basic fundamentals - but this section provides some perspective on its significance. It also emphasises my enthusiasm and interest in this field. It is my goal to join the forefront of this emerging technology.
+
+
+
+
+\newpage
+\subsection{Project Specification}
+The primary objective of this project is to conduct a thorough comparative analysis between two simple, fundamental machine learning algorithms on the classification task. The algorithms selected are K-Nearest Neighbours (KNN) and Decision Trees - more specifically, the CART algorithm. This involves implementing these algorithms from scratch, which provides a deeper understanding of their mechanics and intricacies. The comparison will focus on various performance metrics, including accuracy, precision, and recall, to evaluate the effectiveness of each algorithm in different scenarios. These algorithms and metrics are elaborated in more detail in this report. \par
+The models are implemented in Python~\cite{python3}, creating the data structures using Lists and NumPy~\cite{numpy}, and using various existing libraries as points of reference. Sci-kit Learn is a highly regarded Python library by data scientists and includes various implementations of the models that are relevant to this project. This library proved an invaluable point of reference during the development of both algorithms, and served as a comparable benchmark when initially determining the implementation's performance. \par
+Additionally, the project aims to explore the impact of hyperparameters on these algorithms. For KNN, this includes examining how different values of 'k', the number of nearest neighbors, affect the classification outcome. Similarly, for CART, the focus will be on understanding how different tree depths influence the model's ability to generalize from training data.
+
+
+\subsection{Milestones}
+
+\newpage
+\section{Algorithms}
+In this chapter, we introduce and evaluate the algorithms I'll be reviewing in this project.
+\subsection{K-Nearest Neighbours}
+
+\subsubsection{Overview}
+\subsubsection{Mechanism}
+\subsubsection{Distance Metrics}
+\subsubsection{Applications and Use Cases}
+\subsubsection{Advantages and Limitations}
+\subsubsection{Comparative Analysis with other ML Algorithms}
+
+\newpage
+\subsection{Decision Trees}
+\subsubsection{Introduction}
+\subsubsection{Fundamentals of Tree Mechanism}
+\subsubsection{Splitting, Stopping and Pruning Criteria}
+\subsubsection{Applications and Use-Cases}
+\subsubsection{Advantages and Limitations}
+\subsubsection{Comparative Analysis with other ML Algorithms}
+
+\newpage
+\section{Model Evaluation Techniques}
+\subsection{Bias And Variance}
+\subsection{Hold-Out Test Set}
+\subsection{Cross-Validation}
+\subsection{Metrics}
+
+\newpage
+\section{Implementation}
+\subsection{Planning and Timescales}
+Before we dive into my implementation of the algorithms, I'll bring forward the project plan put in place almost two months ago. The timeline for Term 1 was created with a weekly outline of expected deliverables. \par
+%\vspace{10mm}
+\subsubsection{Term 1 Timeline}
+\begin{tabular}{|c|p{10cm}|}
+\hline
+Timeframe & Tasks \\
+\hline
+Week 1 (Oct 2 - 6) & 
+\makecell[l]{Focus on implementing Project Plan \\
+Handwritten example of NN algorithm \\
+Test out Scikit-Learn classifier functions in Jupyter Notebooks } \\
+\hline
+Week 2 (Oct 9 - 13) & 
+\makecell[l]{1NN on simple dataset \\
+Design NN data structures and UML diagrams \\
+Begin PoC Programs. Fully test DTs and NN on Scikit-Learn} \\
+\hline
+Week 3 (Oct 16 - 20) & 
+\makecell[l]{1NN on iris data, Work on multi-class data \\
+Begin implementing K-Neighbours on Iris data \\
+Demonstate KNN in Jupyter Notebooks, Start basic DTs} \\
+\hline
+Week 4 (Oct 23 - 27) & 
+\makecell[l]{Complete NN Report - 29th October \\
+Start working on DTs on Iris Data with binary classification \\
+Begin working on hold out test set validation programs} \\
+\hline
+Week 5 (Oct 30 - Nov 3) & 
+\makecell[l]{Start DT Report \\
+Continue working on DT data handling with missing values \\
+Start working on cross validation programs and test on KNN} \\
+\hline
+Week 6 (Nov 6 - 10) & 
+\makecell[l]{Use hold out tests on Decision Trees \\
+ Implement K-folds Cross Validation on both algorithms \\
+Continue working on report} \\
+\hline
+Week 7 (Nov 13 - 17) & 
+\makecell[l]{Complete DT Report - 18th November \\
+Deal with any issues that have arisen over previous weeks \\
+Use different datasets from UCI (e.g breast cancer)} \\
+\hline
+Week 8 (Nov 20 - 24) & 
+\makecell[l]{ Focus on completing Interim Report \\
+Amend any issues with supplementary reports if not yet finished \\
+Draw meaningful tests and conclusions from results } \\
+\hline
+Week 9 (Nov 27 - Dec 1) & 
+\makecell[l]{Work on Interim Report \\
+Prepare for Demonstration and Presentation \\
+Finalise project work + prepare for submission} \\
+\hline
+Pres. Week (Dec 4 - 8) & 
+\makecell[l]{Presentation Week!\\
+Submit project, and present work \\
+Make demo and presentation} \\
+\hline
+\end{tabular}
+\subsection{KNN}
+
+\subsection{Classification Tree}
+\subsection{Datasets}
+\subsection{Jupyter Notebooks}
+
+\newpage
+\section{Evaluation and Reflection}
+\section{Future Developments and Objectives}
+\newpage
+\bibliographystyle{IEEEtranN}
+\bibliography{bibliography}
+
+
+\appendix
+\newpage
+\section{Appendix}
+%TC:ignore
+\subsection{Diary}
+The diary appended below is in rather informal shorthand but illustrates my honest thought process while approaching and delivering the project. The diary can be found in the diary folder of the project repository, titled "FYP-diary.MD"
+\begin{markdown}
+
+### 18th September 
+
+Allocated supervisor and informed by supervisor of my project title (allocated on 15th September). Supervisor will be Prof. Zhiyuan Luo.
+Project will be Comparison of Machine Learning Algorithms.
+
+- Made notes and research on "Breaking the ties" with K-NN algorithms
+- Made notes and basic research on Uniformity with Decision Trees, noted measures of uniformity (Gini, Entropy, Info Gain) - will need to read more about these soon.
+^^ Both points are highly relevant for the early deliverables.
+
+Watching CS229 ML lecture [video](https://youtu.be/jGwO_UgTS7I?si=TcRudZ_jwvuylEkv) given by Andrew Ng at Stanford, 2018: 
+Very easy to absorb lecture on overview of different types of ML. My project so far seems to be directed towards Supervised Learning-Classification
+
+
+
+### 19th September
+
+Attended Project Talk given by Dr Argyrios, covered 2 presentations. Useful talk, Argyrios clarified to me personally that LaTeX Project Plan can be in any format, isn't an institution-locked layout.
+Heavy emphasis on focusing on project plan.
+
+As of writing, the outline of plan is somewhat structured, but much work needs to be done.
+
+Will meet Prof. Zhiyuan on 25th, guidance given on how to access his office
+
+### 20th September
+
+Started trying to plan my meeting with Prof. Zhiyuan. Many questions to ask, just trying to find the right questions. Noted that there are various paths I can take this project, now considering if I should exclusively focus on Classification.
+Noted that it's difficult to research on Classification without needing to read into Regression techniques. There's also lots of notation to digest.
+
+- Understood the functionality of parameters (theta) alongside features/inputs (x). Learning a lot on notation in ML. The algorithms given in the brief seem to be more-or-less non-parametric, however - though I could be mistaken.
+- Research on kernel functions and how they transform data into a different representation such that data is easier to evaluate and more separable. I understand this very superficially. Need to read more on examples: Linear, Polynomial, Gaussian (RBF) and Sigmoid Kernels.
+- Some basic research on Multi-Class Support Vector Machines("one-vs-all", "one-vs-rest"). Complicated for now, will be useful for final deliverables. Also tribute to Vapnik. 
+- Research on RSS (Residual Sum of Squares) Criterion - not sure if relevant to KNN/Trees/Classification algorithms, seems moreso relevant to linear regression
+Started watching CS229 [Lecture 2](https://youtu.be/4b4MUYve_U8?si=GvrB1HdXNJ66JWNE), very useful information on notation by Andrew Ng, mostly focused on Regression however. 
+
+- Some concerns that I'm mostly focused on theory and not so much on implementation. Started digging around sci-kit learn [documentation](https://scikit-learn.org/stable/modules/tree.html) today: - will continue to get familiar in upcoming days.
+
+Upon arrival at campus, I've borrowed 5 books from library physically:
+1. The Elements of Statistical Learning, 2nd Edition. (TEoSL)
+2. Pattern Recognition and Machine Learning by Bishop. 
+3. Foundations of Machine Learning by Mohri
+4. Introduction to Machine Learning with Python by Muller & Guido. (MLwP)
+5. Hands-on Machine Learning with Scikit-Learn and TensorFlow
+
+Primarily I've been using (1) TEoSL as reference and using the others, or the internet to decipher concepts or notation when it's difficult to at first glance.
+I've not been using (4) yet but I think it will be vital as I start making proof of concept programs. 
+
+Today found out from Prof. Vovk via Moodle that a new textbook has been released online: An Introduction to Statistical Learning with Applications in Python, 2023. It seems to be a simpler version of TEoSL, so it might be the perfect resource for me. I'm in luck!
+Exchanged emails with the library services today but book isn't available physically, they've provided me an online copy. 
+
+GitLab repo is online! Aiming to put this diary on there.
+
+-Research on using OverLeaf (LaTex editor) in sync with GitLab such that I can track version history of my reports. Also research on Git, branches and recapping version control studies. Emailed Prof. Argyrios for confirmation of repo, as well as gitlab classes and slides from earlier talk. 
+
+### 21st September
+
+Made various changes and commits to repo last night and this morning, it now contains folders for this diary and the project plan I'm working on in LaTeX. I've been pushing to master(or main) lately and it doesn't feel right to me - so now that I've made my repo somewhat easy to navigate, I'm making a branch to continue research on: plan
+
+I'll use the planning branch up until my Project Plan is complete, I can then use my repo to explore my research and put proof of concept programs for the algorithms together while I'm still trying to define my project. This branch will represent my initial development phase. I've spent a lot of time last night and this morning keeping up to date with git conventions such that everything is done orderly. Creating this branch felt like the natural thing to do in this formative phase of my project. My intention is to merge the plan branch with main around when the Project Plan is complete and submitted, marking the beginning of development (and likely, a new dev branch).
+
+I purchased a pocketbook for meetings and ideas with my supervisor
+
+I will spend today looking at sci-kit learn and trying to play with library functions that have implements knn and decision trees already. I have barely looked into datasets yet and I must do so, this will likely define the direction of my project. Still need to look into whether Classification is what I want to exclusively work on. I will also work on my Project Plan, this should be a priority.
+
+### 22nd September
+
+Yesterday I continued reading about kernel functions and SVMs and honestly - found myself overwhelmed with theory and how much I still need to understand, let alone bring to the meeting on 25th. I think I need to focus more now on implementation. I'll work on the simplest ML algorithms and focus on implementing them and assessing them, further theory can wait I think.
+I aim to now focus on working through the exercises in MLwP and get familiar with working with datasets.
+Yesterday I also found Kaggle as a useful resource for datasets. Kaggle is the largest open-source ML community and it's highly likely I'll use their resources in this project, along with UCI and Delve, as long as the data isn't too difficult to process.
+
+Also thinking of turning these diary files into markdown format for easier use.
+
+Setting up python and Jupyter on macOS surprisingly time-consuming.
+
+### 23rd September
+
+Been playing with GUI elements today, tkinter and pyqt5 - I've not really decided how the end-product of this project is going to look and function, so I started investigating this today.
+Wasted a ton of time configuring python environments.
+
+Spent good amount of time today planning for meeting, have a decent outline of things to cover. In the process, have structured my approach to tackling the project a little better.
+
+### 24th September
+
+Wrote meeting outline for supervisor before tomorrow's meeting, during the process did a lot of research on model evaluation concepts and metrics
+
+Sent email with a decent amount of detail, very much looking forward to the meeting. I feel this has been a productive week but I need to make many decisions still on how I'm going to tackle this project.
+
+Will likely change these to .MD files tomorrow and perhaps make a research folder. Hoping to start implementing Jupyter Notebook projects next week.
+
+My priority next week however, will be my project plan. 
+
+### 25th September
+
+Met supervisor! Meeting was thoroughly helpful. Main takeaway from meeting was to 'keep it simple'. I will focus on Nearest Neighbours for now and try implementing the simplest variation of this algorithm in handwritten form. Doing this will allow me to fully understand the algorithm at its core.
+I'll likely just focus on simple implementations of Nearest Neighbours, Decision Trees and perhaps Logistic Regression - I need to read more into this.
+
+My priority is the Plan right now, I think I know which reports to focus on for this term at least. I should start with mathematical implementations of the algorithms to further my understanding - and this might help while I'm creating the Plan. I should then get started on building the algorithm and can structure my approach in SE terms via the Plan too. It's clearer to me now that the Plan is a tool to help me, rather than just a deliverable for assessment.
+
+### 27th September
+Attended FYP Talk on LaTex and Referencing today. Since classes have started, it's gotten a lot busier and less time to focus entirely on research and project progress.
+
+Additions have been made to Project Plan abstract. I hope to have an outline of some kind prepared by Friday and ideally a draft before the end of the week which can be reviewed by my supervisor.
+
+I've forgotten to mention that I've been using a 6th physical book by Tom Mitchell called Machine Learning for much of my research. I find it easier to absorb theory on there, and it covers decision tree theory in much more detail than TEoSL. I think it's probably much more suited for Classification problems.
+
+### 28th September
+Following the previous FYP talk, I've started using Google Scholar to find papers to use as references - and already found some great authoritative texts on the NN algorithm.  
+I aim to make real headway on the Plan today and I really hope to complete some kind of draft by tomorrow, such that I can get early feedback from my supervisor. Today I really need to make some executive decisions on the direction and goals of my project.  
+I've decided it may be wise to include some kind of _success criteria_ in my Abstract, such that I can make critical goals to deliver for the interim review. This project is so open to expansions that it's important to define what should be expected by the end of this. Creating a set of possible expansions may make it more flexible. Once I start assigning a time-frame to this project, it'll become clearer.
+
+### 15th October
+It's been a while since the last diary entry.
+Unfortunately, I may have underestimated how challenging it would be to balance the project with the other modules I'll be studying.  
+The week following my last entry was entirely focused on implementing my Project Plan and submitting something that motivated and outlined my approach to the project sufficiently.  
+The week after this should have been focused on developing my proof of concept programs, designing my UMLs and beginning my Nearest Neighbours report. Unfortunately, last week was not fruitful and I'll have to spend this week catching up with my outline immediately.
+
+### 16th October
+I've made small progress with the NN algorithm proof of concept and it works as expected. The labs in my machine learning module have been very useful with learning python syntactic sugar and dealing with datasets in Jupyter Notebooks. I'd like to somehow implement some kind of unit testing this week that I can carry forwards for the rest of term.  
+The repo needs to progress to a new branch for development and I hope to do this immediately after this entry. I'll be transferring from the 'plan' branch to a 'dev-poc' branch, updating the main branch in the process. It's likely that this will be the first of many dev branches in the overall process.  
+I'll need to update my README too with all the new structure I have put in place.   
+I'll likely setup some structuring of my interim and supplementary reports(NN) this week.  
+I'll move forwards with haste, and hopefully hear feedback on my outline soon, just to find if it's too ambitious, though I feel I'm already seeing that it is. 
+
+### 2nd November
+With the start of November, I do feel that I'm falling behind, not only with the work outlined in my plan - but also unfortunately, the diary entries. I do hope to make these more frequent and get back on track with my weekly diary entries.  
+  
+I've made progress on Nearest Neighbours and K-Nearest Neighbours proof of concept programs in Jupyter Notebooks. I realised quite quickly that it was imperative to create train-test-split functionality immediately just to test these algorithms functionally, and I've managed to do so.  
+I think that my implementation of train-test split will help in implementing k-folds cross-validation.  
+I've essentially realised that I need to implement model evaluation functions in conjunction with my models otherwise it's difficult to know if I'm going the right direction with my model implementation.  
+  
+If I focus on completing an implementation Nearest Neighbours and beginning an implementation with the Tree algorithm - which I believe will carry its own challenges - before the end of this week, as well as implementing cross-validation in some way. I may be able to catch up with my plan's outline.  
+  
+I'm moreso worried about making progress on my reports, as I'm very behind on this and I believe this will be more time-consuming than the algorithm's implementation. I'll be making immediate work on the NN algorithm report, and have already built the skeleton of the report in LaTeX.  
+My only consolation with this is that I don't feel lost with the theory of this much at all and I think research should be straightforward thanks to the reading I did out of interest during the summer.  
+  
+I had my second supervisor meeting a week ago, and the main theme of this meeting was that I essentially need to simply put my head down and deliver. My understanding is there, I simply need to push work forwards without fear of making errors.  
+  
+Areas that I might need to look into next week include handling missing data in datasets and how to implement PyUnit tests for my validation functions. I've played with a heart disease dataset from the UCI repository and noticed that handling missing values might be a challenge that I need to focus on within my data preprocessing phase.  
+  
+CS3920 lectures and labs have been handy for me looking ahead, and I think investigating normalisation techniques and how they affect model accuracy may be something to do next term.  
+  
+All in all, I'm running behind, I'm aware of it, and I need to move quickly to catch up in time for the interim review.
+  
+### 15th November
+I attended the FYP talk today by Prof. Dave Cohen about Presentations and how to bring forward our project during Presentation Week. I'm actually looking forward to talk about the research I've made. However I believe I'll need to make some compromises in order to deliver my targets on time, and I think this will have to take the form of the report deadlines set by myself.   
+I've simply not been keeping up with working on reports in adjacent form with my development, along with the intense assignments I'm working on currently this month. I think I'll have to work solely on the interim report and put together my findings on the two algorithms concurrently within my interim report - rather than simply bringing in two completed algorithm reports to introduce within the interim report. Once the interim report submission is complete, I can review if I want to add more detail or background to the algorithm reports during the second term.   
+It's likely that I'll need to perform some kind of review before the end of the the year to create a more thorough plan for Term 2.   
+  
+I've made some progress with the Decision Tree with Gini Impurity but still trying to work out how to introduce stopping criteria. I'm tentative to commit something that breaks.  
+From the library, I've picked up the book by Leo Breiman - Classification and Regression Trees. It's verbose but goes into pretty deep detail about tree splitting, stopping and pruning strategies. I'm curious about introducing entropy/information gain but the benefits don't seem obvious to me unless I bring about categorical data into the mix - which I've just not done yet.  
+
+I've discovered a really neat dataset on Kaggle called the Titanic dataset, it seems like a fun thing to bring in and a little more interesting than classifying flowers. I'd like to try and bring this into play before the end of term, but it depends on the difficulty of data preprocessing. I think it'd be nice to talk about for my presentation.  
+
+Looking back at my early research, it's quite funny to see how much of the theory I was reading through is rather irrelevant to the implementation I'm putting together - (RBF Kernels, Multi-class SVMs) - and it makes sense now why my supervisor told me to keep things simple back during our first meeting.
+  
+### 24th November
+Judgement day is almost upon us as my Interim Review deadline is approaching. I believe I have two functional algorithms deemed worthy for evaluation, though both could be extended in various ways.  
+I now need to piece together my report and ensure I have sufficient notebooks that evaluate the algorithms' performance. I've not quite completed the cross-validation functionality, but I think I can have this complete in a few days.  
+My third supervisor meeting has been scheduled for the 30th.  
+I need to ensure I have a testing strategy in place that checks the robustness of the algorithms while I made alterations to them.  
+  
+I do feel that I could bring in a third algorithm into play during second term, to make things more interesting. I think after learning about SVMs in CS3920, I have an idea on how this could be a third classification algorithm I could use for comparison to KNN and Trees.
+\end{markdown}
+%TC:endignore
+\end{document}
