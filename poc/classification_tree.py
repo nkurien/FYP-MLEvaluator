@@ -1,29 +1,66 @@
 import numpy as np
-from sklearn.datasets import load_iris
 from train_test_split import train_test_split as split
 
 class ClassificationTree :
-    # Constructor to initialize the classification tree with max depth and minimum size for splitting.
+    """
+    A decision tree classifier that uses the Gini index for splitting.
+
+    Attributes:
+        max_depth (int): The maximum depth of the tree.
+        min_size (int): The minimum number of samples required to split a node.
+        root (dict): The root node of the decision tree.
+    """
     def __init__(self, max_depth=20, min_size=1):
+        """
+        Constructs a ClassificationTree with specified maximum depth and minimum size.
+
+        Args:
+            max_depth (int): The maximum depth of the tree. Defaults to 20.
+            min_size (int): The minimum number of samples required to split a node. Defaults to 1.
+        """
         self.max_depth = max_depth
         self.min_size = min_size
         self.root = None
 
-    # The fit method combines the features and target variable to create a dataset and then builds the tree.
     def fit(self, X, y):
-        # Combine X and y with column_stack and tolist to ease recursive calls during building
-        # This is essentially our preprocessing for iris-data
+        """
+        Fits the decision tree to the provided dataset.
+
+        Args:
+            X (array-like): Feature dataset.
+            y (array-like): Target values.
+
+        Combines X and y into a single dataset and builds the decision tree.
+        """
         dataset = np.column_stack((X, y)).tolist()
         #print(dataset)
         self.root = self.build_tree(dataset, self.max_depth, self.min_size)
 
-    # Predict method to make predictions for each sample in the feature matrix X.
     def predict(self, X):
+        """
+        Predicts class labels for the given samples.
+
+        Args:
+            X (array-like): The input features to predict.
+
+        Returns:
+            np.array: Predicted class labels.
+        """
         predictions = [self._predict(self.root, row) for row in X]
         return np.array(predictions)
     
     # Helper method for prediction that recursively traverses the tree to find the class for a single row.
     def _predict(self, node, row):
+        """
+        Helper method to predict the class for a single sample.
+
+        Args:
+            node (dict): The current node in the decision tree.
+            row (list): A single sample from the dataset.
+
+        Returns:
+            The predicted class label for the sample.
+        """
         if row[node['index']] < node['value']: # Check condition at the node.
             if isinstance(node['left'], dict): # If the left child is a dictionary, it's another decision node.
                 return self._predict(node['left'], row)
@@ -37,6 +74,17 @@ class ClassificationTree :
 
     # Main method that builds the tree from the training dataset.
     def build_tree(self, train, max_depth, min_size):
+        """
+        Builds the decision tree from the training dataset.
+
+        Args:
+            train (list): The training dataset.
+            max_depth (int): The maximum depth of the tree.
+            min_size (int): The minimum number of samples required to split a node.
+
+        Returns:
+            dict: The root node of the decision tree.
+        """
         root = self.get_split(train) # Find the best initial split for the root.
         self.split(root, max_depth, min_size, 1) # Recursively split the tree from the root node.
         # The value 1 above is passed as the first layer depth from the root
@@ -44,6 +92,16 @@ class ClassificationTree :
 
     # Gini index function to evaluate the quality of a split.
     def gini_index(self, groups, classes):
+        """
+        Calculates the Gini index for a split.
+
+        Args:
+            groups (list): The groups of samples after a split.
+            classes (list): The unique class values in the dataset.
+
+        Returns:
+            float: The Gini index for the split.
+        """
         # Count all samples at split point
         n_instances = float(sum([len(group) for group in groups]))
         # Sum weighted Gini index for each group
@@ -63,6 +121,15 @@ class ClassificationTree :
     
     # Method to find the best place to split the dataset.
     def get_split(self, dataset):
+        """
+        Finds the best split point in the dataset.
+
+        Args:
+            dataset (list): The dataset to split.
+
+        Returns:
+            dict: The best split point in the dataset.
+        """
         class_values = list(set(row[-1] for row in dataset)) # Get the unique class values.
         b_index, b_value, b_score, b_groups = 999, 999, 999, None
         for index in range(len(dataset[0]) - 1): # Iterate over all features
@@ -75,6 +142,16 @@ class ClassificationTree :
 
     #Creates a terminal/leaf node from a group of samples. Called when splitting not necessary
     def to_terminal(self, group):
+        """
+        Creates a terminal node value.
+
+        Args:
+            group (list): The group of samples.
+
+        Returns:
+            The most common output value in the group (class label).
+        """
+
         outcomes = [row[-1] for row in group] # Extract the outcomes from the group
         #This assumes the last column is the target variable
         #Returns the most frequent outcome
@@ -83,6 +160,17 @@ class ClassificationTree :
     # Helper method to split the dataset based on an attribute and an attribute value
     # Called to help find all possible splits
     def test_split(self, index, value, dataset):
+        """
+        Splits a dataset based on an attribute and an attribute value.
+
+        Args:
+            index (int): The index of the attribute to split on.
+            value: The value of the attribute to split on.
+            dataset (list): The dataset to split.
+
+        Returns:
+            tuple: Two lists representing left and right splits of the dataset.
+        """
         left, right = list(), list()
         for row in dataset:
             if row[index] < value:
@@ -93,6 +181,17 @@ class ClassificationTree :
 
     # Recursive method to create child splits for a node or make terminal nodes.
     def split(self, node, max_depth, min_size, depth):
+        """
+        Recursively creates child splits for a node or makes terminal nodes.
+
+        Args:
+            node (dict): The node to split.
+            max_depth (int): The maximum depth of the tree.
+            min_size (int): The minimum number of samples required to split a node.
+            depth (int): The current depth in the tree.
+
+        This method splits nodes until the maximum depth or minimum node size is reached.
+        """
         left, right = node['groups']
         del(node['groups'])
         # Check for no split
@@ -120,6 +219,16 @@ class ClassificationTree :
     
     # Prints the tree to the terminal in a relatively organised manner, left to right
     def print_tree(self, node=None, depth=0, feature_names=None):
+        """
+        Prints the decision tree to the output console. Each vertical line represents a layer.
+
+        Args:
+            node (dict, optional): The node to start printing from. Defaults to the root node.
+            depth (int, optional): The initial depth for printing. Defaults to 0.
+            feature_names (list of str, optional): Names of the features for better readability.
+
+        This method recursively prints the tree from the given node.
+        """
         if node is None:
             node = self.root
         
@@ -148,11 +257,28 @@ class ClassificationTree :
             print(f"{'|   ' * depth}--> Class: {node}")
     
     def is_homogeneous(self, group):
-        """Check if all samples in the tree node belong to the same class."""
+        """
+        Checks if all samples in the group belong to the same class.
+
+        Args:
+            group (list): The group of samples.
+
+        Returns:
+            bool: True if all samples in the group belong to the same class, False otherwise.
+        """
         classes = [row[-1] for row in group]
         return len(set(classes)) == 1
     
     def get_depth(self, node=None):
+        """
+        Calculates the depth of the tree.
+
+        Args:
+            node (dict, optional): The node to calculate the depth from. Defaults to the root node.
+
+        Returns:
+            int: The depth of the tree.
+        """
         if node is None:
             node = self.root
 
