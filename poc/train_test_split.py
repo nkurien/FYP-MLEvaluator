@@ -41,6 +41,11 @@ def train_test_split(X, y, test_size=0.25, seed=None):  # Default test_size is n
         ValueError: If test_size is not in the range 0 < test_size < 1 or not an int less than the number of samples.
     """
     # Shuffle is now done by default
+
+    # Convert X and y to numpy arrays if they are not already
+    X = np.array(X) if not isinstance(X, np.ndarray) else X
+    y = np.array(y) if not isinstance(y, np.ndarray) else y
+    
     if len(X) == 0 or len(y) == 0:
         raise ValueError("Input data cannot be empty.")
 
@@ -50,10 +55,18 @@ def train_test_split(X, y, test_size=0.25, seed=None):  # Default test_size is n
 
     num_samples = len(y)
     
-    if 0 <= test_size < 1:
-        train_ratio = num_samples - int(num_samples * test_size)
-    elif 1 <= test_size < num_samples:
-        train_ratio = num_samples - test_size
+    if isinstance(test_size, float):
+        if 0.0 < test_size < 1.0:
+            train_ratio = num_samples - int(num_samples * test_size)
+        else:
+            raise ValueError("test_size as a float must be in the range (0.0, 1.0)")
+
+    elif isinstance(test_size, int):
+        if 1 <= test_size < num_samples:
+            train_ratio = num_samples - test_size
+        else:
+            raise ValueError("test_size as an int must be less than the number of samples")
+
     else:
         raise ValueError("Invalid test_size value")
 

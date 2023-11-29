@@ -1,33 +1,82 @@
+import unittest
 import numpy as np
 import sys
 sys.path.append("..")
-from train_test_split import train_test_split as split
-from one_nn import OneNearestNeighbour
-from sklearn.datasets import load_iris
+from train_test_split import train_test_split  # Adjust the import according to your project structure
 
-# loading iris data using sklearn
-iris = load_iris()
-iris_features = iris['data']
-iris_labels = iris['target']
+class TestTrainTestSplit(unittest.TestCase):
 
-# printing loaded features and labels
-print(iris_features)
-print(iris_labels)
+    def setUp(self):
+        # Sample dataset for testing
+        self.X = np.array([[1, 2], [3, 4], [5, 6], [7, 8]])
+        self.y = np.array([0, 1, 0, 1])
 
-#splitting data into training and test set using train_test_split
-iris_X_train, iris_X_test, iris_y_train, iris_y_test = split(iris_features,iris_labels,0.25,True)
+    def test_proportional_split(self):
+        X_train, X_test, y_train, y_test = train_test_split(self.X, self.y, test_size=0.25)
+        self.assertEqual(len(X_train), 3)
+        self.assertEqual(len(X_test), 1)
+        self.assertEqual(len(y_train), 3)
+        self.assertEqual(len(y_test), 1)
 
-#printing sizes of training and test sets to demonstrate ratio
-print(iris_X_train.shape)
-print(iris_X_test.shape)
+    def test_absolute_split(self):
+        X_train, X_test, y_train, y_test = train_test_split(self.X, self.y, test_size=2)
+        self.assertEqual(len(X_train), 2)
+        self.assertEqual(len(X_test), 2)
+        self.assertEqual(len(y_train), 2)
+        self.assertEqual(len(y_test), 2)
 
-#fitting training data
-NN = OneNearestNeighbour()
-NN.fit(iris_X_train,iris_y_train)
+    def test_empty_input(self):
+        with self.assertRaises(ValueError):
+            train_test_split([], [], test_size=0.25)
 
-#predicting labels for test data
-iris_predictions = NN.predict(iris_X_test)
+    def test_unequal_lengths(self):
+        with self.assertRaises(ValueError):
+            train_test_split(self.X, np.array([0, 1]), test_size=0.25)
 
-#printing correct predictions with accuracy value
-print(iris_predictions == iris_y_test)
-print("1NN Accuracy :", np.mean(iris_predictions == iris_y_test))
+    def test_invalid_test_size(self):
+        with self.assertRaises(ValueError):
+            train_test_split(self.X, self.y, test_size=1.5)
+
+    def test_single_sample(self):
+        X_single = np.array([[1, 2]])
+        y_single = np.array([0])
+        X_train, X_test, y_train, y_test = train_test_split(X_single, y_single, test_size=0.5)
+        self.assertEqual(len(X_train), 1)
+        self.assertEqual(len(X_test), 0)
+        self.assertEqual(len(y_train), 1)
+        self.assertEqual(len(y_test), 0)
+
+    def test_shuffle_consistency_with_seed(self):
+        X_train, X_test, y_train, y_test = train_test_split(self.X, self.y, test_size=0.25, seed=42)
+        X_train_2, X_test_2, y_train_2, y_test_2 = train_test_split(self.X, self.y, test_size=0.25, seed=42)
+        np.testing.assert_array_equal(X_train, X_train_2)
+        np.testing.assert_array_equal(X_test, X_test_2)
+    
+    def test_large_test_size_integer(self):
+        with self.assertRaises(ValueError):
+            train_test_split(self.X, self.y, test_size=100)
+
+    def test_invalid_test_size_type(self):
+        with self.assertRaises(ValueError):
+            train_test_split(self.X, self.y, test_size="invalid_type")
+    
+    def test_single_feature_data(self):
+        X_single_feature = np.array([[1], [3], [5], [7]])
+        X_train, X_test, y_train, y_test = train_test_split(X_single_feature, self.y, test_size=0.25)
+        self.assertEqual(X_train.shape[1], 1)
+        self.assertEqual(X_test.shape[1], 1)
+    
+    def test_list_input_data(self):
+        X_list = [[1, 2], [3, 4], [5, 6], [7, 8]]
+        y_list = [0, 1, 0, 1]
+        X_train, X_test, y_train, y_test = train_test_split(X_list, y_list, test_size=0.25)
+        self.assertIsInstance(X_train, np.ndarray)
+        self.assertIsInstance(X_test, np.ndarray)
+
+
+
+
+
+
+if __name__ == '__main__':
+    unittest.main()
