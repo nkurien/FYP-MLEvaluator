@@ -41,6 +41,11 @@ def train_test_split(X, y, test_size=0.25, seed=None):  # Default test_size is n
         ValueError: If test_size is not in the range 0 < test_size < 1 or not an int less than the number of samples.
     """
     # Shuffle is now done by default
+    if len(X) == 0 or len(y) == 0:
+        raise ValueError("Input data cannot be empty.")
+
+    if len(X) != len(y):
+        raise ValueError("The number of samples in X and y must be equal.")
     X, y = shuffle_data(X, y, seed)
 
     num_samples = len(y)

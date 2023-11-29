@@ -30,4 +30,4 @@ iris_predictions = NN.predict(iris_X_test)
 
 #printing correct predictions with accuracy value
 print(iris_predictions == iris_y_test)
-print("Accuracy :", np.mean(iris_predictions == iris_y_test))
+print("1NN Accuracy :", np.mean(iris_predictions == iris_y_test))

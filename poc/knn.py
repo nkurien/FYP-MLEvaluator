@@ -15,6 +15,8 @@ class KNearestNeighbours:
         Args:
             k (int, optional): Number of neighbours to consider. Defaults to 1.
         """
+        if not isinstance(k, int) or k <= 0:
+            raise ValueError("k must be a positive integer.")
         self.k = k
         self.X_training_data = None
         self.y_training_labels = None
@@ -29,11 +31,25 @@ class KNearestNeighbours:
 
         Raises:
             ValueError: If k is greater than the number of training samples.
+            ValueError: If the training data or labels are empty.
+            ValueError: If the number of samples in X and y are not equal.
         """
+        # Check if the training data or labels are empty
+        if len(X) == 0 or len(y) == 0:
+            raise ValueError("Training data and labels cannot be empty.")
+
+        # Check if the number of samples in X and y are equal
+        if len(X) != len(y):
+            raise ValueError("The number of samples in X and y must be equal.")
+
+        # Existing check for the value of k
         if self.k > len(X):
             raise ValueError("k must be less than or equal to the number of training data points.")
+
         self.X_training_data = X
         self.y_training_labels = y
+
+
 
     def predict(self, X):
         """
@@ -44,9 +60,19 @@ class KNearestNeighbours:
 
         Returns:
             list: Predicted class labels for each data sample.
+
+        Raises:
+            ValueError: If the feature dimensions of the test data do not match the training data.
         """
+        if self.X_training_data is None or self.y_training_labels is None:
+            raise ValueError("Model has not been fitted with training data yet.")
+
+        if X.shape[1] != self.X_training_data.shape[1]:
+            raise ValueError("Feature dimensions of the test data must match the training data.")
+
         predictions = [self._predict_point(point) for point in X]
         return predictions
+
 
     def _predict_point(self, point):
         """
@@ -61,8 +87,6 @@ class KNearestNeighbours:
         k_nearest = [(-1, float('inf')) for _ in range(self.k)]  # [(index, distance), ...]
 
         for i, training_point in enumerate(self.X_training_data):
-            if (point == training_point).all():  # Skip the identical point
-                continue
 
             distance = self._euclidean_distance(point, training_point)
             
