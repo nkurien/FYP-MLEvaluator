@@ -17,8 +17,9 @@ def _k_folds(X, y, k=5, seed=None) :
     X, y = split.shuffle_data(X,y,seed)
     num_of_samples = len(y)
     # Check if 'k' is a valid value
-    if k < 1 or k > num_of_samples:
-        raise ValueError(f"'k' must be between 1 and {num_of_samples}, got {k}")
+    #K can't be 1, we accept 2 and higher
+    if k < 2 or k > num_of_samples or not isinstance(k, int):
+        raise ValueError(f"'k' must be an integer between 2 and {num_of_samples}, got {k}")
     indices = np.arange(num_of_samples)
 
     # Calculate the standard fold size
