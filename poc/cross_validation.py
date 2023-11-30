@@ -65,6 +65,8 @@ def k_folds_accuracy_scores(model, X, y, k=5, seed=None):
     scores = []
 
     # Iterate over each fold
+    #n=0
+    #mismatch = 0
     for (X_train, y_train), (X_test, y_test) in folds:
         # Fit the model on the training set
         model.fit(X_train, y_train)
@@ -75,8 +77,14 @@ def k_folds_accuracy_scores(model, X, y, k=5, seed=None):
         # Compute the score - here, we use accuracy as an example
         accuracy = np.mean(y_pred == y_test)
 
+        #if accuracy != 1.0:
+         #   mismatch+=1
+
         # Append the score to the list
         scores.append(accuracy)
+        #n+=1
+        #print(n,", ",len(folds))
+        #print("mismatches:",mismatch)
 
     return scores
 
@@ -85,5 +93,13 @@ def k_folds_accuracy_score(model, X, y, k=5, seed=None):
     Returns the average accuracy score
     """
     return np.mean(k_folds_accuracy_scores(model, X, y, k, seed))
+
+def leave_one_out_scores(model, X, y, seed=None):
+    k = len(y)
+
+    return k_folds_accuracy_scores(model, X, y, k, seed)
+
+def leave_one_out_score(model, X, y, seed=None):
+    return np.mean(leave_one_out_scores(model,X,y,seed))
 
 
