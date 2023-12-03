@@ -72,6 +72,31 @@ class TestTrainTestSplit(unittest.TestCase):
         X_train, X_test, y_train, y_test = train_test_split(X_list, y_list, test_size=0.25)
         self.assertIsInstance(X_train, np.ndarray)
         self.assertIsInstance(X_test, np.ndarray)
+    
+    def test_seed_with_large_dataset(self):
+        X_large = np.random.rand(100, 10)
+        y_large = np.random.randint(2, size=100)
+        X_train_1, X_test_1, y_train_1, y_test_1 = train_test_split(X_large, y_large, test_size=0.25, seed=42)
+        X_train_2, X_test_2, y_train_2, y_test_2 = train_test_split(X_large, y_large, test_size=0.25, seed=42)
+        np.testing.assert_array_equal(X_train_1, X_train_2)
+    
+    def test_shuffle_different_seeds(self):
+        X_train_1, X_test_1, y_train_1, y_test_1 = train_test_split(self.X, self.y, test_size=0.25, seed=42)
+        X_train_2, X_test_2, y_train_2, y_test_2 = train_test_split(self.X, self.y, test_size=0.25, seed=24)
+        self.assertFalse(np.array_equal(X_train_1, X_train_2))
+
+    def test_same_seed_different_data(self):
+        X_new = np.array([[9, 10], [11, 12], [13, 14], [15, 16]])
+        y_new = np.array([1, 0, 1, 0])
+        X_train_1, X_test_1, y_train_1, y_test_1 = train_test_split(self.X, self.y, test_size=0.25, seed=42)
+        X_train_2, X_test_2, y_train_2, y_test_2 = train_test_split(X_new, y_new, test_size=0.25, seed=42)
+        self.assertFalse(np.array_equal(X_train_1, X_train_2))
+
+    def test_seed_with_different_test_sizes(self):
+        X_train_1, X_test_1, y_train_1, y_test_1 = train_test_split(self.X, self.y, test_size=0.25, seed=42)
+        X_train_2, X_test_2, y_train_2, y_test_2 = train_test_split(self.X, self.y, test_size=0.5, seed=42)
+        self.assertNotEqual(len(X_train_1), len(X_train_2))
+
 
 
 

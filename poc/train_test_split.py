@@ -14,13 +14,12 @@ def shuffle_data(X, y, seed=None):
     Returns:
         tuple: Shuffled data features and labels.
     """
-    if seed is not None:
-        np.random.seed(seed)
+    rng = np.random.RandomState(seed) if seed is not None else np.random
 
-    data_num = np.arange(X.shape[0])
-    np.random.shuffle(data_num)
+    indices = np.arange(X.shape[0])
+    rng.shuffle(indices)
 
-    return X[data_num], y[data_num]
+    return X[indices], y[indices]
 
 def train_test_split(X, y, test_size=0.25, seed=None):  # Default test_size is now 0.25
     """
