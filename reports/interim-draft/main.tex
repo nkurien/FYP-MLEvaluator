@@ -53,7 +53,13 @@ Moving forward, the project will delve deeper into these insights, optimizing th
 \tableofcontents
 
 \newpage
-\section*{Report Navigation Guide}
+\section*{Navigation Guide and Declaration}
+This report has been prepared on the basis of my own work. Where other published and unpublished source materials have been used, these have been acknowledged.\par
+\vspace{10pt}
+I've included a navigation guide here to ease traverse through this report for assessment. \par
+
+Word Count: 3346
+
 
 \newpage
 \section{Introduction}
@@ -62,10 +68,10 @@ Moving forward, the project will delve deeper into these insights, optimizing th
 Machine learning (ML) has taken the world by storm in recent times. In the era of unprecedented data generation, ML has emerged as a pivotal technology with profound implications for industries and everyday life. It underpins significant advancements in various sectors, including healthcare, finance, transportation, and more, by enabling intelligent systems that can learn from data and make informed decisions. \par
 In our daily lives, the influence of machine learning is both subtle and profound. It powers the personalized recommendations we receive on streaming services like Netflix and Spotify, tailoring entertainment to our tastes~\cite{NetflixRecommendations,SpotifyPlaylistGen}. When we shop online, ML algorithms analyze our purchasing habits to suggest products we might like, enhancing our shopping experience~\cite{MediaRecommendationSystemsSurvey}. Even our interactions with smartphones, from voice assistants like Siri and Google Assistant to predictive text and search, are driven by machine learning technologies, making them more intuitive and responsive to our needs~\cite{GoogleAssistantLookAndTalk, SiriML}.
 \par
-Beyond these conveniences, machine learning drives significant developments in critical areas. In healthcare, it aids in the early diagnosis of diseases~\cite{diabetesclassification}, personalized treatment plans~\cite{PersonalisedMedicineDeepLearning}, and even in drug discovery, ~\cite{DrugDiscoveryDeepLearning} revolutionizing patient care and outcomes. In the realm of finance, machine learning algorithms detect fraudulent activities and automate trading, providing more secure and efficient financial services. In transportation, from optimizing logistics and delivery routes to the development of autonomous vehicles, ML is at the forefront, promising safer and more efficient transport systems. \par
+Beyond these conveniences, machine learning drives significant developments in critical areas. In healthcare, it aids in the early diagnosis of diseases~\cite{diabetesclassification}, personalized treatment plans~\cite{PersonalisedMedicineDeepLearning}, and even in drug discovery, ~\cite{DrugDiscoveryDeepLearning} revolutionizing patient care and outcomes. In the realm of finance, machine learning algorithms detect fraudulent activities and automate trading, providing more secure and efficient financial services~\cite{FinanceFraudDeepLearning}. In transportation, from optimizing logistics and delivery routes to the development of autonomous vehicles, ML is at the forefront, promising safer and more efficient transport systems~\cite{TransportationLogisticsML}. \par
 At the heart of all of this are classification tasks, which are central to many ML applications. Classification involves assigning categories or labels to data points based on their features, a task that is fundamental in pattern recognition, decision-making, and predictive modelling. From identifying fraudulent transactions to diagnosing medical conditions, the ability to accurately classify data is crucial.
 \par
-The significance of machine learning is not only growing in the realms of convenience and efficiency but also gaining traction as a key driver of global innovation. It is at the centre of research and development across industries, pushing the boundaries of what technology can achieve. Countries and companies are investing heavily in AI and ML research, recognizing their potential to spur economic growth, enhance competitiveness, and solve some of the world's most pressing challenges, from climate change to healthcare.
+The significance of machine learning is not only growing in the realms of convenience and efficiency but also gaining traction as a key driver of global innovation. It is at the centre of research and development across industries, pushing the boundaries of what technology can achieve. Countries and companies are investing heavily in AI and ML research, recognizing their potential to spur economic growth, enhance competitiveness, and solve some of the world's most pressing challenges, from climate change~\cite{ClimateChange2022} to healthcare.
 \par
 Machine learning, with its ability to analyze vast amounts of data and learn from it, is not just a technological advancement but a transformative force reshaping how we live, work, and interact with the world around us. As it continues to evolve, its impact is set to become even more profound, making its understanding and application an essential facet of modern life.
 
@@ -81,23 +87,167 @@ The breakthroughs mentioned above have generated a large amount of attention in 
 
 \newpage
 \subsection{Project Specification}
-The primary objective of this project is to conduct a thorough comparative analysis between two simple, fundamental machine learning algorithms on the classification task. The algorithms selected are K-Nearest Neighbours (KNN) and Decision Trees - more specifically, the CART algorithm. This involves implementing these algorithms from scratch, which provides a deeper understanding of their mechanics and intricacies. The comparison will focus on various performance metrics, including accuracy, precision, and recall, to evaluate the effectiveness of each algorithm in different scenarios. These algorithms and metrics are elaborated in more detail in this report. \par
+The primary objective of this project is to conduct a thorough comparative analysis between two simple, fundamental machine learning algorithms on the classification task. The algorithms selected are K-Nearest Neighbours (KNN)~\cite{NNEFixHodges,NNCoverHart} and Decision Trees - more specifically, the CART algorithm~\cite{CARTBreiman}. This involves implementing these algorithms from scratch, which provides a deeper understanding of their mechanics and intricacies. The comparison will focus on various performance metrics, including accuracy, precision, and recall, to evaluate the effectiveness of each algorithm in different scenarios. These algorithms and metrics are elaborated in more detail in this report. \par
 The models are implemented in Python~\cite{python3}, creating the data structures using Lists and NumPy~\cite{numpy}, and using various existing libraries as points of reference. Sci-kit Learn is a highly regarded Python library by data scientists and includes various implementations of the models that are relevant to this project. This library proved an invaluable point of reference during the development of both algorithms, and served as a comparable benchmark when initially determining the implementation's performance. \par
-Additionally, the project aims to explore the impact of hyperparameters on these algorithms. For KNN, this includes examining how different values of 'k', the number of nearest neighbors, affect the classification outcome. Similarly, for CART, the focus will be on understanding how different tree depths influence the model's ability to generalize from training data.
+Jupyter notebooks have been used initially while the models are in development.
+They have also been tremendously useful for building visualisations and
+validating the models. Later on in development, I hope to implement these models
+in a standalone interface that can take datasets as inputs and provide useful
+insights on the performance of chose models on this data. Creating the interface
+will potentially be implemented using Python libraries such as PyQt5. The goal is to implement this standalone interface in Term 2, using the proof-of-concept programs put in place prior. There are vast amounts of resources I’ve found helpful in deciphering the theory behind this project. \par
+Additionally, the project aims to explore the impact of hyperparameters on these algorithms. For KNN, this includes examining how different values of 'k', the number of nearest neighbours, affect the classification outcome. Similarly, for CART, the focus will be on understanding how different tree depths influence the model's ability to generalize from training data.
 
-
+\newpage
 \subsection{Milestones}
+Within my Project Plan, my approach was broken down by approaching the algorithms and model evaluation methods all as separate components. I had a success criteria in place for the end of Term 1 - and I believe I've managed to fulfil this. The milestones put in place from my Project Plan are listed as follows.
+
+\subsubsection{First Term}
+\textbf{Reports} \par
+% Describe the milestones for the first term, including reports.
+\textbf{Report 1:} Nearest Neighbour Algorithms - In this report I hope to discuss the theory behind nearest neighbour algorithms, 1-Nearest Neighbour and K-Nearest Neighbour, and further details behind how they function. \par 
+\noindent \textbf{Report 2:} Decision Tree Algorithms - In this report, I hope to discuss the theory behind the Decision Tree algorithm and explore its measures of uniformity. \par
+\vspace{2mm}
+I sense that completing both of these reports will fulfill my understanding of the inner workings of these algorithms, and will supplement my interim report at the end of the year. \par
+
+% Describe the milestones for the first term, including programs.
+\textbf{Programs} \par
+I will begin by implementing Proof of Concept programs in Python, starting very simple, and then expanding as I begin to expand both on the algorithms, and the complexity of my datasets. My PoC Programs will be listed as follows, in three sections: \par
+\textbf{Nearest Neighbours}
+\begin{itemize}
+    \item 1-NN algorithm implemented on very small synthetic dataset - in essence, coordinates on a 2-dimensional axis. The algorithm will essentially calculate Euclidean Distance between two points and set a solid starting point for development.
+    \item 1-NN algorithm implemented on the infamous iris~\cite{irisdata} dataset from the UCI repository~\cite{uci}, starting on two classes and a single feature, and then eventually implemented more features and classes from the dataset.
+    \item Implement K-neighbours:
+    \begin{itemize}
+        \item Starting with k=3 - and find differences with results from the iris dataset
+        \item Increase value for k, towards k=10. 
+        \item Find cases when tie-breaking is necessary i.e. when k is even
+    \end{itemize}
+    \item Introduce tie-breaking policies in the algorithm
+    \item At this point, introduce performance metrics from PoC programs made in \textit{model validation}.
+    \item Also, the algorithm at this point should be able to handle larger and more complex datasets.
+\end{itemize}
+\textbf{Decision Trees}
+\begin{itemize}
+    \item Start on simple synthetic dataset containing features and labels and build a very basic decision tree classifier to classify data points based on their features
+    \begin{itemize}
+        \item Initially, a Decision Tree Node class will be created which should store information about the split criterion - which will likely expand as the algorithm is extended with more hyperparameters
+        \item A tree classifier class that follows the CART algorithm will recursively partition the dataset into various subsets until the optimum Gini impurity is found. This PoC program should explore how to do that.
+    \end{itemize}
+    \item Visualisation - Before an interface is implemented, and while a library isn't being used, it would be wise to investigate how to visualise the tree using the console output.
+    \item Once the program has progressed this far, overfitting will rapidly become an issue. Adding splitting criterion hyperparameters will be useful at this point. Adding a maximum depth will be my first step into implementing this.
+    \begin{itemize}
+        \item There are a wide number of extensions I can go into, when it comes to reducing overfitting on trees, such as pruning techniques and implementing forests
+    \end{itemize}
+\end{itemize}
+\textbf{Model Validation}
+\begin{itemize}
+    \item Start a program that can perform a train-test-split on a dataset, similar to that of Scikit-Learn
+    \item Produce small programs that can calculate metrics such as accuracy, precision, recall and f-score after the training process.
+    \item Implement K-folds Cross-Validation - program that can split dataset into various subsets and cycle through each data set for training + testing
+    \begin{itemize}
+        \item The assessment phase during each iteration can be extended with various different metric calculations, including robustness for KNN and feature importance for DTs
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Success Criteria}
+By the end of the first term, it is essential that I have implemented both algorithms, K-Nearest Neighbours and Decision Trees, in some manner using Jupyter Notebooks, as well as using any form of model validation techniques to determine performance metrics of both algorithms. This is what I'd call an essential deliverable before the interim review, and I think it's feasible with the time and preparation given, and necessary compromises made.
 
 \newpage
 \section{Algorithms}
 In this chapter, we introduce and evaluate the algorithms I'll be reviewing in this project.
 \subsection{K-Nearest Neighbours}
-
+\textbf{K-Nearest Neighbours (KNN)} is a versatile, easy-to-implement, and foundational algorithm in the realm of machine learning, widely recognized for its simplicity and effectiveness in classification and regression tasks.
 \subsubsection{Overview}
+The K-Nearest Neighbours algorithm is a type of instance-based learning, or lazy learning, where the function is only approximated locally and all computation is deferred until function evaluation. It is a non-parametric method used for classification and regression. In both cases, the input consists of the k closest training examples in the feature space. The output depends on whether KNN is used for classification or regression: \par
+
+In KNN classification, the output is a class membership. An object is classified by a majority vote of its neighbours, with the object being assigned to the class most common among its k nearest neighbours (k is a positive integer, typically small). If k = 1, then the object is simply assigned to the class of that single nearest neighbour. \par
+In KNN regression, the output is the property value for the object. This value is the average of the values of its k nearest neighbours. \par
+KNN is a type of lazy learning where the function is only approximated locally and all computation is deferred until classification. The algorithm doesn't learn a discriminative function from the training data but memorizes the training dataset instead.
+
+KNN can be used for both classification and regression problems. However, it is more widely used in classification problems in the industry. The simplicity of the KNN algorithm is one of its biggest assets, making it a great starting point for new data scientists to familiarize themselves with machine learning and data analysis. \par
+I chose this algorithm as my first algorithm to implement due to its simplicity, ease of implementation, and how intuitive its mechanism is to comprehend. Choosing this algorithm as my first model allowed me to have meaningful results I could deliver quite early on in my project's implementation. I would position KNN almost as an introductory tool to ML, and its simplicity can be dissected further as we introduce more sophisticated models later into the project - this was at least, my intention. \par
+There are endless amounts of resources available to look into this algorithm, I've found two authoritative sources that are pivotal in the introduction and development of this algorithm: Evelyn Fix's Discriminatory Analysis paper from 1951~\cite{NNEFixHodges} and Thomas Cover's expansion on this concept in 1967~\cite{NNCoverHart}.
+
 \subsubsection{Mechanism}
+The K-Nearest Neighbours (KNN) algorithm operates on a straightforward principle of feature similarity, which makes it particularly effective for classification tasks. To understand how KNN classifies a new data point, let's break down its mechanism into two primary steps: selecting the nearest neighbours and determining the label. \par
+
+\textbf{Selecting the Nearest Neighbours:}
+
+Distance Measurement: When a new data point is introduced for classification, KNN begins by calculating the distance between this point and every other point in the training dataset. The most common method for this calculation is the Euclidean distance, though other distance metrics can also be used depending on the nature of the data.
+
+Identifying Nearest Neighbours: After calculating distances, the algorithm sorts these values and picks the 'k' shortest distances. The value of 'k' is pre-defined (usually a small integer) and represents the number of nearest neighbours to consider. It's crucial to choose an appropriate 'k' value, as it influences the classification accuracy – too small a value can make the algorithm sensitive to noise, while too large a value might include irrelevant neighbours.
+
+\textbf{Determining the Label:}
+
+Voting Among Neighbours: Each of the 'k' nearest neighbours casts a 'vote' based on their class label. The basic idea is that similar data points (neighbours) will have similar labels.
+
+Majority Wins: The new data point is assigned the class label that has the majority votes among the 'k' nearest neighbours. In case of a tie (i.e., two classes having the same number of votes), various tie-breaking strategies can be employed, such as choosing the class of the single nearest neighbour among the tied groups - which is what I have employed in my implementation.
+
+This process exemplifies the simplicity and intuitiveness of KNN – it classifies based on the most common label among its closest neighbours, following the premise that similar things exist in close proximity.
+
+\textit{[Put diagram here of 1NN and 3NN]}
+
+In summary, the KNN algorithm for classification hinges on the concept of feature similarity, where the class of a new data point is determined based on the classes of its nearest neighbours in the feature space. This method's effectiveness is highly dependent on the choice of 'k' and the distance metric used, making these crucial parameters in KNN's application.
+
+
 \subsubsection{Distance Metrics}
+A critical aspect of the K-Nearest Neighbours (KNN) algorithm is the method used to calculate the distance between data points. The choice of the distance metric can significantly influence the performance of the algorithm. Different types of distance metrics are suited to different types of data and applications. Here, we explore some of the most commonly used distance metrics in KNN: \par
+
+\textbf{Euclidean Distance} is the most commonly used metric in KNN. It is the "ordinary" straight-line distance between two points in Euclidean space. Given two points, \(p\) and \(q\), each with \(n\) dimensions, the Euclidean distance between \(p\) and \(q\) is defined as:
+
+\[ d(p,q) = \sqrt{\sum_{i=1}^{n} (q_i - p_i)^2} \]
+
+This distance is easy to understand and simple to compute, making it a natural choice for many applications. \par
+\vspace{5pt}
+\textbf{Manhattan Distance}, also known as City Block distance, is another useful metric, especially in urban settings. It is calculated as the sum of the absolute differences of their Cartesian coordinates. Formally, the Manhattan distance between two points \(p\) and \(q\) in \(n\)-dimensional space is:
+
+\[ d(p,q) = \sum_{i=1}^{n} |q_i - p_i| \]
+
+This metric can be more useful than the Euclidean distance in certain scenarios, particularly when data points have grid-like structures. \par
+\vspace{5pt}
+\textbf{Minkowski Distance} is a generalized metric form that includes both Euclidean and Manhattan distances as special cases. It is defined as:
+
+\[ d(p,q) = (\sum_{i=1}^{n} |q_i - p_i|^p)^{1/p} \]
+
+For \(p = 2\), it becomes the Euclidean distance, and for \(p = 1\), it is the Manhattan distance. This flexibility allows for more nuanced distance calculations, adaptable to different problem settings.
+
 \subsubsection{Applications and Use Cases}
 \subsubsection{Advantages and Limitations}
+\textbf{Advantages of K-Nearest Neighbors}
+
+\begin{itemize}
+    \item \textbf{Simplicity and Intuitiveness:} KNN is very straightforward and easy to understand, making it an excellent choice for beginners in machine learning. The concept of "the nearest neighbors" is intuitive and doesn't require complex mathematical understanding.
+
+    \item \textbf{No Training Phase:} Unlike many other machine learning algorithms, KNN doesn't require a training phase as it doesn't build a model. It simply stores the dataset, making the implementation easier.
+
+    \item \textbf{Versatility:} KNN can be used for both classification and regression problems, demonstrating its flexibility in handling various types of data.
+
+    \item \textbf{Non-Parametric Nature:} Since KNN makes no assumptions about the underlying data distribution, it is suitable for non-linear data. This feature makes it adaptable to many real-world scenarios where the data distribution is unknown.
+
+    \item \textbf{Adaptability to Complex Decision Boundaries:} KNN can capture complex decision boundaries depending on the value of \( k \).
+
+    \item \textbf{Useful for Multiclass Problems:} KNN can handle multi-class settings without needing any adjustments, making it versatile in handling various classification tasks.
+\end{itemize}
+
+\textbf{Limitations of K-Nearest Neighbors}
+
+\begin{itemize}
+    \item \textbf{Computationally Intensive:} KNN can be computationally expensive, especially with large datasets, as it requires calculating the distance to all training samples for each prediction.
+
+    \item \textbf{Memory Intensive:} Since the algorithm stores all the training data, memory consumption can be high for large datasets.
+
+    \item \textbf{Sensitive to the Choice of \( k \) and Distance Metric:} The performance of KNN heavily relies on the choice of the number of neighbors (\( k \)) and the distance metric used. An inappropriate choice of \( k \) or distance metric can lead to poor performance.
+
+    \item \textbf{Vulnerable to Irrelevant Features:} KNN can be significantly affected by the presence of irrelevant or redundant features because all features contribute equally to the distance computation.
+
+    \item \textbf{Curse of Dimensionality:} Its performance degrades as the number of features (dimensions) increases, due to the difficulty in calculating distances in high-dimensional spaces.
+
+    \item \textbf{Performance Deterioration with Noisy Data:} KNN is sensitive to noise in the dataset, as noisy features can distort the true distance between points.
+
+    \item \textbf{Class Imbalance Problems:} KNN can be biased towards the majority class in cases of class imbalance.
+
+    \item \textbf{Handling Missing Values:} The algorithm struggles with missing values and requires pre-processing to handle such cases.
+\end{itemize}
 \subsubsection{Comparative Analysis with other ML Algorithms}
 
 \newpage
@@ -107,10 +257,13 @@ In this chapter, we introduce and evaluate the algorithms I'll be reviewing in t
 \subsubsection{Splitting, Stopping and Pruning Criteria}
 \subsubsection{Applications and Use-Cases}
 \subsubsection{Advantages and Limitations}
+
+
 \subsubsection{Comparative Analysis with other ML Algorithms}
 
 \newpage
 \section{Model Evaluation Techniques}
+In this section, we'll cover concepts and techniques used to evaluate the performance of these models we've undertaken.
 \subsection{Bias And Variance}
 \subsection{Hold-Out Test Set}
 \subsection{Cross-Validation}
@@ -360,6 +513,44 @@ My third supervisor meeting has been scheduled for the 30th.
 I need to ensure I have a testing strategy in place that checks the robustness of the algorithms while I made alterations to them.  
   
 I do feel that I could bring in a third algorithm into play during second term, to make things more interesting. I think after learning about SVMs in CS3920, I have an idea on how this could be a third classification algorithm I could use for comparison to KNN and Trees.
+
+### 27th November
+Since my last entry I've managed to implement K-Folds Cross-Validation, and made a few tweaks to my models such as adding a get_depth() function to my decision tree. I think my the end of today I can have Leave-One-Out Cross-Validation implemented (as it's essentially when K-Folds = N) with its own get_score functions.   
+Implementing K-F CV feels significant as it seems to be the first time that all of these modules are working together, and seeing it work in the notebook has been satisfying, confirming that the data structures are all working as I'd hoped.    
+One thing I'm a little disappointed about is how my algorithms don't yet work on datasets with missing data, or with categorical data - which significantly limits which datasets my models can work on. I have to make a decision on whether I can somehow implement this soon, or just focus on delivering my report and interim review.
+   
+I've managed to implement a more explicit way of handling ties within my KNN algorithm today.
+  
+I feel that I could find a way to automate some kind of "hyperparameter tuning" for my algorithms - I'm just currently unsure if this would lead to data snooping. From what I'm reading - it's important to use one hold-out set for hyperparameter tuning, and then a different test set for general performance. I'll need to clarify this with my supervisor. 
+
+As for categorical data, I've been reading on how ordinal data and nominal data are generally handled - using one-hot encoding and label encoding. It seems to me that I may need to build some kind of encoder for my data in the future to handle future datasets. I've not considered normalisation - and it'll be necessary for me to implement this, particularly scaling, as if I want to start training on the breast cancer dataset and titanic data - which has missing data, but also a wide range of scales of data - I'll need to bring this forward soon.
+
+On another note, today the deadline for the interim review has been postponed by a week. This is generally good news, but does make me a little confused about whether I should keeping implementing new changes - or wrap things up for review and focus on my report and presentation.
+
+### 28th November
+Having read more about normalisation, handling categorical data and missing data - I think it would be wise to delay this until after the review. I could try and quickly hash something together that works, but I do feel that I need to thoroughly research and plan this implementation out in such a way that they're integrated with model models smoothly.  
+  
+For KNN, there's a chance that I may need to implement a new distance measure such as Hamming Distance or Jaccard Distance to handle categorical data sufficiently, without making misleading effects to the distance between samples. 
+
+### 29th November 
+I've managed to add various test suites to thoroughly check edge cases for the functionality implemented thus far. Doing this helped me notice gaps in my exception handling when passing values around - such as in K-folds and train-test-split when specifying the size of the fold or split. 
+
+### 30th November
+Today I finally had my third meeting with my supervisor. It went smoothly and my supervisor seems satisfied with my progress thus far. I managed to clarify doubts I had about the following:  
+  
+- Handling missing and categorical data:
+    - For missing feature data, it's usually find to remove the entire sample for that instance. As long as there's enough data samples to make training sufficient.  
+     - I asked about implementing an encoder to handle nominal and ordinal data, this seemed like a suitable idea.  
+    - I asked about how this may affect the distance function in KNN, and if nominal data could be handled correctly, if I should using Hamming, Jaccard or Cosine function as an alternative. He suggested I keep trying with Euclidean as this should work okay with the situations I'm dealing with. He reminded me to just try it before I doubt the implementation.
+
+- He cleared up misunderstandings I had about other performance metrics besides accuracy - such as the difference between Precision and Recall, and using the F1 score. I think I could quickly calculate these with the implementation I have so far. He also reminded me that I can find the variance of my model by analysing the range of accuracy values I find during K-Folds Cross-Validation.  
+- Hyperparameter Tuning - I asked about the procedure of finding the ideal hyperparameters of KNN and Trees, i.e. the number of neighbours K for KNN and the maximum depth of the tree constructed. He reminded me to avoid data snooping, which I seemed to be doing in Notebook 6. I need to keep the test set separated and utilise a validation set for this.  
+- He emphasised that it's very important that there's some form of data normalisation for KNN, as it's rather distance-sensitive. This may have explained unusually low values I was getting for the optimum k-value on large datasets such as ionosphere (though perhaps this is the curse of dimensionality in effect).  
+  
+Following the meeting, I immediately implemented a MinMaxScaler so that I have some form of data normalisation I can use to handle misaligned data ranges, particularly for KNN. I will need to correct my hyperparameter tuning procedure too.  
+
+Overall in project development, I have built a pretty strong foundation for me to use for Term 2. I just need to show the results found on the three datasets I've chosen - iris, ionosphere and banknote authentication.  
+Right now, my priority is putting the presentation and report together - this needs more urgent work. 
 \end{markdown}
 %TC:endignore
 \end{document}
