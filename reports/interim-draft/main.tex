@@ -7,6 +7,32 @@
 \usepackage{appendix}
 \usepackage{markdown}
 \usepackage{listings}
+\usepackage{color}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+   backgroundcolor=\color{backcolour},   
+   commentstyle=\color{codegreen},
+   keywordstyle=\color{magenta},
+   numberstyle=\tiny\color{codegray},
+   stringstyle=\color{codepurple},
+   basicstyle=\ttfamily\footnotesize,
+   breakatwhitespace=false,         
+   breaklines=true,                 
+   captionpos=b,                    
+   keepspaces=true,                 
+   numbers=left,                    
+   numbersep=5pt,                  
+   showspaces=false,                
+   showstringspaces=false,
+   showtabs=false,                  
+   tabsize=2
+}
+
+\lstset{style=mystyle}
 
 
 % Define custom title format
@@ -46,7 +72,6 @@
 This project undertakes a comparative analysis of two fundamental machine learning algorithms for classification tasks: K-Nearest Neighbors and Decision Trees, with a focus on the CART algorithm. Employing Python and Jupyter Notebooks, the project aims to evaluate their accuracy and performance characteristics. Initial efforts have centered on developing proof-of-concept programs to grasp the fundamental workings of these algorithms. K-Folds Cross-Validation has been utilized to assess their performance on small datasets with continuous data, revealing interesting variations in accuracy influenced by the choice of k in K-Nearest Neighbors and the maximum depths in Decision Trees. \par
 Moving forward, the project will delve deeper into these insights, optimizing the models and introducing more complex datasets to comprehensively evaluate their performance across diverse scenarios. This endeavour not only seeks to enhance understanding in the fields of data mining and machine learning but also aims to contribute valuable insights and methodologies relevant in today's rapidly advancing technological environment.
 
-
 \end{abstract}
 \newpage
 \setcounter{tocdepth}{2}
@@ -56,9 +81,9 @@ Moving forward, the project will delve deeper into these insights, optimizing th
 \section*{Navigation Guide and Declaration}
 This report has been prepared on the basis of my own work. Where other published and unpublished source materials have been used, these have been acknowledged.\par
 \vspace{10pt}
-I've included a navigation guide here to ease traverse through this report for assessment. \par
+I've included a navigation guide here to ease traversal through this report for assessment. \par
 
-Word Count: 3346
+Word Count(excluding diary and references): 7173
 
 
 \newpage
@@ -75,11 +100,11 @@ The significance of machine learning is not only growing in the realms of conven
 \par
 Machine learning, with its ability to analyze vast amounts of data and learn from it, is not just a technological advancement but a transformative force reshaping how we live, work, and interact with the world around us. As it continues to evolve, its impact is set to become even more profound, making its understanding and application an essential facet of modern life.
 
-\subsection{Breakthrough and Developments in Machine Learning}
+\subsection{Breakthroughs and Developments in Machine Learning}
 The landscape of machine learning has been significantly reshaped with the advent of deep learning, an advanced subset of neural networks. Deep learning models, particularly Convolutional Neural Networks (CNNs), have revolutionized image processing and analysis ~\cite{CNNImageClassification}. They have enabled machines to achieve near or even surpass human-level accuracy in tasks like image recognition and classification. Recurrent Neural Networks (RNNs), another pivotal development in this domain, have been instrumental in processing sequential data, making significant strides in speech recognition and natural language processing~\cite{RNNSequentialLearning} .\par
 Natural Language Processing (NLP) has witnessed transformative changes with the introduction of models like BERT and GPT ~\cite{BERT_NLP, NLP_Transformer}. These transformer-based models have set new benchmarks in understanding and generating human language. Their applications range from sophisticated chatbots to advanced systems for language translation, offering a level of context-awareness previously unattainable in machine learning. \par
-Reinforcement learning, a type of machine learning concerned with how agents ought to take actions in an environment to maximize cumulative reward, has seen groundbreaking successes. The development of algorithms like those used in DeepMind's AlphaGo and AlphaZero represents a significant leap in this area. These systems not only learned to play complex games like Go and Chess but also developed strategies that were innovative and unconventional, showcasing the potential of AI to discover solutions that humans might not conceive. \par
-Computer vision has been another area where deep learning has made a substantial impact. Real-time object detection systems like YOLO have changed the landscape of visual recognition tasks. These systems can identify and classify multiple objects in images and videos with remarkable speed and accuracy. Facial recognition technology, powered by deep learning, has also advanced, finding applications in security, authentication, and personal identification. \par
+Reinforcement learning, a type of machine learning concerned with how agents ought to take actions in an environment to maximize cumulative reward, has seen groundbreaking successes. The development of algorithms like those used in DeepMind's AlphaGo~\cite{AlphaGoDeepMind} and AlphaZero~\cite{AlphaZeroDeepMind} represents a significant leap in this area. These systems not only learned to play complex games like Go and Chess but also developed strategies that were innovative and unconventional, showcasing the potential of AI to discover solutions that humans might not conceive. \par
+Computer vision has been another area where deep learning has made a substantial impact. Real-time object detection systems like YOLO~\cite{YOLODetection} have changed the landscape of visual recognition tasks. These systems can identify and classify multiple objects in images and videos with remarkable speed and accuracy. Facial recognition technology, powered by deep learning, has also advanced, finding applications in security, authentication, and personal identification. \par
 The breakthroughs mentioned above have generated a large amount of attention in news and media, and outlines the prospects of this field looking ahead. My project, of course, will be focused on the pure and basic fundamentals - but this section provides some perspective on its significance. It also emphasises my enthusiasm and interest in this field. It is my goal to join the forefront of this emerging technology.
 
 
@@ -88,7 +113,7 @@ The breakthroughs mentioned above have generated a large amount of attention in 
 \newpage
 \subsection{Project Specification}
 The primary objective of this project is to conduct a thorough comparative analysis between two simple, fundamental machine learning algorithms on the classification task. The algorithms selected are K-Nearest Neighbours (KNN)~\cite{NNEFixHodges,NNCoverHart} and Decision Trees - more specifically, the CART algorithm~\cite{CARTBreiman}. This involves implementing these algorithms from scratch, which provides a deeper understanding of their mechanics and intricacies. The comparison will focus on various performance metrics, including accuracy, precision, and recall, to evaluate the effectiveness of each algorithm in different scenarios. These algorithms and metrics are elaborated in more detail in this report. \par
-The models are implemented in Python~\cite{python3}, creating the data structures using Lists and NumPy~\cite{numpy}, and using various existing libraries as points of reference. Sci-kit Learn is a highly regarded Python library by data scientists and includes various implementations of the models that are relevant to this project. This library proved an invaluable point of reference during the development of both algorithms, and served as a comparable benchmark when initially determining the implementation's performance. \par
+The models are implemented in Python~\cite{python3}, creating the data structures using Lists and NumPy~\cite{numpy}, and using various existing libraries as points of reference. Sci-kit Learn~\cite{scikit-learn} is a highly regarded Python library by data scientists and includes various implementations of the models that are relevant to this project. This library proved an invaluable point of reference during the development of both algorithms, and served as a comparable benchmark when initially determining the implementation's performance. \par
 Jupyter notebooks have been used initially while the models are in development.
 They have also been tremendously useful for building visualisations and
 validating the models. Later on in development, I hope to implement these models
@@ -149,7 +174,7 @@ I will begin by implementing Proof of Concept programs in Python, starting very 
     \end{itemize}
 \end{itemize}
 
-\subsubsection{Success Criteria}
+\subsubsection{Success Criteria} \label{successcriteria}
 By the end of the first term, it is essential that I have implemented both algorithms, K-Nearest Neighbours and Decision Trees, in some manner using Jupyter Notebooks, as well as using any form of model validation techniques to determine performance metrics of both algorithms. This is what I'd call an essential deliverable before the interim review, and I think it's feasible with the time and preparation given, and necessary compromises made.
 
 \newpage
@@ -173,9 +198,9 @@ The K-Nearest Neighbours (KNN) algorithm operates on a straightforward principle
 
 \textbf{Selecting the Nearest Neighbours:}
 
-Distance Measurement: When a new data point is introduced for classification, KNN begins by calculating the distance between this point and every other point in the training dataset. The most common method for this calculation is the Euclidean distance, though other distance metrics can also be used depending on the nature of the data.
+Distance Measurement: When a new data point is introduced for classification, KNN begins by calculating the distance between this point and every other point in the training dataset. The most common distance metric for this calculation is the Euclidean distance, though other distance metrics can also be used depending on the nature of the data.
 
-Identifying Nearest Neighbours: After calculating distances, the algorithm sorts these values and picks the 'k' shortest distances. The value of 'k' is pre-defined (usually a small integer) and represents the number of nearest neighbours to consider. It's crucial to choose an appropriate 'k' value, as it influences the classification accuracy – too small a value can make the algorithm sensitive to noise, while too large a value might include irrelevant neighbours.
+Identifying Nearest Neighbours: After calculating distances, the algorithm sorts these values and picks the 'k' shortest distances. The value of 'k' is pre-defined before the training and represents the number of nearest neighbours to consider. It's crucial to choose an appropriate 'k' value, as it influences the classification accuracy – too small a value can make the algorithm sensitive to noise, while too large a value might include irrelevant neighbours.
 
 \textbf{Determining the Label:}
 
@@ -185,7 +210,21 @@ Majority Wins: The new data point is assigned the class label that has the major
 
 This process exemplifies the simplicity and intuitiveness of KNN – it classifies based on the most common label among its closest neighbours, following the premise that similar things exist in close proximity.
 
-\textit{[Put diagram here of 1NN and 3NN]}
+\begin{figure}[ht]
+    \centering
+    \begin{minipage}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{1NN.png}
+        \caption{1-Nearest Neighbour}
+        \label{fig:1nn}
+    \end{minipage}\hfill
+    \begin{minipage}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{3NN.png}
+        \caption{3-Nearest Neighbours}
+        \label{fig:3nn}
+    \end{minipage}
+\end{figure}
 
 In summary, the KNN algorithm for classification hinges on the concept of feature similarity, where the class of a new data point is determined based on the classes of its nearest neighbours in the feature space. This method's effectiveness is highly dependent on the choice of 'k' and the distance metric used, making these crucial parameters in KNN's application.
 
@@ -211,16 +250,13 @@ This metric can be more useful than the Euclidean distance in certain scenarios,
 
 For \(p = 2\), it becomes the Euclidean distance, and for \(p = 1\), it is the Manhattan distance. This flexibility allows for more nuanced distance calculations, adaptable to different problem settings.
 
-\subsubsection{Applications and Use Cases}
+
 \subsubsection{Advantages and Limitations}
 \textbf{Advantages of K-Nearest Neighbors}
 
 \begin{itemize}
     \item \textbf{Simplicity and Intuitiveness:} KNN is very straightforward and easy to understand, making it an excellent choice for beginners in machine learning. The concept of "the nearest neighbors" is intuitive and doesn't require complex mathematical understanding.
 
-    \item \textbf{No Training Phase:} Unlike many other machine learning algorithms, KNN doesn't require a training phase as it doesn't build a model. It simply stores the dataset, making the implementation easier.
-
-    \item \textbf{Versatility:} KNN can be used for both classification and regression problems, demonstrating its flexibility in handling various types of data.
 
     \item \textbf{Non-Parametric Nature:} Since KNN makes no assumptions about the underlying data distribution, it is suitable for non-linear data. This feature makes it adaptable to many real-world scenarios where the data distribution is unknown.
 
@@ -232,11 +268,9 @@ For \(p = 2\), it becomes the Euclidean distance, and for \(p = 1\), it is the M
 \textbf{Limitations of K-Nearest Neighbors}
 
 \begin{itemize}
-    \item \textbf{Computationally Intensive:} KNN can be computationally expensive, especially with large datasets, as it requires calculating the distance to all training samples for each prediction.
+    \item \textbf{Computationally and Memory Intensive:} KNN can be computationally expensive, especially with large datasets, as it requires calculating the distance to all training samples for each prediction. Since the algorithm stores all the training data, memory consumption can be high for large datasets.
 
-    \item \textbf{Memory Intensive:} Since the algorithm stores all the training data, memory consumption can be high for large datasets.
-
-    \item \textbf{Sensitive to the Choice of \( k \) and Distance Metric:} The performance of KNN heavily relies on the choice of the number of neighbors (\( k \)) and the distance metric used. An inappropriate choice of \( k \) or distance metric can lead to poor performance.
+    \item \textbf{Sensitive to the Choice of \( k \) and Distance Metric:} The performance of KNN heavily relies on the choice of the number of neighbours (\( k \)) and the distance metric used. An inappropriate choice of \( k \) or distance metric can lead to very poor performance.
 
     \item \textbf{Vulnerable to Irrelevant Features:} KNN can be significantly affected by the presence of irrelevant or redundant features because all features contribute equally to the distance computation.
 
@@ -249,28 +283,188 @@ For \(p = 2\), it becomes the Euclidean distance, and for \(p = 1\), it is the M
     \item \textbf{Handling Missing Values:} The algorithm struggles with missing values and requires pre-processing to handle such cases.
 \end{itemize}
 \subsubsection{Comparative Analysis with other ML Algorithms}
+KNN's simplicity has been emphasised throughout this section, and it remains as its key strength when compared to other algorithms, such as Decision Trees and parametic methods. \par
+
+\textbf{KNN vs. Decision Trees:} One of the fundamental differences between KNN and decision trees lies in their approach to learning and prediction. KNN is a typical example of lazy learning and instance-based learning. Unlike decision trees, which are eager learners, KNN does not build a model during the training phase. It simply stores the data and performs computations only at the time of prediction. This characteristic leads to different performance implications:
+
+\begin{itemize}
+    \item \textbf{Speed and Efficiency:} KNN can be slower at making predictions than decision trees, as it requires searching through the entire dataset for each query. In contrast, decision trees, once trained, can make predictions quickly by traversing the tree structure.
+    \item \textbf{Memory Usage:} KNN is memory-intensive since it needs to store the entire dataset. Decision trees, after training, only require the tree structure for predictions, making them more memory-efficient.
+    \item \textbf{Interpretability:} Decision trees offer a more interpretable model compared to KNN. The tree structure of decision trees provides clear rules and paths for decision-making, whereas KNN's predictions are based on the proximity to the nearest neighbors, which might not be as intuitive to understand.
+\end{itemize}
+
+\textbf{KNN vs. Parametric Methods:} KNN also differs significantly from parametric methods, such as linear regression or logistic regression. Parametric methods assume a specific form for the function that relates inputs to outputs and learn the parameters of this function from the training data. In contrast, KNN is a non-parametric method:
+
+\begin{itemize}
+    \item \textbf{Model Assumptions:} KNN makes no assumptions about the underlying data distribution, making it more flexible in handling a variety of data types and distributions. Parametric methods, with their fixed structure, can be limited in this aspect.
+    \item \textbf{Complexity and Overfitting:} Parametric methods can be prone to overfitting or underfitting if the assumed model form is not well-aligned with the true underlying relationships. KNN, with its instance-based approach, can adapt more closely to the data but may also capture noise, leading to overfitting, especially with a small value of 'k'.
+    \item \textbf{Scalability:} In terms of scalability, parametric methods often scale better to large datasets, as they summarize the data into a set of parameters. KNN's need to store and search through the entire dataset can become a bottleneck as data size increases.
+\end{itemize}
 
 \newpage
 \subsection{Decision Trees}
+Decision Trees are a prominent and widely used form of supervised machine learning algorithms, known for their simplicity, interpretability, and versatility in both classification and regression tasks. 
 \subsubsection{Introduction}
-\subsubsection{Fundamentals of Tree Mechanism}
-\subsubsection{Splitting, Stopping and Pruning Criteria}
-\subsubsection{Applications and Use-Cases}
-\subsubsection{Advantages and Limitations}
+Among machine learning algorithms, Decision Trees stand out for their straightforward yet powerful approach to classification tasks. Characterized by their tree-like structure, they simplify decision-making by breaking it down into a series of binary choices, leading to clear, actionable outcomes. This makes Decision Trees not only easy to interpret to anyone but also highly adaptable to various classification challenges. \par
 
+They are quite capable when it comes to transforming complex decision boundaries into a sequence of simpler, binary splits. This process starts at the root node and progresses through various levels, with each node representing a decision point based on one of the input features. The branches, stemming from these nodes, lead to new decision points or leaf nodes, which represent the final classification decision. This hierarchical structure captures the essence of decision-making in a way that is both logical and intuitive. \par
+
+
+Focusing on the \textbf{Classification and Regression Tree (CART)} algorithm within the Decision Tree family, this project explores its application in classification tasks. The CART algorithm distinguishes itself through its binary splitting approach, where each node is split into two child nodes, offering a balanced and manageable way to dissect the data. For classification tasks, CART employs \textbf{Gini Impurity} as a measure of split quality. Gini Impurity is a statistical metric that quantifies the likelihood of incorrect classification, making it an effective tool for evaluating the purity of the split. By minimizing Gini Impurity at each step, CART guides the decision-making process toward the most informative features in the dataset, with the aim of making accurate predictions on the target label. \par
+This report delves into the inner workings of the CART algorithm, demonstrating how its structured approach to decision-making can be effectively harnessed for classification purposes. By implementing CART from scratch and utilizing Gini Impurity as the key criterion for data partitioning, the project aims to provide an insightful exploration into one of the more fundamental yet very versatile algorithms in the field of machine learning. \par
+
+My primary source of material when researching how this algorithm functions was from the original text by Leo Breiman, Classification and Regression Trees~\cite{CARTBreiman} as well as a chapter within Machine Learning by Tom Mitchell~\cite[pp 52-80]{mitchell1997machine}.
+
+
+
+\subsubsection{Fundamentals of Tree Mechanism}
+Decision Trees operate on the fundamental principle of recursive partitioning of the dataset. This process begins at the root of the tree and involves splitting the data based on feature values. Each node in the tree represents a feature in the dataset, and the branches represent the outcomes of the decision made at that node. This leads to further subdivisions in the tree until a leaf node is reached, which provides the final prediction or classification.\par
+
+The decision at each node is made based on certain criteria, typically aiming to maximize the homogeneity of the resultant subsets. For categorical features, the splits are based on the different categories, while for continuous features, the tree selects a threshold value for splitting the data. This recursive partitioning continues until certain stopping criteria are met, which prevents the tree from growing indefinitely and potentially overfitting the data.\par
+
+My implementation uses this idea of a threshold with splitting continuous data, the approach to categorical data is to be implemented soon. \par
+\subsubsection{Splitting, Stopping and Pruning Criteria}
+In Decision Trees, the splitting criterion is a crucial aspect that determines how the data at each node is divided. The CART algorithm utilizes Gini Impurity as a primary measure for this purpose. Gini Impurity is a statistical metric used to quantify the "purity" of a node in the tree. The objective is to minimize this impurity, ensuring that after the split, the subsets are as homogeneous as possible with respect to the target variable. \par
+
+\textbf{Gini Impurity:}
+Gini Impurity measures the frequency at which any element of the dataset will be incorrectly labeled if it was randomly labeled according to the distribution of labels in the subset. The Gini Impurity for a set can be calculated using the formula:
+
+\[ Gini(I) = 1 - \sum_{j} p_j^2 \]
+
+Here, \( p_j \) represents the proportion of the samples that belong to class \( j \) in the set \( I \). This formula implies that a node is 'pure' (Gini = 0) if all its samples belong to a single class. The goal of the CART algorithm is to find splits that decrease the Gini Impurity the most across the nodes it creates.
+
+The algorithm considers all possible thresholds for each feature and calculates the Gini Impurity for the resulting partitions. The feature and the threshold that result in the highest impurity reduction are chosen to split the node. This process is repeated recursively for each new child node.
+
+\textbf{Stopping Criteria:}
+The growth of the tree is regulated by stopping criteria to prevent overfitting. These criteria include:
+
+\begin{itemize}
+    \item Setting a maximum depth for the tree.
+    \item A minimum number of samples required to split a node.
+    \item A minimum number of samples required to be at a leaf node.
+\end{itemize}
+These parameters ensure that the tree does not grow too complex and models the data well without capturing noise.
+
+\textbf{Pruning:}
+After building the tree, pruning is performed to reduce its complexity and enhance its generalization abilities. Pruning involves cutting off branches of the tree that provide little predictive power. This is based on a cost-complexity trade-off, where smaller, simpler trees are preferred unless more complex trees provide substantial improvement in predictive ability. Pruning helps in reducing overfitting and improving the model's performance on unseen data. \par
+
+By controlling the tree's growth and complexity through these mechanisms, Decision Trees can be a powerful tool for classification, striking a balance between fitting the training data well and maintaining good generalization to new, unseen data. \par
+
+My implementation makes use of the Gini Impurity, using a fairly greedy strategy to find the most pure node at each split. It uses maximum depth, minimum number of samples at node and a node being totally pure as stopping criteria. Pruning is yet to be implemented, but it would be an ideal step to reduce overfitting in my implementation. 
+
+\subsubsection{Advantages and Limitations}
+\textbf{Advantages:}
+\begin{itemize}
+    \item \textbf{Interpretability:} Decision Trees are highly interpretable, making it easy to understand the decision-making process.
+    \item \textbf{Handling Non-linear Relationships:} They can capture non-linear relationships between features and the target without the need for transformation.
+    \item \textbf{No Need for Feature Scaling:} Decision Trees do not require normalization or standardization of features.
+    \item \textbf{Versatility:} Capable of handling both numerical and categorical data.
+\end{itemize}
+
+\textbf{Limitations:}
+\begin{itemize}
+    \item \textbf{Overfitting:} Prone to overfitting, especially in cases with many features or complex structures.
+    \item \textbf{Sensitivity to Variance in Data:} Small changes in the data can lead to different tree structures.
+    \item \textbf{Biased with Imbalanced Data:} Can create biased trees if some classes dominate.
+\end{itemize}
 
 \subsubsection{Comparative Analysis with other ML Algorithms}
+Decision Trees, as a fundamental machine learning algorithm, have distinct characteristics when compared to other methods like K-Nearest Neighbors (KNN) and parametric approaches such as Support Vector Machines (SVMs) and Logistic Regression. Each algorithm has its strengths and weaknesses, making them suitable for different types of problems.
+
+\textbf{Decision Trees vs. K-Nearest Neighbors:}
+\begin{itemize}
+\item \textbf{Learning Style:} While Decision Trees are eager learners that build a model based on the entire dataset before making predictions, KNN is a lazy learner that makes predictions using the dataset at the time of query. This difference impacts both training time and prediction time.
+\item \textbf{Interpretability:} Decision Trees are highly interpretable, as they provide a clear decision-making path from root to leaf. KNN, on the other hand, bases its predictions on the proximity to the nearest neighbors, which might not be as intuitive.
+
+\item \textbf{Sensitivity to Data Scale:} KNN is sensitive to the scale of data and requires feature scaling for optimal performance. Decision Trees are less sensitive to the scale of features.
+
+\item \textbf{Handling Non-linear Data:} Both algorithms can handle non-linear data, but Decision Trees can be more effective in capturing complex relationships due to their hierarchical structure.
+\end{itemize}
+
+\textbf{Decision Trees vs. Parametric Methods:}
+\begin{itemize}
+\item \textbf{Interpretability:} Decision Trees excel in interpretability due to their clear, hierarchical decision-making structure. In contrast, parametric methods, especially complex ones like SVMs with non-linear kernels or logistic regression models with many predictors, can be less transparent due to their mathematical formulations.
+\item \textbf{Handling Non-linear Relationships:} Decision Trees naturally adapt to non-linear relationships through their hierarchical structure of splits and decisions. Parametric methods, like logistic regression, can be extended to handle non-linearity using techniques such as feature transformation or kernel methods in SVMs.
+
+\item \textbf{Flexibility in Data Types:} Decision Trees are versatile in handling both categorical and numerical data directly. Parametric methods typically require numerical input, often necessitating additional steps such as one-hot encoding for categorical data.
+
+\item \textbf{Robustness to Overfitting:} Both Decision Trees and parametric methods can overfit data. Decision Trees can grow overly complex, capturing noise, but pruning helps mitigate this. Parametric methods, particularly those with many parameters, are also prone to overfitting, but regularization techniques can help.
+
+\item \textbf{Scalability and Efficiency:} Parametric methods, like logistic regression, can be computationally efficient for large datasets, summarizing information into parameters. Decision Trees, however, may become less efficient with large datasets or feature spaces, especially if the tree grows very deep or complex.
+\end{itemize}
+
+
+
 
 \newpage
 \section{Model Evaluation Techniques}
 In this section, we'll cover concepts and techniques used to evaluate the performance of these models we've undertaken.
 \subsection{Bias And Variance}
+In the realm of machine learning, two key concepts that play a pivotal role in model performance are bias and variance. These terms describe the types of errors a machine learning model might encounter and are crucial in understanding the trade-offs in different model choices. \par
+
+\textbf{Bias} refers to the error introduced by approximating a real-world problem, which may be complex, with a too-simplified model. In essence, bias measures how far off, on average, a model's predictions are from the actual values. High bias can cause a model to miss relevant relations between features and target outputs (underfitting), leading to poor performance on both training and unseen data. \par
+
+\textbf{Variance}, on the other hand, refers to the model's sensitivity to fluctuations in the training dataset. A model with high variance pays a lot of attention to training data and can capture noise present in the dataset rather than the intended outputs (overfitting). Such a model performs well on its training data but poorly on any unseen data. \par
+
+The relationship between bias and variance is a balancing act and is often referred to as \textbf{the bias-variance tradeoff}. Minimizing one typically leads to an increase in the other. For instance, a highly complex model (low bias) might fit the training data too closely, capturing noise and anomalies (high variance). Conversely, a too-simple model (high bias) might fail to capture important patterns, leading to poor prediction accuracy. \par
+
+An ideal model is one that achieves a good balance between bias and variance, ensuring it performs well on both the training data and unseen data. This balance is often achieved through model selection, feature engineering, and tuning of model parameters. \par
+
+\textbf{Accuracy} in this context is a measure of a model's overall correctness in classifying data or predicting outcomes. However, it's essential to consider that a highly accurate model on training data may not necessarily generalize well to new, unseen data if it has high variance. \par
+
+
 \subsection{Hold-Out Test Set}
+Quite a central process when evaluating machine learning models involves dividing our data into training and test sets. The test set, and this particular process, is sometimes more formally known as a \textbf{Hold-Out Test Set}. This technique involves partitioning the dataset into two segments: one that is used to train the model and another that is used to test and evaluate its performance. \par
+
+\textbf{Training Set:} This is the portion of the dataset used to train the model. The training set allows the algorithm to identify patterns, learn the relationships between features and the target variable, and build the model. The size of the training set can significantly influence the model’s learning, with larger training sets generally providing more comprehensive learning opportunities.
+
+\textbf{Test Set:} Once the model is trained, it is essential to evaluate its performance on data it hasn't seen before. This is where the testing set comes in. It is a separate portion of the dataset not used during the training phase. By assessing the model's performance on the testing set, we get a sense of how well the model generalizes to new, unseen data. \par
+
+All in all, this is rather simple to implement and undertake - but the performance we find can heavily vary depending on the splits of our data. So our assessment can have a lot of variability. This issue is directly addressed with the following technique. 
+
 \subsection{Cross-Validation}
+While the Hold-Out Test Set method provides an initial assessment of a model's generalization capability, it can lead to variability in performance evaluation due to different splits of the data. To address this issue and obtain a more robust evaluation, the technique of Cross-Validation is employed - and is generally utilised to evaluate a classification model's performance in making accurate predictions. \par
+
+\textbf{Cross-validation} is a resampling procedure used to evaluate machine learning models on a limited data sample. The fundamental idea behind this technique is to divide the entire dataset into multiple subsets and then systematically use different subsets for training and testing the model. This approach ensures that every data point is used for both training and testing, providing a comprehensive assessment of the model's performance. \par
+
+Essentially, we're carrying on this idea of splitting the dataset into training and test sets, and we're repeating it in several different segments or subsets of the dataset. We could name these several test sets as 'folds'. \par
+
+With this in mind, we find that the most common form of Cross-Validation is \textbf{K-fold Cross-Validation}. In this method, the dataset is randomly partitioned into 'k' equal-sized folds. For each iteration, one of the 'k' subsets is used as the test set, and the remaining 'k-1' subsets are put together to form a training set. The model is then trained on this training set and validated on the test set. This process is repeated 'k' times, with each of the 'k' subsets used exactly once as the test set. The results from all 'k' iterations are then averaged to produce a single estimation. \par
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.6\textwidth]{KFolds.png}
+    \caption{Illustration of K-fold Cross-Validation}
+    \label{fig:kfolds}
+\end{figure}
+
+In this project's implementation, we incorporate functions that return a list of accuracy values calculated on each fold, as well as the average of this list of values. \par
+
+Another notable variant of Cross-Validation is \textbf{Leave-One-Out Cross-Validation} (LOOCV). In LOOCV, the 'k' in k-fold Cross-Validation is set equal to the number of observations in the dataset. This means that for a dataset with N observations, the model is trained N times, each time using all observations except one for training and the left-out observation for testing. \par
+
+LOOCV is particularly useful when dealing with small datasets, as it maximizes the amount of data used for training the model. Each iteration provides a test on a unique single data point, offering a thorough exploration of the model's performance across the entire dataset. However, LOOCV can be highly computationally intensive for larger datasets, as it requires the model to be retrained from scratch for each of the N iterations. I've found this to be the case in my implementation, especially for the tree model implementation.
+
+
+
 \subsection{Metrics}
+Various metrics are used to assess different aspects of a model's performance, with each metric offering unique insights. In this project, we focus on several key metrics: Accuracy, Precision, Recall, and the F1 Score. \par
+
+\textbf{Accuracy} was introduced earlier as a measure of a model's overall correctness. It is the ratio of correctly predicted instances to the total instances in the dataset. While accuracy is straightforward and widely used, it may not always be the best indicator of a model's performance, especially in cases where the data is imbalanced. \par
+
+\textbf{Precision} refers to the proportion of positive identifications that were actually correct. It is calculated as the ratio of true positives (correct positive predictions) to the sum of true and false positives. Precision is a critical measure in scenarios where the cost of a false positive is high. \par
+
+\textbf{Recall}, also known as Sensitivity or True Positive Rate, measures the proportion of actual positives that were correctly identified. It is calculated as the ratio of true positives to the sum of true positives and false negatives. Recall becomes a key metric when the cost of a false negative is high. \par
+
+\textbf{F1 Score} is the harmonic mean of Precision and Recall. It provides a single metric that balances both the concerns of precision and recall in one number. The F1 Score is particularly useful when we need a balance between precision and recall and there is an uneven class distribution (as is often the case in real-world scenarios). \par
+
+
 
 \newpage
 \section{Implementation}
+\subsection{Overview}
+By the end of Term 1, I managed to implement proof-of-concept programs for the implementation of the K-Nearest Neighbours algorithm, and the Decision Tree algorithm using Gini Impurity. I implemented a train-test-split function to separate any loaded datasets. I also implemented a cross-validation module which contains functions that undertake K-Folds Cross-Validation and Leave-One-Out Cross-Validation on a given model with given data, and retrieve the accuracy scores from this process. I present all of this on several notebooks, which also essentially display the progress I made across the First Term. My final interim review notebook presents all of this work in one place, as well as an implementation of a Min-Max Scaler - the first implementation made thus far of data preprocessing.\par
+
+\newpage
 \subsection{Planning and Timescales}
 Before we dive into my implementation of the algorithms, I'll bring forward the project plan put in place almost two months ago. The timeline for Term 1 was created with a weekly outline of expected deliverables. \par
 %\vspace{10mm}
@@ -331,13 +525,137 @@ Make demo and presentation} \\
 \hline
 \end{tabular}
 \subsection{KNN}
+\subsubsection{1-NN}
+Following my Project Plan, my first step was to begin working on implementing One-Nearest Neighbours on a simple synthetic dataset. Fortunately, my lectures at Prof. Vovk's CS3920 Machine Learning course were very helpful with much of KNN's implementation - and Vovk provided a useful example in the lectures illustrating the mechanism of Nearest Neighbours in two dimensions. I took inspiration from his dataset and focused on implementing a model that could work with this 2-D coordinate data, before moving on to the Iris dataset.
+
+
+\begin{lstlisting}[language=Python, caption=one\_nn.py]
+    import numpy as np
+
+class OneNearestNeighbour:
+    def __init__(self):
+        self.training_data = None
+        self.training_labels = None
+
+    # training of data onto labels
+    def fit(self, X, y):
+        self.X_training_data = X
+        self.y_training_labels = y
+    
+    # testing function, classifies using helper method which finds euclidean distance
+    def predict(self, X):
+        predictions = []
+        for point in X:
+            predictions.append(self._predict_point(point))
+        return predictions
+    
+
+    def _predict_point(self, point):
+        distances = [self._euclidean_distance(point, x) for x in self.X_training_data]
+        # print(distances)
+        nearest = np.argmin(distances)
+
+        return self.y_training_labels[nearest]
+
+    def _euclidean_distance(self, p1, p2):
+        return np.sqrt(np.sum((np.array(p1) - np.array(p2))**2))
+\end{lstlisting}
+
+This implementation is rather trivial. As is customary, fit() is used to train the model and predict() is used to make predictions on a test sample. The predict() method calls a helper function \_predict\_point() which predicts a label for every individual point given to it. This function calls upon the Euclidean distance function. The Euclidean Distance function basically utilises element-wise subtraction between two numpy arrays, utilising Numpy vectorization - which is generally far more efficient in practice compared to alternatives.\par 
+This general structure is maintained into the KNN implementation. \par
+
+\vspace{5pt}
+
+I demonstrated the way this works within my first Jupyter Notebook in Figure \ref{fig:1nnjupy}. 
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=1.25\textwidth]{1NNjupy.png}
+    \caption{Notebook 1 - Fitting 1NN on simple synthetic data}
+    \label{fig:1nnjupy}
+\end{figure}
+
+This notebook elaborates further on how we can also retrieve all the distances calculated and used to find the nearest neighbour for the test sample. \par
+
+Once this was demonstrated, I focused on incorporating the iris\cite{irisdata} dataset. This also was relatively straightforward, as I essentially just utilised the load\_iris() function from the SKLearn~\cite{scikit-learn} library. This way of loading iris remains incorporated throughout the project, though other datasets are handled more manually. I could alter this later and manually add the iris dataset as a txt file using numpy\cite{numpy}. \par
+It was at this point that I realised I needed to split this dataset somehow, which brings us to the next step. \par
+\vspace{20pt}
+\subsubsection{Train-Test-Split}
+It became quickly apparent that I needed to immediately implement a way to divide the iris dataset into a training and test set, if I'm to find anything useful about my KNN implementation on the dataset. \par
+Though not anticipated by my Plan, this was the next thing I decided to focus on putting together. \par
+
+Fortunately, I found this generally to be also rather simple to implement thanks to Python's list-slicing functionality. \par
+Within a train\_test\_split module that can be imported, I wanted to implement a function of the same name that took inputs \(X\) and \(y\) as features and labels respectively. The size of the test set is the key parameter, and I thought it would be useful to not only input a ratio for the test set to the training set but also a specific number of samples for the size of the test set too. \par
+Over time during development, I realised during testing for edge cases that it's important to implement lots of excepting handling in this function- in case an erroneous value is passed as test set size, (for example \(7.25\)). \par
+It's also important that the dataset is randomly shuffled in some way, and so a complementary shuffle\_data() method is called to handle this - taking \(X\) and \(y\) as inputs with an inputted random seed value - so that we can retrieve repeatable results when we need to. \par
+This overall implementation is described in Listing 2. This is the final implementation after various iterations. Some comments and PyDoc documentation have been removed for the sake of fitting this here. \par
+
+\begin{lstlisting}[language=Python, caption=train\_test\_split.py]
+def train_test_split(X, y, test_size=0.25, seed=None):  # Default test_size is now 0.25
+    X = np.array(X) if not isinstance(X, np.ndarray) else X
+    y = np.array(y) if not isinstance(y, np.ndarray) else y
+    
+    if len(X) == 0 or len(y) == 0:
+        raise ValueError("Input data cannot be empty.")
+
+    if len(X) != len(y):
+        raise ValueError("The number of samples in X and y must be equal.")
+    X, y = shuffle_data(X, y, seed)
+
+    num_samples = len(y)
+    
+    if isinstance(test_size, float):
+        if 0.0 < test_size < 1.0:
+            train_ratio = num_samples - int(num_samples * test_size)
+        else:
+            raise ValueError("test_size as a float must be in the range (0.0, 1.0)")
+
+    elif isinstance(test_size, int):
+        if 1 <= test_size < num_samples:
+            train_ratio = num_samples - test_size
+        else:
+            raise ValueError("test_size as an int must be less than the number of samples")
+
+    else:
+        raise ValueError("Invalid test_size value")
+
+    X_train, X_test = X[:train_ratio], X[train_ratio:]
+    y_train, y_test = y[:train_ratio], y[train_ratio:]
+
+    return X_train, X_test, y_train, y_test
+
+def shuffle_data(X, y, seed=None):
+    rng = np.random.RandomState(seed) if seed is not None else np.random
+
+    indices = np.arange(X.shape[0])
+    rng.shuffle(indices)
+\end{lstlisting}
+
+\vspace{20pt}
+At this point, it was now finally possible to train and predict our 1-Nearest Neighbour implementation on the iris dataset. This was demonstrated in the second Jupyter Notebook. \par
+
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=1.25\textwidth]{1NNsplitjupy.png}
+    \caption{Notebook 2 - Implementing 1NN on iris hold-out test set }
+    \label{fig:1nnsplitjupy}
+\end{figure}
+
+And here we have our first evaluation of an algorithm! This was the rudimentary first step of the project, but it was a good foundation for me to work on the main K-Nearest Neighbours proof-of-concept program. Jupyter Notebooks were also my main way of demonstrating my progress in a visible way. \par
+
+
+\subsubsection{Implementing K-Neighbours}
 
 \subsection{Classification Tree}
+\subsection{Cross-Validation}
+\subsection{Data Preprocessing}
+\subsection{Unit Tests}
 \subsection{Datasets}
 \subsection{Jupyter Notebooks}
 
 \newpage
 \section{Evaluation and Reflection}
+When comparing this progress with my success criteria outlined in section \ref{successcriteria}, I think I successfully achieved the
 \section{Future Developments and Objectives}
 \newpage
 \bibliographystyle{IEEEtranN}
@@ -551,6 +869,12 @@ Following the meeting, I immediately implemented a MinMaxScaler so that I have s
 
 Overall in project development, I have built a pretty strong foundation for me to use for Term 2. I just need to show the results found on the three datasets I've chosen - iris, ionosphere and banknote authentication.  
 Right now, my priority is putting the presentation and report together - this needs more urgent work. 
+
+### 6th December
+Obligatory diary entry - I've been working away at completing my deliverables for the interim review - the interim report and the presentation. The presentation has been submitted and will take place on the 8th.  
+I'm finding it difficult to not add further functionality to the project last minute. I think there's still a lot I can do to automate various processes, such as the hyperparameter tuning process, and finding metrics such as accuracy. I think I can work on the preprocessing.py module this month after the review, and also work on integrating the process of calculating accuracy, recall and precision within a new metrics.py module.  
+My report is coming together, it leans quite heavily into the theory. Overall, I do feel quite proud of what I've managed to do this term, and I think I can carry this momentum forwards, once submission is completed.
+
 \end{markdown}
 %TC:endignore
 \end{document}
