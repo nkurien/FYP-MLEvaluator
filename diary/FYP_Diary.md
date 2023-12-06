@@ -204,3 +204,8 @@ Today I finally had my third meeting with my supervisor. It went smoothly and my
 Following the meeting, I immediately implemented a MinMaxScaler so that I have some form of data normalisation I can use to handle misaligned data ranges, particularly for KNN. I will need to correct my hyperparameter tuning procedure too.  
 Overall in project development, I have built a pretty strong foundation for me to use for Term 2. I just need to show the results found on the three datasets I've chosen - iris, ionosphere and banknote authentication.  
 Right now, my priority is putting the presentation and report together - this needs more urgent work. 
+
+### 6th December
+Obligatory diary entry - I've been working away at completing my deliverables for the interim review - the interim report and the presentation. The presentation has been submitted and will take place on the 8th.  
+I'm finding it difficult to not add further functionality to the project last minute. I think there's still a lot I can do to automate various processes, such as the hyperparameter tuning process, and finding metrics such as accuracy. I think I can work on the preprocessing.py module this month after the review, and also work on integrating the process of calculating accuracy, recall and precision within a new metrics.py module.  
+My report is coming together, it leans quite heavily into the theory. Overall, I do feel quite proud of what I've managed to do this term, and I think I can carry this momentum forwards, once submission is completed. 
