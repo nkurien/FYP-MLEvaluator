@@ -25,6 +25,7 @@ def _k_folds(X, y, k=5, seed=None) :
     # Calculate the standard fold size
     fold_size = num_of_samples // k
     remainder = num_of_samples % k
+    #unused but may be useful if we optimise remainder-handling
 
     # Initialize an array to store the training and testing sets for each fold
     folds = []
@@ -57,6 +58,12 @@ def k_folds_accuracy_scores(model, X, y, k=5, seed=None):
 
     """
 
+     # Check if the model has 'fit' and 'predict' methods
+    if not hasattr(model, 'fit') or not callable(getattr(model, 'fit')):
+        raise AttributeError("The provided model does not have a callable 'fit' method.")
+    if not hasattr(model, 'predict') or not callable(getattr(model, 'predict')):
+        raise AttributeError("The provided model does not have a callable 'predict' method.")
+
 
     # Generate folds using the previously defined k_folds function
     folds = _k_folds(X, y, k, seed)
@@ -77,14 +84,10 @@ def k_folds_accuracy_scores(model, X, y, k=5, seed=None):
         # Compute the score - here, we use accuracy as an example
         accuracy = np.mean(y_pred == y_test)
 
-        #if accuracy != 1.0:
-         #   mismatch+=1
 
         # Append the score to the list
         scores.append(accuracy)
-        #n+=1
-        #print(n,", ",len(folds))
-        #print("mismatches:",mismatch)
+       
 
     return scores
 

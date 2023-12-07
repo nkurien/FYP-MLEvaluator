@@ -16,6 +16,11 @@ class MockModel:
 class MockModelWithoutFit:
     def predict(self, X):
         return np.zeros(len(X))
+    
+class MockModelWithoutPredict:
+    def fit(self, X, y):
+        pass
+
 
 class TestKFolds(unittest.TestCase):
     @classmethod
@@ -64,6 +69,16 @@ class TestKFolds(unittest.TestCase):
     def test_k_folds_float_input(self):
         with self.assertRaises(ValueError):
             scores = k_folds_accuracy_scores(self.knn, self.X, self.y, k=2.5)
+    
+    def test_model_without_fit(self):
+        model_without_fit = MockModelWithoutFit()
+        with self.assertRaises(AttributeError):
+            k_folds_accuracy_scores(model_without_fit, self.X, self.y, 5)
+
+    def test_model_without_predict(self):
+        model_without_predict = MockModelWithoutPredict()
+        with self.assertRaises(AttributeError):
+            k_folds_accuracy_scores(model_without_predict, self.X, self.y, 5)
 
 
 if __name__ == '__main__':
