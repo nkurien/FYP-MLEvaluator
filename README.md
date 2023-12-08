@@ -24,8 +24,9 @@ __The structure can be described as follows:__
 This directory folder contains my project diary and personal notes as I work through my project this year.
 
 ### poc
-This directory folder contains my proof of concept programs that will act as the foundation of my project development.   
-This folder includes the models, the datasets, the model tests and the datasets for my project.
+This directory folder contains my proof of concept programs that will act as the foundation of my project development.
+All development is in this folder.     
+This folder includes the models, the datasets, the model tests and the jupyter notebooks for my project.
 
 ### reports
 This directory folder contains the reports made or in progress, including my project plan and my interim report.

@@ -7,6 +7,8 @@
 \usepackage{appendix}
 \usepackage{markdown}
 \usepackage{listings}
+\usepackage{outlines}
+
 \usepackage{color}
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
@@ -83,24 +85,37 @@ This report has been prepared on the basis of my own work. Where other published
 \vspace{10pt}
 I've included a navigation guide here to ease traversal through this report for assessment. \par
 
-Word Count(excluding diary and references): 7173
+Word Count(excluding diary and references): 10171 
+
+\vspace{5pt}
+
+\begin{outline}
+    \1 Aims and Objectives - Sections \ref{aimsobjectives} and \ref{futureplans}
+    \1 Planning and Timescales - Section \ref{plan}
+    \1 Literature Survey and Research Material
+        \2 Within the project scope - Sections \ref{withinscopestart} to \ref{withinscopefinish}
+        \2 Beyond the project scope - Sections \ref{beyondscopestart} to \ref{beyondscopefinish}
+    \1 Summary of Completed Work - Section \ref{currentwork}
+    \1 Diary - Appendix (roughly 2400 words)
+\end{outline}
+
 
 
 \newpage
 \section{Introduction}
 \pagenumbering{arabic}
-\subsection{Machine Learning and Classification Tasks}
+\subsection{Machine Learning and Classification Tasks} \label{beyondscopestart}
 Machine learning (ML) has taken the world by storm in recent times. In the era of unprecedented data generation, ML has emerged as a pivotal technology with profound implications for industries and everyday life. It underpins significant advancements in various sectors, including healthcare, finance, transportation, and more, by enabling intelligent systems that can learn from data and make informed decisions. \par
 In our daily lives, the influence of machine learning is both subtle and profound. It powers the personalized recommendations we receive on streaming services like Netflix and Spotify, tailoring entertainment to our tastes~\cite{NetflixRecommendations,SpotifyPlaylistGen}. When we shop online, ML algorithms analyze our purchasing habits to suggest products we might like, enhancing our shopping experience~\cite{MediaRecommendationSystemsSurvey}. Even our interactions with smartphones, from voice assistants like Siri and Google Assistant to predictive text and search, are driven by machine learning technologies, making them more intuitive and responsive to our needs~\cite{GoogleAssistantLookAndTalk, SiriML}.
 \par
 Beyond these conveniences, machine learning drives significant developments in critical areas. In healthcare, it aids in the early diagnosis of diseases~\cite{diabetesclassification}, personalized treatment plans~\cite{PersonalisedMedicineDeepLearning}, and even in drug discovery, ~\cite{DrugDiscoveryDeepLearning} revolutionizing patient care and outcomes. In the realm of finance, machine learning algorithms detect fraudulent activities and automate trading, providing more secure and efficient financial services~\cite{FinanceFraudDeepLearning}. In transportation, from optimizing logistics and delivery routes to the development of autonomous vehicles, ML is at the forefront, promising safer and more efficient transport systems~\cite{TransportationLogisticsML}. \par
-At the heart of all of this are classification tasks, which are central to many ML applications. Classification involves assigning categories or labels to data points based on their features, a task that is fundamental in pattern recognition, decision-making, and predictive modelling. From identifying fraudulent transactions to diagnosing medical conditions, the ability to accurately classify data is crucial.
+At the heart of all of this are classification tasks, which are central to many ML applications. Supervised learning, a cornerstone of machine learning, involves training algorithms on labeled data, where the correct answers are provided, enabling the model to learn and make predictions on new, unseen data. Classification involves assigning categories or labels to data points based on their features, a task that is fundamental in pattern recognition, decision-making, and predictive modelling.
 \par
 The significance of machine learning is not only growing in the realms of convenience and efficiency but also gaining traction as a key driver of global innovation. It is at the centre of research and development across industries, pushing the boundaries of what technology can achieve. Countries and companies are investing heavily in AI and ML research, recognizing their potential to spur economic growth, enhance competitiveness, and solve some of the world's most pressing challenges, from climate change~\cite{ClimateChange2022} to healthcare.
 \par
 Machine learning, with its ability to analyze vast amounts of data and learn from it, is not just a technological advancement but a transformative force reshaping how we live, work, and interact with the world around us. As it continues to evolve, its impact is set to become even more profound, making its understanding and application an essential facet of modern life.
 
-\subsection{Breakthroughs and Developments in Machine Learning}
+\subsection{Breakthroughs and Developments in Machine Learning} \label{beyondscopefinish}
 The landscape of machine learning has been significantly reshaped with the advent of deep learning, an advanced subset of neural networks. Deep learning models, particularly Convolutional Neural Networks (CNNs), have revolutionized image processing and analysis ~\cite{CNNImageClassification}. They have enabled machines to achieve near or even surpass human-level accuracy in tasks like image recognition and classification. Recurrent Neural Networks (RNNs), another pivotal development in this domain, have been instrumental in processing sequential data, making significant strides in speech recognition and natural language processing~\cite{RNNSequentialLearning} .\par
 Natural Language Processing (NLP) has witnessed transformative changes with the introduction of models like BERT and GPT ~\cite{BERT_NLP, NLP_Transformer}. These transformer-based models have set new benchmarks in understanding and generating human language. Their applications range from sophisticated chatbots to advanced systems for language translation, offering a level of context-awareness previously unattainable in machine learning. \par
 Reinforcement learning, a type of machine learning concerned with how agents ought to take actions in an environment to maximize cumulative reward, has seen groundbreaking successes. The development of algorithms like those used in DeepMind's AlphaGo~\cite{AlphaGoDeepMind} and AlphaZero~\cite{AlphaZeroDeepMind} represents a significant leap in this area. These systems not only learned to play complex games like Go and Chess but also developed strategies that were innovative and unconventional, showcasing the potential of AI to discover solutions that humans might not conceive. \par
@@ -123,7 +138,7 @@ will potentially be implemented using Python libraries such as PyQt5. The goal i
 Additionally, the project aims to explore the impact of hyperparameters on these algorithms. For KNN, this includes examining how different values of 'k', the number of nearest neighbours, affect the classification outcome. Similarly, for CART, the focus will be on understanding how different tree depths influence the model's ability to generalize from training data.
 
 \newpage
-\subsection{Milestones}
+\subsection{Milestones} \label{aimsobjectives}
 Within my Project Plan, my approach was broken down by approaching the algorithms and model evaluation methods all as separate components. I had a success criteria in place for the end of Term 1 - and I believe I've managed to fulfil this. The milestones put in place from my Project Plan are listed as follows.
 
 \subsubsection{First Term}
@@ -178,7 +193,7 @@ I will begin by implementing Proof of Concept programs in Python, starting very 
 By the end of the first term, it is essential that I have implemented both algorithms, K-Nearest Neighbours and Decision Trees, in some manner using Jupyter Notebooks, as well as using any form of model validation techniques to determine performance metrics of both algorithms. This is what I'd call an essential deliverable before the interim review, and I think it's feasible with the time and preparation given, and necessary compromises made.
 
 \newpage
-\section{Algorithms}
+\section{Algorithms} \label{withinscopestart}
 In this chapter, we introduce and evaluate the algorithms I'll be reviewing in this project.
 \subsection{K-Nearest Neighbours}
 \textbf{K-Nearest Neighbours (KNN)} is a versatile, easy-to-implement, and foundational algorithm in the realm of machine learning, widely recognized for its simplicity and effectiveness in classification and regression tasks.
@@ -280,7 +295,6 @@ For \(p = 2\), it becomes the Euclidean distance, and for \(p = 1\), it is the M
 
     \item \textbf{Class Imbalance Problems:} KNN can be biased towards the majority class in cases of class imbalance.
 
-    \item \textbf{Handling Missing Values:} The algorithm struggles with missing values and requires pre-processing to handle such cases.
 \end{itemize}
 \subsubsection{Comparative Analysis with other ML Algorithms}
 KNN's simplicity has been emphasised throughout this section, and it remains as its key strength when compared to other algorithms, such as Decision Trees and parametic methods. \par
@@ -323,6 +337,14 @@ Decision Trees operate on the fundamental principle of recursive partitioning of
 The decision at each node is made based on certain criteria, typically aiming to maximize the homogeneity of the resultant subsets. For categorical features, the splits are based on the different categories, while for continuous features, the tree selects a threshold value for splitting the data. This recursive partitioning continues until certain stopping criteria are met, which prevents the tree from growing indefinitely and potentially overfitting the data.\par
 
 My implementation uses this idea of a threshold with splitting continuous data, the approach to categorical data is to be implemented soon. \par
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.4\textwidth]{sklearntree.png}
+    \caption{Example of a tree using Gini}
+    \label{fig:sklearntree}
+\end{figure}
+
 \subsubsection{Splitting, Stopping and Pruning Criteria}
 In Decision Trees, the splitting criterion is a crucial aspect that determines how the data at each node is divided. The CART algorithm utilizes Gini Impurity as a primary measure for this purpose. Gini Impurity is a statistical metric used to quantify the "purity" of a node in the tree. The objective is to minimize this impurity, ensuring that after the split, the subsets are as homogeneous as possible with respect to the target variable. \par
 
@@ -331,7 +353,9 @@ Gini Impurity measures the frequency at which any element of the dataset will be
 
 \[ Gini(I) = 1 - \sum_{j} p_j^2 \]
 
-Here, \( p_j \) represents the proportion of the samples that belong to class \( j \) in the set \( I \). This formula implies that a node is 'pure' (Gini = 0) if all its samples belong to a single class. The goal of the CART algorithm is to find splits that decrease the Gini Impurity the most across the nodes it creates.
+Here, \( p_j \) represents the proportion of the samples that belong to class \( j \) in the set \( I \). This formula implies that a node is 'pure' (Gini = 0) if all its samples belong to a single class. \par
+We can think of \(p\) as representing the probability that a single sample picked from this once belongs to its corresponding class. We find the probabilities for each class, square them and sum these squared values. We then subtract the sum found from 1 to find the impurity value. \par
+The goal of the CART algorithm is to find splits that decrease the Gini Impurity the most across the nodes it creates.
 
 The algorithm considers all possible thresholds for each feature and calculates the Gini Impurity for the resulting partitions. The feature and the threshold that result in the highest impurity reduction are chosen to split the node. This process is repeated recursively for each new child node.
 
@@ -368,9 +392,9 @@ My implementation makes use of the Gini Impurity, using a fairly greedy strategy
     \item \textbf{Biased with Imbalanced Data:} Can create biased trees if some classes dominate.
 \end{itemize}
 
-\subsubsection{Comparative Analysis with other ML Algorithms}
-Decision Trees, as a fundamental machine learning algorithm, have distinct characteristics when compared to other methods like K-Nearest Neighbors (KNN) and parametric approaches such as Support Vector Machines (SVMs) and Logistic Regression. Each algorithm has its strengths and weaknesses, making them suitable for different types of problems.
-
+\subsubsection{Comparative Analysis with other ML Algorithms} 
+Decision Trees, as a fundamental machine learning algorithm, have distinct characteristics when compared to other methods like K-Nearest Neighbors (KNN) and parametric approaches such as Support Vector Machines (SVMs) and Logistic Regression. Each algorithm has its strengths and weaknesses, making them suitable for different types of problems. \par
+\vspace{5pt}
 \textbf{Decision Trees vs. K-Nearest Neighbors:}
 \begin{itemize}
 \item \textbf{Learning Style:} While Decision Trees are eager learners that build a model based on the entire dataset before making predictions, KNN is a lazy learner that makes predictions using the dataset at the time of query. This difference impacts both training time and prediction time.
@@ -446,7 +470,7 @@ LOOCV is particularly useful when dealing with small datasets, as it maximizes t
 
 
 
-\subsection{Metrics}
+\subsection{Metrics} \label{withinscopefinish}
 Various metrics are used to assess different aspects of a model's performance, with each metric offering unique insights. In this project, we focus on several key metrics: Accuracy, Precision, Recall, and the F1 Score. \par
 
 \textbf{Accuracy} was introduced earlier as a measure of a model's overall correctness. It is the ratio of correctly predicted instances to the total instances in the dataset. While accuracy is straightforward and widely used, it may not always be the best indicator of a model's performance, especially in cases where the data is imbalanced. \par
@@ -460,12 +484,12 @@ Various metrics are used to assess different aspects of a model's performance, w
 
 
 \newpage
-\section{Implementation}
+\section{Implementation} \label{currentwork}
 \subsection{Overview}
 By the end of Term 1, I managed to implement proof-of-concept programs for the implementation of the K-Nearest Neighbours algorithm, and the Decision Tree algorithm using Gini Impurity. I implemented a train-test-split function to separate any loaded datasets. I also implemented a cross-validation module which contains functions that undertake K-Folds Cross-Validation and Leave-One-Out Cross-Validation on a given model with given data, and retrieve the accuracy scores from this process. I present all of this on several notebooks, which also essentially display the progress I made across the First Term. My final interim review notebook presents all of this work in one place, as well as an implementation of a Min-Max Scaler - the first implementation made thus far of data preprocessing.\par
 
 \newpage
-\subsection{Planning and Timescales}
+\subsection{Planning and Timescales} \label{plan}
 Before we dive into my implementation of the algorithms, I'll bring forward the project plan put in place almost two months ago. The timeline for Term 1 was created with a weekly outline of expected deliverables. \par
 %\vspace{10mm}
 \subsubsection{Term 1 Timeline}
@@ -585,7 +609,7 @@ Though not anticipated by my Plan, this was the next thing I decided to focus on
 
 Fortunately, I found this generally to be also rather simple to implement thanks to Python's list-slicing functionality. \par
 Within a train\_test\_split module that can be imported, I wanted to implement a function of the same name that took inputs \(X\) and \(y\) as features and labels respectively. The size of the test set is the key parameter, and I thought it would be useful to not only input a ratio for the test set to the training set but also a specific number of samples for the size of the test set too. \par
-Over time during development, I realised during testing for edge cases that it's important to implement lots of excepting handling in this function- in case an erroneous value is passed as test set size, (for example \(7.25\)). \par
+Over time during development, I realised during testing for edge cases that it's important to implement intensive exception handling in this function- in case an erroneous value is passed as test set size, (for example \(7.25\)). \par
 It's also important that the dataset is randomly shuffled in some way, and so a complementary shuffle\_data() method is called to handle this - taking \(X\) and \(y\) as inputs with an inputted random seed value - so that we can retrieve repeatable results when we need to. \par
 This overall implementation is described in Listing 2. This is the final implementation after various iterations. Some comments and PyDoc documentation have been removed for the sake of fitting this here. \par
 
@@ -643,20 +667,400 @@ At this point, it was now finally possible to train and predict our 1-Nearest Ne
 
 And here we have our first evaluation of an algorithm! This was the rudimentary first step of the project, but it was a good foundation for me to work on the main K-Nearest Neighbours proof-of-concept program. Jupyter Notebooks were also my main way of demonstrating my progress in a visible way. \par
 
-
 \subsubsection{Implementing K-Neighbours}
+Implementing K-Nearest Neighbours followed a similar structure, but instead involved making various alterations to the way that the helper function, \_predict\_point(), works. We begin by adding an attribute, k to the constructor of the classifier - it's a parameter that we can pass to the classifier during initialisation. \par
+When a point is passed from the main predict() function to the helper function, we now need to keep track of a list of points and their corresponding distances from the test point in a list. We do this with k\_nearest in the snipped shown below, where we make a list of tuples storing the index and distance, initialised as '-1' and infinity respectively. \par
+We then iterate through the training set and compare each point to our test point - by iterating through our k-nearest list and replacing when we find a training point that is lower than one we've kept stored. By the end of these loops, we have a list of nearest neighbours, with their indices and distances \par
+From this list, we generate a new list of tuples, containing the label of the stored point and its corresponding distance. Doing this makes it easier for us to vote for a label and handle ties if necessary \par
+We then iterate through this list and count the instance of each label as well as the minimum distance found from each label compared to the test point. Finally, we use a max function to find our majority vote on the predicted label. I use a lambda function here to establish a condition such that if there's a tie in votes, we pick the closest label to the test point to predict our point. \par
+I made the choice to handle ties when voting for \(K\) by simply predicting the label of the closest point - it seemed like the most intuitive way to break a tie without bringing in weighted voting - which could be implemented later but I was worried of making this calculation too inefficient. \par
+\begin{lstlisting}[language=Python, caption=knn.py - \_predict\_point()]
+def _predict_point(self, point):
+    k_nearest = [(-1, float('inf')) for _ in range(self.k)]  # [(index, distance), ...]
 
+        for i, training_point in enumerate(self.X_training_data):
+
+            distance = self._euclidean_distance(point, training_point)
+            
+            # Check if the distance is smaller than the current k-nearest distances
+            for j, (idx, dist) in enumerate(k_nearest):
+                if distance < dist:
+                    k_nearest.insert(j, (i, distance))
+                    k_nearest = k_nearest[:self.k]  # Keep only the k-nearest distances
+                    break
+        # Get labels and distances of the k-nearest points
+        k_labels_distances = [(self.y_training_labels[idx], dist) for idx, dist in k_nearest]
+
+        # Count the occurrences of each label and store minimum distance for each label
+        label_counts = {}
+        for label, dist in k_labels_distances:
+            if label not in label_counts:
+                label_counts[label] = [0, float('inf')]
+            label_counts[label][0] += 1  # Increase count
+            label_counts[label][1] = min(label_counts[label][1], dist)  # Store the minimum distance
+
+        # Find the label with the maximum count and if there's a tie, choose the one with the smallest distance
+        majority_label = max(label_counts, key=lambda x: (label_counts[x][0], -label_counts[x][1]))
+
+        return majority_label
+
+\end{lstlisting}
+
+This method is called for every point in the test set that needs to be predicted and thus the predict() method returns a list of predicted labels. \par 
+At this point, we can now start using KNN on our iris data. \par
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=1\textwidth]{3NNjupy.png}
+    \caption{Notebook 3 - Initialising and predicting with 3 nearest neighbours}
+    \label{fig:3nnjupy}
+\end{figure}
+
+In Figure \ref{fig:3nnjupy} we can see KNN getting initialised at a 3-Nearest Neighbours classifier. In code block 4, we can see the predict() function getting utilised and a list of instances of when these predictions are made correctly. \par
+Within this notebook, I also investigated how the value of the hyperparameter \(K\) affected the accuracy of the KNN classifier.\par
+We are essentially expecting our accuracy to decrease once the value of K becomes exceedingly high. I used a loop to iterate through various values of \(k\) and graphed the accuracies using matplotlib~\cite{matplotlib}. In Figure \ref{fig:kiris} we can see that KNN performs surprisingly well. \par
+\begin{figure}[ht]
+    \centering
+    \begin{minipage}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{kiris.png}
+        \caption{Notebook 3 - Evaluating k on iris data}
+        \label{fig:kiris}
+    \end{minipage}\hfill
+    \begin{minipage}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{kiono.png}
+        \caption{Notebook 3 - Evaluating k on ionosphere data}
+        \label{fig:kiono}
+    \end{minipage}
+\end{figure}
+
+I investigated this further by introducing the ionosphere~\cite{ionosphere} dataset, another UCI dataset that needs minimal preprocessing by many more features per sample. Here we can see in Figure \ref{fig:kiono} that KNN retrieves lower accuracy values in general, and the accuracy falls more sharply. Likely due to the much larger number of features in ionosphere. \par
+It's at this point that I began to work on the Tree algorithm implementation.
 \subsection{Classification Tree}
+\subsubsection{SKLearn Implementation}
+Implementing the tree algorithm was possibly the most challenging aspect of development in Term 1. I felt unfamiliar with the way that the fit() and predict() functions worked with Trees, so I utilised the SKLearn~\cite{scikit-learn} library in Notebook 4 to understand what I should expect at a higher level from my implementation. \par
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=1\textwidth]{carttree.png}
+    \caption{Notebook 4 - Investigating using SKLearn}
+    \label{fig:carttree}
+\end{figure}
+
+\subsubsection{Building the tree}
+When fit() is called, we want our classifier to build a tree that models that training data. To do this we need to essentially, find a way to split the data continuously and recursively, such that the nodes produced are more pure than their roots. We also need to find a way to calculate this impurity and use it to traverse all the training data's features and values, to find the best thresholds that will produce this split. \par
+After considering how the gini impurity should be implemented, I realised it's important to incorporate a weighted gini impurity that we can combine across both branches, so that we can aim to find a left and right branch, that have the lowest possible combined impurity. I realised that the size of both branches is something that needs to be accounted for, we want larger branches to have a greater influence if they have a low purity, as we're able to classify a larger group of samples in a split. \par
+
+\begin{lstlisting} [language=Python, caption=classification\_tree.py - gini\_index()]
+    # Gini index function to evaluate the quality of a split.
+    def gini_index(self, groups, classes):
+        # Count all samples at split point
+        n_instances = float(sum([len(group) for group in groups]))
+        # Sum weighted Gini index for each group
+        gini = 0.0 # Initialize Gini index.
+        for group in groups:
+            size = float(len(group))
+            if size == 0:  # Avoid division by zero
+                continue
+            score = 0.0
+            # Score the group based on the score for each class
+            for class_val in classes:
+                p = [row[-1] for row in group].count(class_val) / size # Proportion of each class.
+                score += p * p
+            # Sum weighted Gini index for each group.
+            gini += (1.0 - score) * (size / n_instances)
+        return gini
+\end{lstlisting}
+
+Using this as a helper function, we have a way to determine the quality of our splits. \par
+Looking at this at the higher level, we want our fit() function to build a tree, and we'd want a build\_tree() function to handle the split finding. I approached this in the following manner. \par
+
+\begin{lstlisting} [language=Python, caption=classification\_tree.py - fit()]
+    def fit(self, X, y):
+    if len(X) == 0 or len(y) == 0:
+            raise ValueError("Cannot fit a tree with an empty dataset")
+
+
+        dataset = np.column_stack((X, y)).tolist()
+        #print(dataset)
+        self.root = self.build_tree(dataset, self.max_depth, self.min_size)
+\end{lstlisting}
+
+The fit() function combines the features and labels into a single dataset using numpy's column\_stack() functionality, and we use to\_list() to arrange this as a list of lists. What we have is, in essence, a 2-D array where each row represents a sample of features and a label at the end of the row. We now have a neat structure to manipulate within the tree. \par
+
+\begin{lstlisting} [language=Python, caption=classification\_tree.py - build\_tree()]
+    def build_tree(self, train, max_depth, min_size):
+    root = self.get_split(train) # Find the best initial split for the root.
+        self.split(root, max_depth, min_size, 1) # Recursively split the tree from the root node.
+        # The value 1 above is passed as the first layer depth from the root
+        return root
+\end{lstlisting}
+
+The tree-building function is then called by fit() and this method calls get\_split() to find the best split at this node, followed by the split() function which essentially performs this split on the tree and also assesses the stopping criteria to determine whether these nodes should continue being split, or if they can become leaf nodes - in which case the to\_terminal() method is called. \par
+Within get\_split(), the test\_split() method is used to iterate through various candidate splits to help search for an ideal split. It's worth noting that this implementation is a rather greedy and inefficient algorithm, that is committed to finding the best possible split. This is something I hope to optimise to reduce training time and improve performance - by reducing overfitting. \par
+
+\begin{lstlisting} [language=Python, caption=classification\_tree.py - get\_split()]
+     # Method to find the best place to split the dataset.
+    def get_split(self, dataset):
+    class_values = list(set(row[-1] for row in dataset)) # Get the unique class values.
+        b_index, b_value, b_score, b_groups = 999, 999, 999, None
+        for index in range(len(dataset[0]) - 1): # Iterate over all features
+            for row in dataset:
+                groups = self.test_split(index, row[index], dataset) # Test split on each unique feature value.
+                gini = self.gini_index(groups, class_values) # Calculate Gini index for the split.
+                if gini < b_score: # Check if we found a better split.
+                    b_index, b_value, b_score, b_groups = index, row[index], gini, groups
+        return {'index': b_index, 'value': b_value, 'groups': b_groups} # Return the best split.
+\end{lstlisting}
+
+The method for finding the split is shown above. \par
+Other helper methods I implemented include is\_homogenous(), which checks if the node only contains samples of the same class, and get\_depth(), which finds how deep the tree has managed to reach from the root - which mostly helped me with checking if the tree is being constructed the way I expect it to, and at what point the stopping criteria prevents the tree from reaching the maximum depth. \par
+Finally, mostly to maintain an understanding of the structure and to retain my sanity, I made a print\_tree() which prints the created tree from training to the terminal. Perhaps the only implementation I've personally put together that shows a visualisation, so I'm somewhat proud of its implementation. \par
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.5\textwidth]{printtree.png}
+    \caption{print\_tree() example}
+    \label{fig:printtree}
+\end{figure}
+
+\subsubsection{Making Predictions}
+In theory, once we've made our tree from training - making predictions is relatively quick and straightforward. We simply take our test sample and traverse the decision nodes in the tree, until we can make our prediction at a leaf node. \par
+Similar to how KNN works, we have a predict() function and a helper \_predict() function that handles each sample getting passed to it which predict iterates. \par
+
+\begin{lstlisting} [language=Python, caption=classification\_tree.py - predict() functions]
+     def predict(self, X):
+        predictions = [self._predict(self.root, row) for row in X]
+        return np.array(predictions)
+
+    def _predict(self, node, row):
+        if row[node['index']] < node['value']: # Check condition at the node.
+            if isinstance(node['left'], dict): # If the left child is a dictionary, it's another decision node.
+                return self._predict(node['left'], row)
+            else:
+                return node['left'] # If it's not a dictionary, it's a terminal node.
+        else:
+            if isinstance(node['right'], dict):
+                return self._predict(node['right'], row)
+            else:
+                return node['right']
+\end{lstlisting}
+
 \subsection{Cross-Validation}
+\subsubsection{Retrieving K-Folds}
+Once both algorithms has been implemented, I wanted to Implement K-folds Cross-Validation immediately to properly evaluate and compare these two algorithms at how well they made predictions. Approaching this wasn't too difficult compared to the Tree, and the fold-making aspect essentially had a lot of similarities with the train-test-split implementation, with more iterations. \par
+I approached this by making a function, \_k\_folds(), that separates the set given into the number of folds given. This essentially returns a list of folds, comprised of training and test data for features and labels - so four lists of data within each 'fold' of the folds lists. \par
+
+\begin{lstlisting} [language=Python, caption=cross\_validation.py - \_k\_folds()]
+     def _k_folds(X, y, k=5, seed=None) :
+      X, y = split.shuffle_data(X,y,seed)
+    num_of_samples = len(y)
+    # Check if 'k' is a valid value
+    #K can't be 1, we accept 2 and higher
+    if k < 2 or k > num_of_samples or not isinstance(k, int):
+        raise ValueError(f"'k' must be an integer between 2 and {num_of_samples}, got {k}")
+    indices = np.arange(num_of_samples)
+
+    # Calculate the standard fold size
+    fold_size = num_of_samples // k
+    remainder = num_of_samples % k
+    #unused but may be useful if we optimise remainder-handling
+
+    # Initialize an array to store the training and testing sets for each fold
+    folds = []
+
+    current = 0
+    for i in range(k):
+        if i < k - 1:
+            start, stop = current, current + fold_size
+        else:
+            # For the last fold, use the remaining samples
+            start, stop = current, num_of_samples
+
+        test_indices = indices[start:stop]
+        train_indices = np.concatenate([indices[:start], indices[stop:]])
+
+        X_train, X_test = X[train_indices], X[test_indices]
+        y_train, y_test = y[train_indices], y[test_indices]
+
+        folds.append(((X_train, y_train), (X_test, y_test)))
+
+        current = stop
+
+    return folds
+\end{lstlisting}
+I realised that there are various ways to approach the problem regarding the remainder of samples that don't evenly fit into the division of folds - my implementation simply allowed the final fold to handle the remainder, so this fold could be larger or smaller in comparison to the rest. This could be optimised a little, such that the remainder is evenly distributed across all the folds, but for now I chose the simpler approach. The caveat is if a significantly large number of folds is requested (say where \(k > (n/2)\)), the final fold will be quite unusually sized in comparison to the rest. But this is an unusual situation to be in anyway. \par
+
+\subsubsection{Calculating the scores}
+I decided, for simplicity, to allow a function to take the model, the features and labels, and the number of folds with a shuffle seed - all as parameters. And the function will perform all the training and testing using the model's defined fit() and predict() functions and retrieve a list of accuracy scores to be interpreted. 
+
+\begin{lstlisting} [language=Python, caption=cross\_validation.py - accuracy scores]
+     def k_folds_accuracy_scores(model, X, y, k=5, seed=None):
+      # Check if the model has 'fit' and 'predict' methods
+    if not hasattr(model, 'fit') or not callable(getattr(model, 'fit')):
+        raise AttributeError("The provided model does not have a callable 'fit' method.")
+    if not hasattr(model, 'predict') or not callable(getattr(model, 'predict')):
+        raise AttributeError("The provided model does not have a callable 'predict' method.")
+
+
+    # Generate folds using the previously defined k_folds function
+    folds = _k_folds(X, y, k, seed)
+
+    # List to store the scores from each fold
+    scores = []
+
+    # Iterate over each fold
+    #n=0
+    #mismatch = 0
+    for (X_train, y_train), (X_test, y_test) in folds:
+        # Fit the model on the training set
+        model.fit(X_train, y_train)
+
+        # Predict on the test set
+        y_pred = model.predict(X_test)
+
+        # Compute the score - here, we use accuracy as an example
+        accuracy = np.mean(y_pred == y_test)
+
+
+        # Append the score to the list
+        scores.append(accuracy)
+       
+
+    return scores
+      
+\end{lstlisting}
+This was an exciting thing to put together, as it would essentially be the first time all these abstractions I've made can finally fit together in one function. Implementation here was relatively simple, but it was important that exception handling here was robust, as we're assuming that the models in place have the functions we need to retrieve these performance scores.  \par
+Once this was implemented, it was natural to make more functions that retrieves the mean of these scores, and also perform LOOCV. Implementing these was trivial, as it essentially just called the function above. \par
+
 \subsection{Data Preprocessing}
+Data preprocessing hasn't been covered a lot in this report but it's significance became far more apparent to me rather late in the term, when I realised there's many factors preventing me from using these algorithms on more interesting datasets. My supervisor also emphasised the importance of normalising data that will be trained by KNN, as KNN is scale-sensitive. \par
+Due to this, I very quickly implemented a MinMaxScaler - which essentially fits all data passed to it on a scale from 0 to 1. The scaler is in the form of a class, which means that it can be fitted in accordance to a particular training set, and then apply that same transformation to a test set, as is necessary for a scaler in ML settings. \par
+
+\begin{lstlisting} [language=Python, caption=preprocessing.py - MinMaxScaler]
+import numpy as np
+
+class MinMaxScaler:
+    def __init__(self):
+        self.min_ = None
+        self.max_ = None
+        self.range_ = None
+
+    def fit(self, X):
+        """Fit the scaler to the data."""
+        self.min_ = np.min(X, axis=0)
+        self.max_ = np.max(X, axis=0)
+        self.range_ = self.max_ - self.min_
+        # Handle zero range to avoid division by zero
+        self.range_[self.range_ == 0] = 1
+        return self
+        
+
+    def transform(self, X):
+        """Transform the data using the fitted scaler."""
+        if self.min_ is None or self.max_ is None:
+            raise RuntimeError("The scaler has not been fitted yet.")
+        return (X - self.min_) / self.range_
+
+    def fit_transform(self, X):
+        """Fit to data, then transform it."""
+        return self.fit(X).transform(X)
+      
+\end{lstlisting}
+
+This module will come useful in future implementations, I see this class as the first of various other functions in this module, with handling categorical data and missing data. \par
+
 \subsection{Unit Tests}
+Testing was an imperative past of development, especially as the complexity of these algorithms started to increase. The most important issue was ensuring that data was handled between components correctly and securely. I kept my tests in a folder named 'tests' and used the 'unittests' library within the standard Python~\cite{python3} library to set up my test suite. \par
+Below I've added an example of some unit tests from the tree test suite:
+
+\begin{lstlisting} [language=Python, caption=test\_tree.py - example tests]
+    def test_gini_index(self):
+        """Test the Gini index calculation."""
+        tree = ClassificationTree()
+        groups = [[[1, 0], [2, 0]], [[3, 1], [4, 1]]]
+        classes = [0, 1]
+        gini = tree.gini_index(groups, classes)
+        self.assertGreaterEqual(gini, 0)
+        self.assertLessEqual(gini, 1)
+    
+    def test_tree_depth(self):
+        """Test if the tree respects the maximum depth limit."""
+        tree = ClassificationTree(max_depth=3)
+        tree.fit(self.X, self.y)
+        depth = tree.get_depth()
+        self.assertLessEqual(depth, 3)
+
+    def test_homogeneity_check(self):
+        """Test if the is_homogeneous function correctly identifies a homogeneous group."""
+        tree = ClassificationTree()
+        homogeneous_group = [[1, 0], [2, 0]]
+        heterogeneous_group = [[1, 0], [2, 1]]
+        self.assertTrue(tree.is_homogeneous(homogeneous_group))
+        self.assertFalse(tree.is_homogeneous(heterogeneous_group))
+
+
+    def test_terminal_node_creation(self):
+        """Test if terminal nodes are correctly created from a group of samples."""
+        tree = ClassificationTree()
+        group = [[0,0], [1, 0], [2, 0], [3, 1], [4, 1]]
+        terminal_node = tree.to_terminal(group)
+        # The most common class in the group is 0
+        self.assertEqual(terminal_node, 0)
+      
+\end{lstlisting}
+
+Listing through the unit tests in each of my test suites:
+\begin{itemize}
+    \item K-Folds has 8 unit-tests
+    \item KNN has 19 unit-tests
+    \item The MinMaxScaler has 2 unit-tests
+    \item Tree has 10 unit-tests
+    \item Train-Test-Split has 15 unit-tests
+\end{itemize}
+
+As I begin to work on unifying my programs into a standalone interface, these tests will help greatly in ensuring that the functionality of my algorithms and other data-handling functions is retained. \par
+
 \subsection{Datasets}
+The datasets used in this project include the Iris~\cite{irisdata} dataset, the ionosphere~\cite{ionosphere} dataset and the banknote authentication~\cite{banknote_authentication} dataset - all from the UCI repository~\cite{uci}. These datasets are all comprised of continuous, complete data and are well suited towards the classification task with specified target labels for each sample. This worked perfectly for my current implementation \par
+This is discussed further in Evaluation - but I had plans to implement the Breast Cancer dataset following my project plan. Unfortunately, due to my programs not being able to handle missing data, this dataset couldn't be incorporated and the choice of datasets was rather limited. \par
+
 \subsection{Jupyter Notebooks}
+Jupyter Notebooks~\cite{jupyter} are mentioned quite a few times in this section. These 'notebooks' are essentially a succinct interface that's very helpful with tracking a workflow in Machine Learning with its mix of code blocks and markdown blocks. In the context of my project, Jupyter Notebooks have been instrumental in not only developing and testing the algorithms but also in visualizing data and results in a coherent and interactive manner. They provide a platform where code, output, graphical visualizations, and explanatory text can coexist, making it an ideal environment for iterative coding, experimenting with data, and drawing conclusions. \par
+They've served as a useful tool in tracking my progress in implementation, from the simple 1NN implementation, up until we've implemented scaling and K-Folds Cross-Validation on both algorithms. They've been a useful playground for me to gain insights into my models before building the interface. \par
 
 \newpage
 \section{Evaluation and Reflection}
-When comparing this progress with my success criteria outlined in section \ref{successcriteria}, I think I successfully achieved the
-\section{Future Developments and Objectives}
+When comparing this progress with my success criteria outlined in section \ref{successcriteria}, I think I successfully achieved the base goal of implementing two algorithms, evaluating them in some way, on some kind of dataset. I think this term has been deeply insightful for me in understanding the intricacies of putting these algorithms together, and how rigorous one must be in evaluating that they function correctly. I've learned a lot about how to handle training and test sets properly, and avoiding data snooping during the tuning process. I feel quite fortunate to be working such a relevant project topic. In this section I'll list some issues I faced in this term and how I may try to amend them moving forwards.\par
+\subsection{Approach}
+\subsubsection{Underestimating Preprocessing}
+It seems obvious in retrospect, but I feel that I'm unable to observe much potential in my algorithms until I've managed to implement more data handling. I think that what makes these algorithms interesting is the data that they perform on, and I'm limited to what I've chosen due to the lack of work in this aspect. \par
+I would blame this on the fact that my project plan, as airtight as it seemed at the time, simply didn't consider how early on it needed to be considered into the workflow. \par
+
+\subsubsection{Time and Task Management}
+It's a tale as old as time itself, but I unfortunately did struggle with keeping up with the rigidity of my project plan in term 1, especially with the deadlines for my reports and my scheduled diary entries - which looking back, were rather lofty ambitions when considering the other responsibilities that come into play in final year.\par
+To go deeper into this, I would add that much of this was also from hesitation to push forward changes that I did not feel certain would work in the long-term. The largest gap in my workflow this term coincides with the time I began trying to implement the core structure of my tree implementation - and I think I would have struggled less if I broke the challenge down into segments in the same way that I did with the Nearest Neighbours implementation. \par
+\subsection{Implementation}
+\subsubsection{Inefficiencies in Tree Splitting}
+My algorithm when searching for the next split in the tree-building process is a greedy one. It's searching for the optimal split through the entire set of features and iterating through every single one. Not only is this inefficient, but data preprocessing may unveil that this is unnecessary. Using the ionosphere dataset as an example, there are various features that don't show much variance whatsoever and likely can be either ignored or have less priority during the search for the split - in essence, investigating feature importance of my dataset. It's also likely that I can utilise NumPy's vectorisation capabilities to find a more efficient approach, or implementing some kind of parallelization. \par
+
+\subsubsection{Tree Nodes Lacking Information}
+Essentially, my implementation when building the tree is yet to give me much information about how many samples are allocated to each leaf node, as is found in the SKLearn implementation. This is quite a vital oversight, as I'm unsure of where inefficiencies may lay within my implementation until I am able to evaluate this. However, amending this may involve making larger changes to the data structure of the tree implementation, which will require some time and planning. 
+\section{Future Developments and Objectives} \label{futureplans}
+With the close of this term, I feel quite driven to deliver changes and make progress upon the foundation I've built so far.
+
+\subsection{Data Preprocessing}
+The most immediate plan I have, right after the interim submission - is to work on handling missing and categorical data. For the former, I hope to implement some form of listwise deletion for any sample with a missing feature. If this shrinks the set too much, I could investigate with some form of statistical inputation.\par 
+For categorical data, I intend on working on an encoder of some kind - one-hot or label - and investigating how I may need to use this for both ordinal and nominal data samples. All of this will take place in the preprocessing.py module that's in place already. \par
+\subsection{Performance Metrics}
+A common mantra in the machine learning realm is that "accuracy is not enough". I intend to build a metrics module that automates the process of finding the accuracy, and also checks the precision and recall where it's applicable to do so. I believe this works in binary classification scenarios, so I'll need to investigate how I can implement this with multi-class data. \par
+\subsection{Hyperparameter Tuning}
+As shown in my interim review Jupyter Notebook - tuning the hyperparameters for a model is rather repetitive. I'd like to investigate if I could integrate this into an automated process. This may be necessary when implementing my standalone interface. \par
+\subsection{Interface}
+The end-goal for this project is to have a standalone interface using TKinter or QtPy5. I aim to have some implementation of this by the end of January next term. \par
+\subsection{Third Algorithm}
+I think I could add a lot of depth to this project by introducing one more algorithm to compare, ideally a parametric one to draw comparisons with these two. I've been considering either Logistic Regression or an SVM, though I think the latter could be very ambitious considering the challenges faced so far. \par
 \newpage
 \bibliographystyle{IEEEtranN}
 \bibliography{bibliography}
