@@ -186,7 +186,7 @@ Having read more about normalisation, handling categorical data and missing data
   
 For KNN, there's a chance that I may need to implement a new distance measure such as Hamming Distance or Jaccard Distance to handle categorical data sufficiently, without making misleading effects to the distance between samples. 
 
-### 29th November 
+### 29th November
 I've managed to add various test suites to thoroughly check edge cases for the functionality implemented thus far. Doing this helped me notice gaps in my exception handling when passing values around - such as in K-folds and train-test-split when specifying the size of the fold or split. 
 
 ### 30th November
@@ -208,4 +208,42 @@ Right now, my priority is putting the presentation and report together - this ne
 ### 6th December
 Obligatory diary entry - I've been working away at completing my deliverables for the interim review - the interim report and the presentation. The presentation has been submitted and will take place on the 8th.  
 I'm finding it difficult to not add further functionality to the project last minute. I think there's still a lot I can do to automate various processes, such as the hyperparameter tuning process, and finding metrics such as accuracy. I think I can work on the preprocessing.py module this month after the review, and also work on integrating the process of calculating accuracy, recall and precision within a new metrics.py module.  
-My report is coming together, it leans quite heavily into the theory. Overall, I do feel quite proud of what I've managed to do this term, and I think I can carry this momentum forwards, once submission is completed. 
+My report is coming together, it leans quite heavily into the theory. Overall, I do feel quite proud of what I've managed to do this term, and I think I can carry this momentum forwards, once submission is completed.
+  
+### 10th December
+Term 1 is over! I gave my interim presentation on the 8th and it went very well, I received around four questions - two from the audience and two from the Chair. One member of the audience suggested I implement integer division into the way I calculate my folds for K-Folds Cross-Validation. I've realised now that I have already implemented this, but the need to handle the remainder is still necessary. I received further questions about how my MinMaxScaler was implemented, and why I chose the algorithms that I focused on.  
+  
+Lately, I've been thinking about what I may need to research on for the rest of this month to make next term a little easier for me.
+
+### 17th December
+I think the most immediate addition I'd need to make to my project should be the addition of some form of Encoder to handle missing data and categorical data. Handling this would quite immediately increase my algorithm's functionality and I'd quite rapidly be able to double the number of datasets I work with, and evaluate my algorithms a lot more rigorously.  
+  
+The Leave-One-Out Cross-Validation exposed just how inefficient my tree algorithm is during training - and I think I'd need to find ways to make the algorithm less greedy during the split search. I could also do some research on the ID3.5 algorithm to see how it differs to the CART algorithm that I've implemented.  
+Another significant issue I need to bring my attention to, is how the tree model doesn't reveal much information about its structure, such as the number of training points that were classified at each leaf node. Finding this will make debugging and optimisation significantly easier, and could potentially help me devise a method of finding a confidence level for each prediction.  
+  
+A key objective in the next term will be to work on an interface for these models to work, and essentially, act as the front-end of my final project. I've not made a start on this, so it'll be wise for me to at least research which libraries I'll use to put this together.  
+  
+Pipelines were mentioned towards the end of the CS3920 ML course - I feel like this could be a solid addition to my implementation. The interim submission shows each process executed manually - and this simply won't be feasible in a graphical interface layout in Pipelines. I think pipelines could help me to wrap up all the preprocessing in a neat way, as well as potentially show off some intricate software design practices.  
+
+I've yet to use Precision and Recall as metrics in my project, and it seems silly to only use accuracy as a sole metric so far. However I've noted that these metrics are generally only used in binary classification - so it'll be necessary to adapt this for multi-class classification. 
+  
+### 16th January
+I'm gearing up for the upcoming term and I've comprised a list of necessary objectives:
+  1) Preprocessing - Handling missing and categorical data to accommodate more datasets
+  2) Tree Refinement - Implement optimisations to how the tree searches for splits during the training process. Alter the tree model structure so that the leaf nodes are more informative.
+  3) Metrics - Introduce more model evaluation metrics that allow more thorough comparison and insight into the algorithms' performance. 
+  4) Pipelines - Implement pipelines that can encapsulate much of the data manipulation into few executions. This will make it easier to implement an interface for the end-user. 
+  5) GUI - Make a head start in implementing a simple but effective graphical interface for end-user to use the algorithms being discussed. Ideally allow for inputted datasets to be analysed and trained upon. 
+  6) Implement a third algorithm given there's enough time to do so. Strongly considering logistic regression.  
+    
+I'm relieved to have received positive feedback on my project's progress so far, as well as the presentation - It's assuring to know that my implementation so far is going the right direction.  
+  
+I'm likely to have a lot more clarity over next steps after my next supervisor meeting. 
+  
+### 25th January
+Just had my 4th meeting with Zhiyuan - I found it quite helpful. Every meeting has been focused around the importance of delivering a finished product - and it's reminded me that I need to define the scope of what I want to achieve this term with everything working smoothly. Zhiyuan recommended I try and implement a third algorithm quickly and then focus on implementing the final product.  
+I've place a lot of emphasis on components like data preprocessing but my supervisor recommended that I don't waste too much time on this, it can be easy to waste time on this and it can become convoluted.  
+I need to implement a third algorithm quite quickly, I'm leaning towards Logistic Regression for now - a parametric model. I think it'd also be interesting to introduce Grid Search to my implementation in addition to what's been previously considered. 
+My supervisor reminded me to focus on discussing my results and findings of my project - and evaluate their performance. It's important that my report reflects its title, as obvious as that sounds.
+  
+I'll pushing to the repo again very soon. 
