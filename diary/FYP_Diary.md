@@ -247,3 +247,9 @@ I need to implement a third algorithm quite quickly, I'm leaning towards Logisti
 My supervisor reminded me to focus on discussing my results and findings of my project - and evaluate their performance. It's important that my report reflects its title, as obvious as that sounds.
   
 I'll pushing to the repo again very soon. 
+
+### 27th January
+Worked on a new simple notebook just to experiment with SKLearn's preprocessing libraries and envision how I could make a preprocessing pipeline.  
+  
+I've been looking for material to research on Logistic Regression so I can get working on it quickly. I've found a great excerpt from chapter 4 of 
+Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow, 3rd Edition. I think this could be helpful.  
