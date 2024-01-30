@@ -134,15 +134,16 @@ class ClassificationTree :
         Returns:
             dict: The best split point in the dataset.
         """
-        class_values = list(set(row[-1] for row in dataset)) # Get the unique class values.
+        class_values = list(set(row[-1] for row in dataset))
         b_index, b_value, b_score, b_groups = 999, 999, 999, None
-        for index in range(len(dataset[0]) - 1): # Iterate over all features
-            for row in dataset:
-                groups = self.test_split(index, row[index], dataset) # Test split on each unique feature value.
-                gini = self.gini_index(groups, class_values) # Calculate Gini index for the split.
-                if gini < b_score: # Check if we found a better split.
-                    b_index, b_value, b_score, b_groups = index, row[index], gini, groups
-        return {'index': b_index, 'value': b_value, 'groups': b_groups} # Return the best split.
+        for index in range(len(dataset[0]) - 1):
+            unique_values = set(row[index] for row in dataset)  # Optimization: consider unique values only
+            for value in unique_values:  # Sampling or using quantiles can be applied here
+                groups = self.test_split(index, value, dataset)
+                gini = self.gini_index(groups, class_values)
+                if gini < b_score:
+                    b_index, b_value, b_score, b_groups = index, value, gini, groups
+        return {'index': b_index, 'value': b_value, 'groups': b_groups}
 
     #Creates a terminal/leaf node from a group of samples. Called when splitting not necessary
     def to_terminal(self, group):
