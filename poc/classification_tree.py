@@ -141,7 +141,7 @@ class ClassificationTree :
             for value in unique_values:  # Sampling or using quantiles can be applied here
                 groups = self.test_split(index, value, dataset)
                 gini = self.gini_index(groups, class_values)
-                if gini < b_score:
+                if gini < b_score: # Consider changing at a certain threshold? 
                     b_index, b_value, b_score, b_groups = index, value, gini, groups
         return {'index': b_index, 'value': b_value, 'groups': b_groups}
 
