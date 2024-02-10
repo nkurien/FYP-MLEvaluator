@@ -253,3 +253,10 @@ Worked on a new simple notebook just to experiment with SKLearn's preprocessing 
   
 I've been looking for material to research on Logistic Regression so I can get working on it quickly. I've found a great excerpt from chapter 4 of 
 Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow, 3rd Edition. I think this could be helpful.  
+
+### 9th February
+Somewhat hit a bit of a roadblock in research this week: Implementing a Softmax Regression Classifier.  
+It's clear to me that I need to implement a form of multi-class logistic regression, and the ideal form of this seems to be utilising softmax as the decision function. However, I've been getting pretty lost with how to implement this and all the inner mechanisms of it.  
+I've somewhat concluded that I'll start with the basics and work my way up - implementing binary classification with a Logistic Regression Classifier on simple data, perhaps working with One-Vs-Rest to create a form of multi-class classification, and then from there - hopefully implementing softmax will be more intuitive.  
+  
+I want to finish algorithm implementation asap so that I can focus on metrics and GUI, and approach a final working implementation. So far, I've managed to implement Notebook 8 with a basic implementation of LR on Iris data. As well as a new file for my LR implementations logistic_regression.py. 
