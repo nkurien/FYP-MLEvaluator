@@ -97,6 +97,47 @@ def k_folds_accuracy_score(model, X, y, k=5, seed=None):
     """
     return np.mean(k_folds_accuracy_scores(model, X, y, k, seed))
 
+def k_folds_predictions(model, X, y, k=5, seed=None):
+    """
+    Perform k-fold cross-validation to generate predictions for each data point in the dataset.
+
+    This function splits the dataset into k folds, trains the provided model on k-1 of those folds, 
+    and then predicts the remaining fold. This process is repeated for each fold, resulting in 
+    predictions for each data point in the dataset. The true labels and predictions are aggregated 
+    and returned.
+
+    Parameters:
+    - model: A machine learning model instance that implements fit and predict methods.
+    - X: ndarray, shape (n_samples, n_features)
+      The input data to be split and used for training and testing.
+    - y: ndarray, shape (n_samples,)
+      The target labels corresponding to the input data.
+    - k: int, default=5
+      The number of folds to split the data into for cross-validation.
+    - seed: int or None, optional
+      The seed for the random number generator used to shuffle the data before splitting into folds.
+      If None, the random number generator is the RandomState instance used by np.random.
+
+    Returns:
+    - all_true_labels: list
+      The list of true labels for each data point, aggregated across all k folds.
+    - all_predictions: list
+      The list of predictions for each data point, aggregated across all k folds.
+
+    """
+    folds = _k_folds(X, y, k, seed)
+    all_predictions = []
+    all_true_labels = []
+
+    for (X_train, y_train), (X_test, y_test) in folds:
+        model.fit(X_train, y_train)
+        predictions = model.predict(X_test)
+        all_predictions.extend(predictions)
+        all_true_labels.extend(y_test)
+    
+    return all_true_labels, all_predictions
+
+
 def leave_one_out_scores(model, X, y, seed=None):
     k = len(y)
 
