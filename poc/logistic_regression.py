@@ -67,7 +67,7 @@ class LogisticRegression:
         return original_labels
     
 class SoftmaxRegression:
-    def __init__(self, learning_rate=0.01, n_iterations=1000):
+    def __init__(self, learning_rate=0.01, n_iterations=1000, ):
         self.learning_rate = learning_rate
         self.n_iterations = n_iterations
         self.weights = None
@@ -101,7 +101,7 @@ class SoftmaxRegression:
         self.bias -= self.learning_rate * db
 
     
-    def fit(self, X, y):
+    def fit(self, X, y, print_loss = False):
 
         # Extract unique classes and sort them to ensure consistency
         unique_labels = np.unique(y)
@@ -137,7 +137,7 @@ class SoftmaxRegression:
             self.gradient_descent_step(X, y_one_hot, probabilities)
             
             # Print the loss every 100 iterations
-            if i % 100 == 0:
+            if i % 100 == 0 and print_loss:
                 print(f"Iteration {i}: Loss {loss}")
     
     def predict(self, X):
