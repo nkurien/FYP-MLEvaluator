@@ -7,9 +7,34 @@ class LogisticRegression:
         self.weights = None
         self.bias = None
         self.label_map = None
+        self.loss_history = []  # To store the loss at each iteration
+
 
     def sigmoid(self, z):
         return 1 / (1 + np.exp(-z))
+    
+    def log_loss(self, y_true, y_pred):
+        """
+        Computes the binary cross-entropy loss.
+        """
+        epsilon = 1e-15  # To prevent log(0)
+        y_pred = np.clip(y_pred, epsilon, 1 - epsilon)
+        return -np.mean(y_true * np.log(y_pred) + (1 - y_true) * np.log(1 - y_pred))
+    
+    def gradient_descent_step(self, X, y):
+        """
+        Performs one step of gradient descent updating the weights and bias.
+        """
+        n_samples, n_features = X.shape
+        model = np.dot(X, self.weights) + self.bias
+        predictions = self.sigmoid(model)
+
+        dw = (1 / n_samples) * np.dot(X.T, (predictions - y))
+        db = (1 / n_samples) * np.sum(predictions - y)
+
+        self.weights -= self.learning_rate * dw
+        self.bias -= self.learning_rate * db
+        return predictions  # Return predictions for loss calculation
 
     def fit(self, X, y):
         # Check for more than two unique labels
@@ -25,18 +50,10 @@ class LogisticRegression:
         self.weights = np.zeros(n_features)
         self.bias = 0
 
-        # Gradient descent
         for _ in range(self.n_iterations):
-            model = np.dot(X, self.weights) + self.bias
-            predictions = self.sigmoid(model)
-
-            # Compute gradients
-            dw = (1 / n_samples) * np.dot(X.T, (predictions - mapped_y))
-            db = (1 / n_samples) * np.sum(predictions - mapped_y)
-
-            # Update parameters
-            self.weights -= self.learning_rate * dw
-            self.bias -= self.learning_rate * db
+            predictions = self.gradient_descent_step(X, y)
+            loss = self.log_loss(y, predictions)
+            self.loss_history.append(loss)
 
     def predict(self, X):
         model = np.dot(X, self.weights) + self.bias
