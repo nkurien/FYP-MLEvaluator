@@ -259,4 +259,21 @@ Somewhat hit a bit of a roadblock in research this week: Implementing a Softmax 
 It's clear to me that I need to implement a form of multi-class logistic regression, and the ideal form of this seems to be utilising softmax as the decision function. However, I've been getting pretty lost with how to implement this and all the inner mechanisms of it.  
 I've somewhat concluded that I'll start with the basics and work my way up - implementing binary classification with a Logistic Regression Classifier on simple data, perhaps working with One-Vs-Rest to create a form of multi-class classification, and then from there - hopefully implementing softmax will be more intuitive.  
   
-I want to finish algorithm implementation asap so that I can focus on metrics and GUI, and approach a final working implementation. So far, I've managed to implement Notebook 8 with a basic implementation of LR on Iris data. As well as a new file for my LR implementations logistic_regression.py. 
+I want to finish algorithm implementation asap so that I can focus on metrics and GUI, and approach a final working implementation. So far, I've managed to implement Notebook 8 with a basic implementation of LR on Iris data. As well as a new file for my LR implementations logistic_regression.py.
+
+### 16th February
+The Softmax Regression Classifier has been implemented! I now have three working algorithms that can be evaluated and I feel jubilant about it. Breaking down the algorithm bit by bit definitely helped.  
+  
+I began by developing a binomial classification implementation, with basic logistic regression implemented - and this made it far simpler to visualise how to put together a multi-class softmax regression classifier. Gradient descent is explicitly implemented with a loss history to track the loss with every iteration of training. 
+
+
+## 22nd February
+I've been working on the wine quality dataset in a jupyter notebook of the same name. It's a pretty challenging dataset to work with and allows me to put my three models to the test and against each other.
+  
+## 6th March
+I've been working on preprocessing a lot since my last entry. I've been significant delayed by other deadlines unfortunately, I need to make a headway in wrapping up this project into a final product, with an interface. 
+
+## 8th March
+I've been working on testing my preprocessing tools on a dataset, so I've been working on a notebook under the name of preprocessing. I've implemented a preprocessing pipeline, as well as a one-hot and ordinal encoder and an imputter for handling missing data. The imputation has been challenging to work with, especially with many data types. I've been using a dataset from the UCI repository called 'Congressional Voting Records' which is almost entirely categorical, with missing data and no numerical data at all - so it's a good example to test out my preprocessing tools.
+
+I've noted that I might need to implement a label encoder for my models, I don't think my models have sufficient handling for when my labels are not just integers. I'm also thinking of automating the confusion matrix display function, it'll save much hassle when putting these jupyter notebooks together. 
