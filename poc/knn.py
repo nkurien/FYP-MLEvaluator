@@ -20,6 +20,7 @@ class KNearestNeighbours:
         self.k = k
         self.X_training_data = None
         self.y_training_labels = None
+        self.name = "KNN"
 
     def fit(self, X, y):
         """

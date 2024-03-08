@@ -74,6 +74,7 @@ class SoftmaxRegression:
         self.bias = None
         self.label_map = None
         self.loss_history = []  # To store the loss at each iteration
+        self.name = "Softmax Regression"
     
     def softmax(self, z):
         e_z = np.exp(z - np.max(z, axis=1, keepdims=True))

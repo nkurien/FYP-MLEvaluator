@@ -21,6 +21,7 @@ class ClassificationTree :
         self.max_depth = max_depth
         self.min_size = min_size
         self.root = None
+        self.name = "Decision Tree"
 
     def fit(self, X, y):
         """
