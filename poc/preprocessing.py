@@ -181,3 +181,46 @@ class PreprocessingPipeline:
 
     def fit_transform(self, X, y=None):
         return self.fit(X, y).transform(X)
+    
+
+class LabelEncoder:
+    def __init__(self):
+        self.classes_ = None
+        self.mapping_ = None
+        self.inverse_mapping_ = None
+        self.unseen_label = -1  # Default value for unseen labels
+
+    def fit(self, y):
+        """Fit label encoder to labels."""
+        # Check for higher-dimensional inputs
+        if y.ndim > 2:
+            raise ValueError("LabelEncoder expects input with 1 or 2 dimensions, got {}.".format(y.ndim))
+        # Flatten y to 1D if it's 2D (shape: [n_samples, 1])
+        if y.ndim == 2 and y.shape[1] == 1:
+            y = y.ravel()
+        self.classes_ = np.unique(y)
+        self.mapping_ = {label: idx for idx, label in enumerate(self.classes_)}
+        self.inverse_mapping_ = {idx: label for label, idx in self.mapping_.items()}
+        return self
+
+    def transform(self, y):
+        """Transform labels to normalized encoding."""
+        # Check and flatten as in fit
+        if y.ndim > 2:
+            raise ValueError("LabelEncoder expects input with 1 or 2 dimensions, got {}.".format(y.ndim))
+        if y.ndim == 2 and y.shape[1] == 1:
+            y = y.ravel()
+        return np.array([self.mapping_.get(label, -1) for label in y])  # Assuming unseen_label is -1
+
+    def inverse_transform(self, y):
+        """Transform labels back to original encoding."""
+        # Check as in fit and transform
+        if y.ndim > 2:
+            raise ValueError("LabelEncoder expects input with 1 or 2 dimensions, got {}.".format(y.ndim))
+        if y.ndim == 2 and y.shape[1] == 1:
+            y = y.ravel()
+        return np.array([self.inverse_mapping_.get(label) for label in y])
+
+    def fit_transform(self, y):
+        """Fit label encoder and return encoded labels."""
+        return self.fit(y).transform(y)
