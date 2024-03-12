@@ -1,4 +1,5 @@
 import numpy as np
+import csv
 import pandas as pd
 from typing import List, Tuple, Union
 from collections import Counter
@@ -339,3 +340,57 @@ class CombinedPreprocessor:
     def fit_transform(self, X, y=None):
         self.fit(X, y)
         return self.transform(X)
+
+
+
+
+def load_dataset(file_path, target_col=-1, delimiter=',', missing_values=None, drop_missing=False, dtype=None, header=False):
+    """
+    Load a dataset from a file and split it into features (X) and target (y) using NumPy.
+
+    Args:
+        file_path (str): The path to the dataset file.
+        target_col (int): The index of the target column. Default is -1 (last column).
+        delimiter (str): The delimiter used in the dataset file. Default is ','.
+        missing_values (list or None): The values to consider as missing. Default is None.
+        drop_missing (bool): Whether to drop rows with missing values. Default is False.
+        dtype (numpy.dtype or None): The data type of the loaded data. Default is None.
+        header (bool): Whether the dataset has a header row. Default is False.
+
+    Returns:
+        tuple: A tuple containing the features (X) and target (y) as numpy arrays.
+    """
+    try:
+        data = []
+        with open(file_path, 'r') as file:
+            csv_reader = csv.reader(file, delimiter=delimiter)
+            if header:
+                next(csv_reader)  # Skip the header row
+            for row in csv_reader:
+                data.append(row)
+
+        data = np.array(data, dtype=dtype)
+
+        # Handle missing values
+        if missing_values:
+            mask = np.isin(data, missing_values)
+            data[mask] = np.nan
+        if drop_missing:
+            data = data[~np.isnan(data).any(axis=1)]
+
+        # Extract the features (X) and target (y)
+        if target_col < 0:
+            target_col = data.shape[1] + target_col
+        X = np.delete(data, target_col, axis=1)
+        y = data[:, target_col]
+
+        return X, y
+
+    except FileNotFoundError:
+        raise FileNotFoundError(f"File not found: {file_path}")
+    except IOError as e:
+        raise IOError(f"An error occurred while reading the file: {e}")
+    except ValueError as ve:
+        raise ValueError(f"Invalid file format or target column: {ve}")
+    except Exception as e:
+        raise Exception(f"An error occurred while loading the dataset: {e}")
