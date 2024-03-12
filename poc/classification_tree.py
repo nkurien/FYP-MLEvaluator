@@ -1,7 +1,8 @@
 import numpy as np
 from train_test_split import train_test_split as split
+from preprocessing import LabelEncoder
 
-class ClassificationTree :
+class ClassificationTree:
     """
     A decision tree classifier that uses the Gini index for splitting.
 
@@ -9,6 +10,7 @@ class ClassificationTree :
         max_depth (int): The maximum depth of the tree.
         min_size (int): The minimum number of samples required to split a node.
         root (dict): The root node of the decision tree.
+        label_encoder (LabelEncoder): The label encoder for encoding and decoding labels.
     """
     def __init__(self, max_depth=20, min_size=1):
         """
@@ -22,6 +24,7 @@ class ClassificationTree :
         self.min_size = min_size
         self.root = None
         self.name = "Decision Tree"
+        self.label_encoder = LabelEncoder()
 
     def fit(self, X, y):
         """
@@ -36,9 +39,10 @@ class ClassificationTree :
         if len(X) == 0 or len(y) == 0:
             raise ValueError("Cannot fit a tree with an empty dataset")
 
+        # Encode the labels
+        y_encoded = self.label_encoder.fit_transform(y)
 
-        dataset = np.column_stack((X, y)).tolist()
-        #print(dataset)
+        dataset = np.column_stack((X, y_encoded)).tolist()
         self.root = self.build_tree(dataset, self.max_depth, self.min_size)
 
     def predict(self, X):
@@ -52,7 +56,10 @@ class ClassificationTree :
             np.array: Predicted class labels.
         """
         predictions = [self._predict(self.root, row) for row in X]
-        return np.array(predictions)
+        predictions = np.array(predictions)
+        # Decode the predictions
+        predictions_decoded = self.label_encoder.inverse_transform(predictions)
+        return np.array(predictions_decoded)
     
     # Helper method for prediction that recursively traverses the tree to find the class for a single row.
     def _predict(self, node, row):
@@ -66,11 +73,11 @@ class ClassificationTree :
         Returns:
             The predicted class label for the sample.
         """
-        if row[node['index']] < node['value']: # Check condition at the node.
-            if isinstance(node['left'], dict): # If the left child is a dictionary, it's another decision node.
+        if row[node['index']] < node['value']:  # Check condition at the node.
+            if isinstance(node['left'], dict):  # If the left child is a dictionary, it's another decision node.
                 return self._predict(node['left'], row)
             else:
-                return node['left'] # If it's not a dictionary, it's a terminal node.
+                return node['left']  # If it's not a dictionary, it's a terminal node.
         else:
             if isinstance(node['right'], dict):
                 return self._predict(node['right'], row)

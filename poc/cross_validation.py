@@ -51,19 +51,24 @@ def _k_folds(X, y, k=5, seed=None) :
     return folds
 
 
-def k_folds_accuracy_scores(model, X, y, k=5, seed=None):
+def k_folds_accuracy_scores(model, X, y, k=5, seed=None, preprocessor=None,):
     """
     Returns a list of accuracy scores when given a model, dataset of features
-    and labels, a number of folds (k) and a seed for shuffling the dataset 
+    and labels, a preprocessor (optional), a number of folds (k), and a seed for shuffling the dataset.
 
     """
-
-     # Check if the model has 'fit' and 'predict' methods
+    # Check if the model has 'fit' and 'predict' methods
     if not hasattr(model, 'fit') or not callable(getattr(model, 'fit')):
         raise AttributeError("The provided model does not have a callable 'fit' method.")
     if not hasattr(model, 'predict') or not callable(getattr(model, 'predict')):
         raise AttributeError("The provided model does not have a callable 'predict' method.")
 
+    # Check if the preprocessor has 'fit' and 'transform' methods (if provided)
+    if preprocessor is not None:
+        if not hasattr(preprocessor, 'fit') or not callable(getattr(preprocessor, 'fit')):
+            raise AttributeError("The provided preprocessor does not have a callable 'fit' method.")
+        if not hasattr(preprocessor, 'transform') or not callable(getattr(preprocessor, 'transform')):
+            raise AttributeError("The provided preprocessor does not have a callable 'transform' method.")
 
     # Generate folds using the previously defined k_folds function
     folds = _k_folds(X, y, k, seed)
@@ -72,22 +77,23 @@ def k_folds_accuracy_scores(model, X, y, k=5, seed=None):
     scores = []
 
     # Iterate over each fold
-    #n=0
-    #mismatch = 0
     for (X_train, y_train), (X_test, y_test) in folds:
-        # Fit the model on the training set
+        # Preprocess the training and testing data (if preprocessor is provided)
+        if preprocessor is not None:
+            X_train = preprocessor.fit_transform(X_train)
+            X_test = preprocessor.transform(X_test)
+
+        # Fit the model on the preprocessed training set
         model.fit(X_train, y_train)
 
-        # Predict on the test set
+        # Predict on the preprocessed test set
         y_pred = model.predict(X_test)
 
         # Compute the score - here, we use accuracy as an example
         accuracy = np.mean(y_pred == y_test)
 
-
         # Append the score to the list
         scores.append(accuracy)
-       
 
     return scores
 

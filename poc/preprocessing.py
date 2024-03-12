@@ -272,6 +272,8 @@ class LabelEncoder:
     def inverse_transform(self, y):
         """Transform labels back to original encoding."""
         # Check as in fit and transform
+        if isinstance(y, list):
+            y = np.array(y)
         if y.ndim > 2:
             raise ValueError("LabelEncoder expects input with 1 or 2 dimensions, got {}.".format(y.ndim))
         if y.ndim == 2 and y.shape[1] == 1:
@@ -281,3 +283,59 @@ class LabelEncoder:
     def fit_transform(self, y):
         """Fit label encoder and return encoded labels."""
         return self.fit(y).transform(y)
+
+class NumericConverter:
+    def __init__(self):
+        pass
+
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X):
+        X_numeric = np.empty_like(X, dtype=float)
+        for i in range(X.shape[1]):
+            try:
+                X_numeric[:, i] = X[:, i].astype(float)
+            except ValueError:
+                X_numeric[:, i] = np.nan
+        return X_numeric
+
+    def fit_transform(self, X, y=None):
+        return self.fit(X, y).transform(X)
+
+class CombinedPreprocessor:
+    def __init__(self, categorical_pipeline, numerical_pipeline, ordinal_pipeline, cat_columns, num_columns, ord_columns):
+        self.categorical_pipeline = categorical_pipeline
+        self.numerical_pipeline = numerical_pipeline
+        self.ordinal_pipeline = ordinal_pipeline
+        self.categorical_columns = cat_columns
+        self.numerical_columns = num_columns
+        self.ordinal_columns = ord_columns
+
+    def fit(self, X, y=None):
+        X_categorical = X[:, self.categorical_columns]
+        X_numerical = X[:, self.numerical_columns]
+        X_ordinal = X[:, self.ordinal_columns]
+
+        self.categorical_pipeline.fit(X_categorical)
+        self.numerical_pipeline.fit(X_numerical)
+        self.ordinal_pipeline.fit(X_ordinal)
+
+        return self
+
+    def transform(self, X):
+        X_categorical = X[:, self.categorical_columns]
+        X_numerical = X[:, self.numerical_columns]
+        X_ordinal = X[:, self.ordinal_columns]
+
+        X_categorical_transformed = self.categorical_pipeline.transform(X_categorical)
+        X_numerical_transformed = self.numerical_pipeline.transform(X_numerical)
+        X_ordinal_transformed = self.ordinal_pipeline.transform(X_ordinal)
+
+        X_transformed = np.hstack((X_categorical_transformed, X_numerical_transformed, X_ordinal_transformed))
+
+        return X_transformed
+
+    def fit_transform(self, X, y=None):
+        self.fit(X, y)
+        return self.transform(X)
