@@ -39,56 +39,113 @@ class SimpleImputer:
     def fit(self, X):
         """Calculate the fill value depending on the strategy."""
         if isinstance(X, pd.DataFrame):
-            if self.strategy in ['mean', 'median']:
-                # Directly use pandas functionality for mean and median
-                self.statistics_ = getattr(X, self.strategy)(axis=0).to_numpy()
-            elif self.strategy == 'most_frequent':
-                self.statistics_ = X.apply(lambda x: x.mode().iloc[0] if not x.mode().empty else self.fill_value, axis=0).to_numpy()
-            elif self.strategy == 'constant':
-                self.statistics_ = np.full(X.shape[1], self.fill_value)
-        else:  # Assuming numpy array or similar
-            self.statistics_ = []
-            for column in X.T:
+            # Convert DataFrame to numpy array
+            X = X.values
+
+        self.statistics_ = []
+        for column in X.T:
+            try:
+                # Attempt to convert the column to float, ignoring empty spaces
+                column_float = np.array([float(x) if x.strip() else np.nan for x in column])
+                # Handle numeric columns
                 if self.strategy == 'mean':
-                    self.statistics_.append(np.nanmean(column))
+                    self.statistics_.append(np.nanmean(column_float))
                 elif self.strategy == 'median':
-                    self.statistics_.append(np.nanmedian(column))
+                    self.statistics_.append(np.nanmedian(column_float))
                 elif self.strategy == 'most_frequent':
-                    # Use Counter to find the most frequent element for non-numeric data
-                    most_common, _ = Counter(column).most_common(1)[0]
-                    self.statistics_.append(most_common if most_common else self.fill_value)
+                    self.statistics_.append(np.nanmax(np.bincount(column_float[~np.isnan(column_float)].astype(int))))
                 elif self.strategy == 'constant':
                     self.statistics_.append(self.fill_value)
-            self.statistics_ = np.array(self.statistics_)
+                else:
+                    raise ValueError(f"Strategy '{self.strategy}' not supported for numeric data")
+            except ValueError:
+                # Handle non-numeric columns
+                if self.strategy == 'most_frequent':
+                    most_common = Counter(column[column != '']).most_common(1)
+                    self.statistics_.append(most_common[0][0] if most_common else self.fill_value)
+                elif self.strategy == 'constant':
+                    self.statistics_.append(self.fill_value)
+                else:
+                    raise ValueError(f"Strategy '{self.strategy}' not supported for non-numeric data")
+
+        self.statistics_ = np.array(self.statistics_)
         return self
 
     def transform(self, X):
         """Fill in missing values in X."""
         if self.statistics_ is None:
             raise RuntimeError("The imputer has not been fitted yet.")
-    
-        # Handle the case when X is a DataFrame
+
         if isinstance(X, pd.DataFrame):
-            X_transformed = X.copy()
-            for i, (col_name, statistic) in enumerate(zip(X.columns, self.statistics_)):
-                if self.strategy == 'constant':
-                    X_transformed[col_name].fillna(self.fill_value, inplace=True)
-                else:
-                    X_transformed[col_name].fillna(statistic, inplace=True)
-            return X_transformed
-        else:  # Assuming numpy array or similar
-            X_transformed = np.array(X, copy=True)
-            for i, statistic in enumerate(self.statistics_):
-                # Identify missing data in the current column. 
-                # For categorical data represented as strings, we consider None or an empty string as missing.
-                if np.issubdtype(X_transformed[:, i].dtype, np.number):
-                    missing_idx = np.isnan(X_transformed[:, i])
-                else:
-                    missing_idx = (X_transformed[:, i] == '') | (X_transformed[:, i] == None)
-                    
-                # Apply imputation
-                X_transformed[missing_idx, i] = statistic
-            return X_transformed
+            # Convert DataFrame to numpy array
+            X = X.values
+
+        X_transformed = np.array(X, copy=True, dtype=object)
+        for i, statistic in enumerate(self.statistics_):
+            try:
+                # Attempt to convert the column to float
+                column_float = X_transformed[:, i].astype(float)
+                # Handle numeric columns
+                missing_idx = np.isnan(column_float)
+            except ValueError:
+                # Handle non-numeric columns
+                missing_idx = (X_transformed[:, i] == '') | (X_transformed[:, i] == None)
+
+            X_transformed[missing_idx, i] = statistic
+
+        return X_transformed
+
+    def fit_transform(self, X):
+        """Fit to data, then transform it."""
+        return self.fit(X).transform(X)
+
+    def transform(self, X):
+        """Fill in missing values in X."""
+        if self.statistics_ is None:
+            raise RuntimeError("The imputer has not been fitted yet.")
+
+        if isinstance(X, pd.DataFrame):
+            # Convert DataFrame to numpy array
+            X = X.values
+
+        X_transformed = np.array(X, copy=True, dtype=object)
+        for i, statistic in enumerate(self.statistics_):
+            if np.issubdtype(X_transformed[:, i].dtype, np.number):
+                # Handle numeric columns
+                missing_idx = np.isnan(X_transformed[:, i])
+            else:
+                # Handle non-numeric columns
+                missing_idx = (X_transformed[:, i] == '') | (X_transformed[:, i] == None)
+
+            X_transformed[missing_idx, i] = statistic
+
+        return X_transformed
+
+    def fit_transform(self, X):
+        """Fit to data, then transform it."""
+        return self.fit(X).transform(X)
+
+    def transform(self, X):
+        """Fill in missing values in X."""
+        if self.statistics_ is None:
+            raise RuntimeError("The imputer has not been fitted yet.")
+
+        if isinstance(X, pd.DataFrame):
+            # Convert DataFrame to numpy array
+            X = X.values
+
+        X_transformed = np.array(X, copy=True)
+        for i, statistic in enumerate(self.statistics_):
+            if np.issubdtype(X_transformed[:, i].dtype, np.number):
+                # Handle numeric columns
+                missing_idx = np.isnan(X_transformed[:, i])
+            else:
+                # Handle non-numeric columns
+                missing_idx = (X_transformed[:, i] == '') | (X_transformed[:, i] == None)
+
+            X_transformed[missing_idx, i] = statistic
+
+        return X_transformed
 
     def fit_transform(self, X):
         """Fit to data, then transform it."""
