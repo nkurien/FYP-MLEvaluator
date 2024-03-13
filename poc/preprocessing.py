@@ -198,7 +198,7 @@ class OrdinalEncoder:
         X_encoded = np.zeros_like(X, dtype=int)
         for i, categories in enumerate(self.categories_):
             ordinal_map = self.ordinal_map_[i]
-            X_encoded[:, i] = [ordinal_map[x] for x in X[:, i]]
+            X_encoded[:, i] = [ordinal_map.get(x, -1) for x in X[:, i]]  # Use -1 for unknown values
         return X_encoded
 
     def fit_transform(self, X):
@@ -344,14 +344,19 @@ class CombinedPreprocessor:
 
 
 
-def load_dataset(file_path, target_col=-1, delimiter=',', missing_values=None, drop_missing=False, dtype=None, header=False):
+
+
+import csv
+import numpy as np
+
+def load_dataset(file_path, target_col=-1, sep=',', missing_values=None, drop_missing=False, dtype=None, header=False):
     """
     Load a dataset from a file and split it into features (X) and target (y) using NumPy.
 
     Args:
         file_path (str): The path to the dataset file.
         target_col (int): The index of the target column. Default is -1 (last column).
-        delimiter (str): The delimiter used in the dataset file. Default is ','.
+        sep (str): The separator used in the dataset file. Default is ','. Use '\t' for tab-separated files and ' ' for space-separated files.
         missing_values (list or None): The values to consider as missing. Default is None.
         drop_missing (bool): Whether to drop rows with missing values. Default is False.
         dtype (numpy.dtype or None): The data type of the loaded data. Default is None.
@@ -363,11 +368,16 @@ def load_dataset(file_path, target_col=-1, delimiter=',', missing_values=None, d
     try:
         data = []
         with open(file_path, 'r') as file:
-            csv_reader = csv.reader(file, delimiter=delimiter)
-            if header:
-                next(csv_reader)  # Skip the header row
-            for row in csv_reader:
-                data.append(row)
+            if sep == '\t':
+                for line in file:
+                    row = line.strip().split()
+                    data.append(row)
+            else:
+                csv_reader = csv.reader(file, delimiter=sep)
+                if header:
+                    next(csv_reader)  # Skip the header row
+                for row in csv_reader:
+                    data.append([value.strip() for value in row])
 
         data = np.array(data, dtype=dtype)
 
@@ -381,8 +391,14 @@ def load_dataset(file_path, target_col=-1, delimiter=',', missing_values=None, d
         # Extract the features (X) and target (y)
         if target_col < 0:
             target_col = data.shape[1] + target_col
-        X = np.delete(data, target_col, axis=1)
-        y = data[:, target_col]
+        if 0 <= target_col < data.shape[1]:
+            if target_col == data.shape[1] - 1:
+                X = data[:, :-1]
+            else:
+                X = np.concatenate((data[:, :target_col], data[:, target_col+1:]), axis=1)
+            y = data[:, target_col]
+        else:
+            raise ValueError(f"Invalid target column index: {target_col}")
 
         return X, y
 
