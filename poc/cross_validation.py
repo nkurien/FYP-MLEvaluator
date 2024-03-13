@@ -103,7 +103,7 @@ def k_folds_accuracy_score(model, X, y, k=5, seed=None):
     """
     return np.mean(k_folds_accuracy_scores(model, X, y, k, seed))
 
-def k_folds_predictions(model, X, y, k=5, seed=None):
+def k_folds_predictions(model, X, y, k=5, seed=None, preprocessor=None):
     """
     Perform k-fold cross-validation to generate predictions for each data point in the dataset.
 
@@ -136,6 +136,9 @@ def k_folds_predictions(model, X, y, k=5, seed=None):
     all_true_labels = []
 
     for (X_train, y_train), (X_test, y_test) in folds:
+        if preprocessor is not None:
+            X_train = preprocessor.fit_transform(X_train)
+            X_test = preprocessor.transform(X_test)
         model.fit(X_train, y_train)
         predictions = model.predict(X_test)
         all_predictions.extend(predictions)

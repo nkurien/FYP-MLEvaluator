@@ -368,7 +368,7 @@ def load_dataset(file_path, target_col=-1, sep=',', missing_values=None, drop_mi
     try:
         data = []
         with open(file_path, 'r') as file:
-            if sep == '\t':
+            if sep == '\t' :
                 for line in file:
                     row = line.strip().split()
                     data.append(row)
