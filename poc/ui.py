@@ -1,6 +1,6 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QHBoxLayout, QFileDialog, QMessageBox, QCheckBox, QScrollArea, QSizePolicy
-from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QHBoxLayout, QFileDialog, QMessageBox, QCheckBox, QScrollArea, QSizePolicy,QProgressBar
+from PyQt5.QtCore import Qt, QObject, QThread, pyqtSignal
 from PyQt5 import QtGui
 from preprocessing import load_dataset
 from knn import KNearestNeighbours
@@ -70,6 +70,7 @@ class MainWindow(QWidget):
         # Setup layout for the entire window
         layout = QVBoxLayout(self)  # This layout is for the QMainWindow itself
         layout.addWidget(self.scroll_area)  # Add the scroll area to the main window layout
+        self.progress_bar = QProgressBar() #Progress bar for training
 
         # File selection layout
         file_layout = QHBoxLayout()
@@ -106,6 +107,12 @@ class MainWindow(QWidget):
         self.train_button = QPushButton('Train Models')
         self.train_button.setEnabled(False)
         self.train_button.clicked.connect(self.train_models)
+        self.main_layout.addWidget(self.progress_bar)
+
+        self.abort_button = QPushButton('Abort')
+        self.abort_button.setVisible(False)
+        self.abort_button.clicked.connect(self.abort_training)
+
 
         self.knn_label = QLabel('KNN Accuracy Scores:')
         self.tree_label = QLabel('Classification Tree Accuracy Scores:')
@@ -121,6 +128,7 @@ class MainWindow(QWidget):
         self.main_layout.addWidget(self.load_button)
         self.main_layout.addWidget(self.preview_label)
         self.main_layout.addWidget(self.train_button)
+        self.main_layout.addWidget(self.abort_button)
         self.main_layout.addWidget(self.knn_label)
         self.main_layout.addWidget(self.tree_label)
         self.main_layout.addWidget(self.softmax_label)
@@ -170,51 +178,82 @@ class MainWindow(QWidget):
         else:
             QMessageBox.warning(self, 'No File Selected', 'Please select a dataset file.')
     
+    def abort_training(self):
+        self.training_thread.abort()
+        self.abort_button.setVisible(False)
+        self.train_button.setEnabled(True)
+        QMessageBox.information(self, 'Training Aborted', 'Training has been aborted.')
+
+    
     def train_models(self):
-        k = 5  # Number of folds for cross-validation
-        seed = 42  # Random seed for reproducibility
-
+        self.training_thread = TrainingThread(self.X, self.y, k=5, seed=42)
+        self.training_thread.training_completed.connect(self.on_training_completed)
+        self.training_thread.start()
+        
+        self.abort_button.setVisible(True)
+        self.train_button.setEnabled(False)
+    
+    def on_training_completed(self, scores_list, y_true, y_preds, labels):
+        # Display the accuracy scores
+        self.knn_label.setText(f'KNN Accuracy Scores:\n{scores_list[0]}')
+        self.tree_label.setText(f'Classification Tree Accuracy Scores:\n{scores_list[1]}')
+        self.softmax_label.setText(f'Softmax Regression Accuracy Scores:\n{scores_list[2]}')
+        
+        # Plot the confusion matrices
+        self.confusion_matrix_plot.plot_confusion_matrices(y_true, y_preds, labels, ['KNN', 'Classification Tree', 'Softmax Regression'])
+        
+        QMessageBox.information(self, 'Training Complete', 'Models have been trained successfully.')
+        
+        self.abort_button.setVisible(False)
+        self.train_button.setEnabled(True)
+    
+class TrainingThread(QThread):
+    training_completed = pyqtSignal(list, list, list, list)
+    
+    def __init__(self, X, y, k, seed, parent=None):
+        super().__init__(parent)
+        self.X = X
+        self.y = y
+        self.k = k
+        self.seed = seed
+        self.training_aborted = False
+    
+    def run(self):
         # Create instances of the models
-        knn = KNearestNeighbours(k=5)
-        tree = ClassificationTree(max_depth=5)
-        softmax = SoftmaxRegression(learning_rate=0.1, n_iterations=1000)
-
-        # Temporary Preprocessor 
+        models = [
+            ('KNN', KNearestNeighbours(k=5)),
+            ('Classification Tree', ClassificationTree(max_depth=5)),
+            ('Softmax Regression', SoftmaxRegression(learning_rate=0.1, n_iterations=1000))
+        ]
+        
+        # Create the preprocessor within the training thread
         preprocessor = PreprocessingPipeline([
             ("imputer", SimpleImputer(strategy="mean")),
             ("converter", NumericConverter()),
             ("scaler", MinMaxScaler())
         ])
-
-
-        # Perform cross-validation and get accuracy scores
-        knn_scores = k_folds_accuracy_scores(knn, self.X, self.y, k, seed, preprocessor)
-        tree_scores = k_folds_accuracy_scores(tree, self.X, self.y, k, seed, preprocessor)
-        softmax_scores = k_folds_accuracy_scores(softmax, self.X, self.y, k, seed, preprocessor)
-
-        # Display the accuracy scores
-        self.knn_label.setText(f'KNN Accuracy Scores:\n{knn_scores}')
-        self.tree_label.setText(f'Classification Tree Accuracy Scores:\n{tree_scores}')
-        self.softmax_label.setText(f'Softmax Regression Accuracy Scores:\n{softmax_scores}')
-
-        # Correctly collect y_true and y_preds for each model
-        y_true_knn, y_preds_knn = k_folds_predictions(knn, self.X, self.y, k, seed, preprocessor)
-        y_true_tree, y_preds_tree = k_folds_predictions(tree, self.X, self.y, k, seed, preprocessor)
-        y_true_softmax, y_preds_softmax = k_folds_predictions(softmax, self.X, self.y, k, seed, preprocessor)
-
-        # Assuming all y_true arrays are the same, we can use any of them for plotting
-        y_true = y_true_knn  # Or any other model's y_true since they should all match
-
-        # Now, y_preds should be a list of predictions from each model
-        y_preds = [y_preds_knn, y_preds_tree, y_preds_softmax]
-
-        labels = np.unique(self.y)  # Ensure labels reflect the entire dataset
-        titles = ['KNN', 'Classification Tree', 'Softmax Regression']
-
-        # Now, plot the confusion matrices correctly
-        self.confusion_matrix_plot.plot_confusion_matrices(y_true, y_preds, labels, titles)
-
-        QMessageBox.information(self, 'Training Complete', 'Models have been trained successfully.')
+        
+        labels = np.unique(self.y).tolist()  # Convert labels to a list
+        y_preds = []
+        scores_list = []
+        
+        for model_name, model in models:
+            if self.training_aborted:
+                break
+            
+            # Perform cross-validation and get accuracy scores
+            scores = k_folds_accuracy_scores(model, self.X, self.y, self.k, self.seed, preprocessor)
+            scores_list.append(scores)
+            
+            # Get the predicted labels for confusion matrix
+            y_true, y_pred = k_folds_predictions(model, self.X, self.y, self.k, self.seed, preprocessor)
+            y_preds.append(y_pred)
+        
+        if not self.training_aborted:
+            self.training_completed.emit(scores_list, y_true, y_preds, labels)
+    
+    def abort(self):
+        self.training_aborted = True
 
 def main():
     app = QApplication(sys.argv)
@@ -224,3 +263,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
