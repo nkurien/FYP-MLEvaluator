@@ -1,7 +1,6 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QHBoxLayout, QFileDialog, QMessageBox, QCheckBox, QScrollArea, QSizePolicy,QProgressBar
-from PyQt5.QtCore import Qt, QObject, QThread, pyqtSignal
-from PyQt5 import QtGui
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QHBoxLayout, QFileDialog, QMessageBox, QCheckBox, QScrollArea,QProgressBar
+from PyQt5.QtCore import Qt, QThread, pyqtSignal
 from preprocessing import load_dataset
 from knn import KNearestNeighbours
 from classification_tree import ClassificationTree
@@ -187,27 +186,38 @@ class MainWindow(QWidget):
     
     def train_models(self):
         self.training_thread = TrainingThread(self.X, self.y, k=5, seed=42)
+        self.training_thread.model_progress.connect(self.update_progress)
+        self.training_thread.model_scores.connect(self.display_scores)
         self.training_thread.training_completed.connect(self.on_training_completed)
         self.training_thread.start()
         
         self.abort_button.setVisible(True)
         self.train_button.setEnabled(False)
+        self.progress_bar.setValue(0)
     
-    def on_training_completed(self, scores_list, y_true, y_preds, labels):
-        # Display the accuracy scores
-        self.knn_label.setText(f'KNN Accuracy Scores:\n{scores_list[0]}')
-        self.tree_label.setText(f'Classification Tree Accuracy Scores:\n{scores_list[1]}')
-        self.softmax_label.setText(f'Softmax Regression Accuracy Scores:\n{scores_list[2]}')
-        
-        # Plot the confusion matrices
+    def update_progress(self, progress):
+        self.progress_bar.setValue(progress)
+    
+    def display_scores(self, model_name, scores):
+        if model_name == 'KNN':
+            self.knn_label.setText(f'KNN Accuracy Scores:\n{scores}')
+        elif model_name == 'Classification Tree':
+            self.tree_label.setText(f'Classification Tree Accuracy Scores:\n{scores}')
+        elif model_name == 'Softmax Regression':
+            self.softmax_label.setText(f'Softmax Regression Accuracy Scores:\n{scores}')
+    
+    def plot_confusion_matrix(self, y_true, y_pred, labels, model_name):
+        self.confusion_matrix_plot.plot_confusion_matrices(y_true, [y_pred], labels, [model_name])
+    
+    def on_training_completed(self, scores, y_true, y_preds, labels):
         self.confusion_matrix_plot.plot_confusion_matrices(y_true, y_preds, labels, ['KNN', 'Classification Tree', 'Softmax Regression'])
-        
         QMessageBox.information(self, 'Training Complete', 'Models have been trained successfully.')
-        
         self.abort_button.setVisible(False)
         self.train_button.setEnabled(True)
     
 class TrainingThread(QThread):
+    model_progress = pyqtSignal(int)
+    model_scores = pyqtSignal(str, list)
     training_completed = pyqtSignal(list, list, list, list)
     
     def __init__(self, X, y, k, seed, parent=None):
@@ -234,23 +244,27 @@ class TrainingThread(QThread):
         ])
         
         labels = np.unique(self.y).tolist()  # Convert labels to a list
+        num_models = len(models)
         y_preds = []
-        scores_list = []
         
-        for model_name, model in models:
+        for i, (model_name, model) in enumerate(models):
             if self.training_aborted:
                 break
             
             # Perform cross-validation and get accuracy scores
             scores = k_folds_accuracy_scores(model, self.X, self.y, self.k, self.seed, preprocessor)
-            scores_list.append(scores)
+            self.model_scores.emit(model_name, scores)
             
             # Get the predicted labels for confusion matrix
             y_true, y_pred = k_folds_predictions(model, self.X, self.y, self.k, self.seed, preprocessor)
             y_preds.append(y_pred)
+            
+            # Update progress
+            progress = int((i + 1) / num_models * 100)
+            self.model_progress.emit(progress)
         
         if not self.training_aborted:
-            self.training_completed.emit(scores_list, y_true, y_preds, labels)
+            self.training_completed.emit(scores, y_true, y_preds, labels)
     
     def abort(self):
         self.training_aborted = True
