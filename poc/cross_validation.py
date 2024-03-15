@@ -97,11 +97,11 @@ def k_folds_accuracy_scores(model, X, y, k=5, seed=None, preprocessor=None,):
 
     return scores
 
-def k_folds_accuracy_score(model, X, y, k=5, seed=None):
+def k_folds_accuracy_score(model, X, y, k=5, seed=None, preprocessor=None):
     """
     Returns the average accuracy score
     """
-    return np.mean(k_folds_accuracy_scores(model, X, y, k, seed))
+    return np.mean(k_folds_accuracy_scores(model, X, y, k, seed, preprocessor))
 
 def k_folds_predictions(model, X, y, k=5, seed=None, preprocessor=None):
     """

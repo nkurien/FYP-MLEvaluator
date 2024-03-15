@@ -3,10 +3,13 @@ from itertools import product
 import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
+from knn import KNearestNeighbours
+from classification_tree import ClassificationTree
+from logistic_regression import SoftmaxRegression
 
 
 class GridSearch:
-    def __init__(self, model, param_grid, scoring=None):
+    def __init__(self, model, param_grid=None, scoring=None):
         """
         Initialize the GridSearch object.
 
@@ -21,7 +24,10 @@ class GridSearch:
             If None, the model's default score method is used.
         """
         self.model = model
-        self.param_grid = param_grid
+        if param_grid is None:
+            self.param_grid = self._get_default_param_grid() 
+        else:
+            self.param_grid = param_grid
         self.scoring = scoring
         self.best_params_ = None
         self.best_score_ = None
@@ -84,6 +90,34 @@ class GridSearch:
         param_values = list(self.param_grid.values())
         params_list = [dict(zip(param_names, params)) for params in product(*param_values)]
         return params_list
+    
+    def _get_default_param_grid(self):
+        """
+        Get the default parameter grid based on the model type.
+
+        Returns:
+        --------
+        param_grid : dict
+            The default parameter grid for the model.
+        """
+        if isinstance(self.model, KNearestNeighbours):
+            param_grid = {
+                'k': [1, 3, 5, 7, 9, 10, 20]
+            }
+        elif isinstance(self.model, ClassificationTree):
+            param_grid = {
+                'max_depth': [3, 5, 10, 15, 20],
+                'min_size': [2, 5, 10]
+            }
+        elif isinstance(self.model, SoftmaxRegression):
+            param_grid = {
+                'learning_rate': [0.01, 0.1, 1],
+                'n_iterations': [100, 500, 1000, 5000]
+            }
+        else:
+            raise ValueError(f"Unsupported model type: {type(self.model)}")
+
+        return param_grid
 
     def _validate(self, model, X_val, y_val):
         """
