@@ -1,12 +1,12 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QHBoxLayout, QFileDialog, QMessageBox, QCheckBox, QScrollArea,QProgressBar
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QHBoxLayout, QFileDialog, QMessageBox, QCheckBox, QScrollArea,QProgressBar, QInputDialog
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
 from preprocessing import load_dataset
 from knn import KNearestNeighbours
 from classification_tree import ClassificationTree
 from logistic_regression import SoftmaxRegression
 from cross_validation import k_folds_accuracy_scores, k_folds_predictions
-from preprocessing import PreprocessingPipeline, CombinedPreprocessor, SimpleImputer, MinMaxScaler, NumericConverter
+from preprocessing import PreprocessingPipeline, CombinedPreprocessor, SimpleImputer, MinMaxScaler, NumericConverter, OrdinalEncoder, OneHotEncoder
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
@@ -108,6 +108,10 @@ class MainWindow(QWidget):
         self.train_button.clicked.connect(self.train_models)
         self.main_layout.addWidget(self.progress_bar)
 
+        self.process_button = QPushButton('Process Data')
+        self.process_button.setEnabled(False)
+        self.process_button.clicked.connect(self.process_data)
+
         self.abort_button = QPushButton('Abort')
         self.abort_button.setVisible(False)
         self.abort_button.clicked.connect(self.abort_training)
@@ -126,6 +130,7 @@ class MainWindow(QWidget):
         self.main_layout.addLayout(params_layout)
         self.main_layout.addWidget(self.load_button)
         self.main_layout.addWidget(self.preview_label)
+        self.main_layout.addWidget(self.process_button)
         self.main_layout.addWidget(self.train_button)
         self.main_layout.addWidget(self.abort_button)
         self.main_layout.addWidget(self.knn_label)
@@ -162,6 +167,7 @@ class MainWindow(QWidget):
                 self.X, self.y = load_dataset(file_path, target_col=target_col, sep=delimiter, header=header)
                 QMessageBox.information(self, 'Dataset Loaded', 'Dataset has been loaded successfully.')
                 self.train_button.setEnabled(True)
+                self.process_button.setEnabled(True)
 
                 # Display the first five lines of the loaded dataset
                 preview_text = 'Dataset Preview:\n'
@@ -171,11 +177,65 @@ class MainWindow(QWidget):
                 preview_text += f'Labels: \n'
                 for i in range(min(5, len(self.X))):
                     preview_text += f'{i+1}: {self.y[i]} \n'
+                
+                # Display the shape of X
+                preview_text += f'\nShape of X: {self.X.shape}'
+
                 self.preview_label.setText(preview_text)
             except Exception as e:
                 QMessageBox.critical(self, 'Error Loading Dataset', str(e))
         else:
             QMessageBox.warning(self, 'No File Selected', 'Please select a dataset file.')
+    
+    def process_data(self):
+        # Prompt the user to enter column types
+        categorical_columns, numerical_columns, ordinal_columns = self.prompt_column_types()
+
+        # Create the preprocessor based on the column types
+        self.preprocessor = self.create_preprocessor(categorical_columns, numerical_columns, ordinal_columns)
+
+        QMessageBox.information(self, 'Data Processed', 'Data has been processed successfully.')
+
+    def prompt_column_types(self):
+        # Create a dialog or input fields for the user to enter column types
+        # You can use QInputDialog or create a custom dialog
+        # For simplicity, let's assume the user enters comma-separated indices for each type
+        categorical_input, ok = QInputDialog.getText(self, 'Categorical Columns', 'Enter comma-separated indices of categorical columns:')
+        numerical_input, ok = QInputDialog.getText(self, 'Numerical Columns', 'Enter comma-separated indices of numerical columns:')
+        ordinal_input, ok = QInputDialog.getText(self, 'Ordinal Columns', 'Enter comma-separated indices of ordinal columns:')
+
+        categorical_columns = list(map(int, categorical_input.split(','))) if categorical_input else []
+        numerical_columns = list(map(int, numerical_input.split(','))) if numerical_input else []
+        ordinal_columns = list(map(int, ordinal_input.split(','))) if ordinal_input else []
+
+        return categorical_columns, numerical_columns, ordinal_columns
+
+    def create_preprocessor(self, categorical_columns, numerical_columns, ordinal_columns):
+        # Create the individual preprocessing pipelines
+        categorical_pipeline = PreprocessingPipeline([
+            ("imputer", SimpleImputer(strategy="most_frequent")),
+            ("encoder", OneHotEncoder())
+        ])
+
+        numerical_pipeline = PreprocessingPipeline([
+            ("imputer", SimpleImputer(strategy="mean")),
+            ("converter", NumericConverter()),
+            ("scaler", MinMaxScaler())
+        ])
+
+        ordinal_pipeline = PreprocessingPipeline([
+            ("imputer", SimpleImputer(strategy="most_frequent")),
+            ("encoder", OrdinalEncoder())
+        ])
+
+        # Create the combined preprocessor
+        preprocessor = CombinedPreprocessor(
+            num = (numerical_pipeline, numerical_columns),
+            cat = (categorical_pipeline, categorical_columns),
+            ord = (ordinal_pipeline, ordinal_columns)
+        )
+
+        return preprocessor
     
     def abort_training(self):
         self.training_thread.abort()
@@ -185,7 +245,7 @@ class MainWindow(QWidget):
 
     
     def train_models(self):
-        self.training_thread = TrainingThread(self.X, self.y, k=5, seed=42)
+        self.training_thread = TrainingThread(self.X, self.y, k=5, seed=42, preprocessor=self.preprocessor)
         self.training_thread.model_progress.connect(self.update_progress)
         self.training_thread.model_scores.connect(self.display_scores)
         self.training_thread.training_completed.connect(self.on_training_completed)
@@ -220,12 +280,13 @@ class TrainingThread(QThread):
     model_scores = pyqtSignal(str, list)
     training_completed = pyqtSignal(list, list, list, list)
     
-    def __init__(self, X, y, k, seed, parent=None):
+    def __init__(self, X, y, k, seed, preprocessor, parent=None):
         super().__init__(parent)
         self.X = X
         self.y = y
         self.k = k
         self.seed = seed
+        self.preprocessor = preprocessor
         self.training_aborted = False
     
     def run(self):
@@ -237,11 +298,11 @@ class TrainingThread(QThread):
         ]
         
         # Create the preprocessor within the training thread
-        preprocessor = PreprocessingPipeline([
-            ("imputer", SimpleImputer(strategy="mean")),
-            ("converter", NumericConverter()),
-            ("scaler", MinMaxScaler())
-        ])
+       # preprocessor = PreprocessingPipeline([
+       #     ("imputer", SimpleImputer(strategy="mean")),
+       #    ("converter", NumericConverter()),
+       #     ("scaler", MinMaxScaler())
+       # ])
         
         labels = np.unique(self.y).tolist()  # Convert labels to a list
         num_models = len(models)
@@ -252,11 +313,11 @@ class TrainingThread(QThread):
                 break
             
             # Perform cross-validation and get accuracy scores
-            scores = k_folds_accuracy_scores(model, self.X, self.y, self.k, self.seed, preprocessor)
+            scores = k_folds_accuracy_scores(model, self.X, self.y, self.k, self.seed, self.preprocessor)
             self.model_scores.emit(model_name, scores)
             
             # Get the predicted labels for confusion matrix
-            y_true, y_pred = k_folds_predictions(model, self.X, self.y, self.k, self.seed, preprocessor)
+            y_true, y_pred = k_folds_predictions(model, self.X, self.y, self.k, self.seed, self.preprocessor)
             y_preds.append(y_pred)
             
             # Update progress
