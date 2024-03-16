@@ -7,6 +7,8 @@ from classification_tree import ClassificationTree
 from logistic_regression import SoftmaxRegression
 from cross_validation import k_folds_accuracy_scores, k_folds_predictions
 from preprocessing import PreprocessingPipeline, CombinedPreprocessor, SimpleImputer, MinMaxScaler, NumericConverter, OrdinalEncoder, OneHotEncoder
+from train_test_split import train_test_split
+from optimisers import GridSearch
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
@@ -112,6 +114,14 @@ class MainWindow(QWidget):
         self.process_button.setEnabled(False)
         self.process_button.clicked.connect(self.process_data)
 
+        self.tune_button = QPushButton('Tune Models')
+        self.tune_button.setEnabled(False)
+        self.tune_button.clicked.connect(self.tune_models)
+
+        self.best_knn_label = QLabel('')
+        self.best_tree_label = QLabel('')
+        self.best_softmax_label = QLabel('')
+
         self.abort_button = QPushButton('Abort')
         self.abort_button.setVisible(False)
         self.abort_button.clicked.connect(self.abort_training)
@@ -131,6 +141,10 @@ class MainWindow(QWidget):
         self.main_layout.addWidget(self.load_button)
         self.main_layout.addWidget(self.preview_label)
         self.main_layout.addWidget(self.process_button)
+        self.main_layout.addWidget(self.tune_button)
+        self.main_layout.addWidget(self.best_knn_label)
+        self.main_layout.addWidget(self.best_tree_label)
+        self.main_layout.addWidget(self.best_softmax_label)
         self.main_layout.addWidget(self.train_button)
         self.main_layout.addWidget(self.abort_button)
         self.main_layout.addWidget(self.knn_label)
@@ -195,6 +209,7 @@ class MainWindow(QWidget):
         self.preprocessor = self.create_preprocessor(categorical_columns, numerical_columns, ordinal_columns)
 
         QMessageBox.information(self, 'Data Processed', 'Data has been processed successfully.')
+        self.tune_button.setEnabled(True)  # Enable the "Tune Models" button
 
     def prompt_column_types(self):
         # Create a dialog or input fields for the user to enter column types
@@ -237,6 +252,28 @@ class MainWindow(QWidget):
 
         return preprocessor
     
+    
+    def tune_models(self):
+        self.tuning_thread = TuningThread(self.X, self.y, self.preprocessor)
+        self.tuning_thread.tuning_completed.connect(self.on_tuning_completed)
+        self.tuning_thread.start()
+        
+        self.tune_button.setEnabled(False)
+        self.train_button.setEnabled(False)
+    
+    def on_tuning_completed(self, best_knn, best_tree, best_softmax):
+        self.best_knn = best_knn
+        self.best_tree = best_tree
+        self.best_softmax = best_softmax
+        
+        # Display the best model parameters
+        self.best_knn_label.setText(f"KNN: K={best_knn.k}")
+        self.best_tree_label.setText(f"Classification Tree: Max Depth={best_tree.max_depth}, Min Size={best_tree.min_size}")
+        self.best_softmax_label.setText(f"Softmax Regression: Learning Rate={best_softmax.learning_rate}, N Iterations={best_softmax.n_iterations}")
+
+        QMessageBox.information(self, 'Tuning Complete', 'Models have been tuned successfully.')
+        self.train_button.setEnabled(True)  # Enable the "Train Models" button
+    
     def abort_training(self):
         self.training_thread.abort()
         self.abort_button.setVisible(False)
@@ -245,7 +282,8 @@ class MainWindow(QWidget):
 
     
     def train_models(self):
-        self.training_thread = TrainingThread(self.X, self.y, k=5, seed=42, preprocessor=self.preprocessor)
+        self.training_thread = TrainingThread(self.X, self.y, k=5, seed=42, preprocessor=self.preprocessor,
+                                            best_knn=self.best_knn, best_tree=self.best_tree, best_softmax=self.best_softmax)
         self.training_thread.model_progress.connect(self.update_progress)
         self.training_thread.model_scores.connect(self.display_scores)
         self.training_thread.training_completed.connect(self.on_training_completed)
@@ -280,21 +318,24 @@ class TrainingThread(QThread):
     model_scores = pyqtSignal(str, list)
     training_completed = pyqtSignal(list, list, list, list)
     
-    def __init__(self, X, y, k, seed, preprocessor, parent=None):
+    def __init__(self, X, y, k, seed, preprocessor, best_knn, best_tree, best_softmax, parent=None):
         super().__init__(parent)
         self.X = X
         self.y = y
         self.k = k
         self.seed = seed
         self.preprocessor = preprocessor
+        self.best_knn = best_knn
+        self.best_tree = best_tree
+        self.best_softmax = best_softmax
         self.training_aborted = False
     
     def run(self):
         # Create instances of the models
         models = [
-            ('KNN', KNearestNeighbours(k=5)),
-            ('Classification Tree', ClassificationTree(max_depth=5)),
-            ('Softmax Regression', SoftmaxRegression(learning_rate=0.1, n_iterations=1000))
+            ('KNN', self.best_knn),
+            ('Classification Tree', self.best_tree),
+            ('Softmax Regression', self.best_softmax)
         ]
         
         # Create the preprocessor within the training thread
@@ -329,6 +370,44 @@ class TrainingThread(QThread):
     
     def abort(self):
         self.training_aborted = True
+
+class TuningThread(QThread):
+    tuning_completed = pyqtSignal(object, object, object)
+    
+    def __init__(self, X, y, preprocessor, parent=None):
+        super().__init__(parent)
+        self.X = X
+        self.y = y
+        self.preprocessor = preprocessor
+    
+    def run(self):
+        X_train, X_val, y_train, y_val = train_test_split(self.X, self.y, test_size=0.2, seed=2108)
+        
+        # Create instances of the models
+        knn_model = KNearestNeighbours()
+        tree_model = ClassificationTree()
+        softmax_model = SoftmaxRegression()
+        
+        # Create GridSearch objects for each model
+        knn_grid_search = GridSearch(knn_model)
+        tree_grid_search = GridSearch(tree_model)
+        softmax_grid_search = GridSearch(softmax_model)
+        
+        X_train = self.preprocessor.fit_transform(X_train)
+        X_val = self.preprocessor.transform(X_val)
+
+
+        # Perform grid search for each model
+        knn_grid_search.fit(X_train, y_train, X_val, y_val)
+        tree_grid_search.fit(X_train, y_train, X_val, y_val)
+        softmax_grid_search.fit(X_train, y_train, X_val, y_val)
+        
+        # Get the best models
+        best_knn = knn_grid_search.best_model_
+        best_tree = tree_grid_search.best_model_
+        best_softmax = softmax_grid_search.best_model_
+        
+        self.tuning_completed.emit(best_knn, best_tree, best_softmax)
 
 def main():
     app = QApplication(sys.argv)
