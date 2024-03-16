@@ -650,6 +650,8 @@ class CombinedPreprocessor:
             If an error occurs during fitting any of the preprocessing pipelines.
         """
         for pipeline_name, (pipeline, columns) in self.pipelines.items():
+            if len(columns) == 0:
+                continue  # Skip the pipeline if there are no corresponding columns
             try:
                 if columns is not None:
                     X_subset = X[:, columns]
@@ -659,6 +661,7 @@ class CombinedPreprocessor:
             except ValueError as e:
                 raise ValueError(f"Error fitting {pipeline_name} pipeline: {str(e)}")
         return self
+
 
     def transform(self, X):
         """
@@ -682,12 +685,20 @@ class CombinedPreprocessor:
         """
         transformed_subsets = []
         for pipeline_name, (pipeline, columns) in self.pipelines.items():
+            if len(columns) == 0:
+                continue  # Skip the pipeline if there are no corresponding columns
             try:
                 if columns is not None:
                     X_subset = X[:, columns]
-                    transformed_subset = pipeline.transform(X_subset)
+                    if hasattr(pipeline, 'transform'):
+                        transformed_subset = pipeline.transform(X_subset)
+                    else:
+                        transformed_subset = X_subset  # Use original subset if pipeline has no transform method
                 else:
-                    transformed_subset = pipeline.transform(X)
+                    if hasattr(pipeline, 'transform'):
+                        transformed_subset = pipeline.transform(X)
+                    else:
+                        transformed_subset = X  # Use original data if pipeline has no transform method
                 transformed_subsets.append(transformed_subset)
             except ValueError as e:
                 raise ValueError(f"Error transforming {pipeline_name} pipeline: {str(e)}")
