@@ -64,7 +64,7 @@ class MainWindow(QWidget):
         # Scroll Area Setup
         self.scroll_area = QScrollArea(self)
         self.scroll_area.setWidgetResizable(True)  # Important for the scroll area to adapt
-        self.scroll_widget = QWidget()  # This widget will hold your main layout
+        self.scroll_widget = QWidget()  # This widget will hold the main layout
         self.scroll_widget.setLayout(self.main_layout)
         self.scroll_area.setWidget(self.scroll_widget)
 
@@ -114,6 +114,31 @@ class MainWindow(QWidget):
         self.process_button.setEnabled(False)
         self.process_button.clicked.connect(self.process_data)
 
+        self.column_types_layout = QHBoxLayout()
+    
+        self.categorical_label = QLabel('Categorical Columns:')
+        self.categorical_text = QLineEdit()
+        self.categorical_text.setPlaceholderText('Enter comma-separated indices')
+        
+        self.numerical_label = QLabel('Numerical Columns:')
+        self.numerical_text = QLineEdit()
+        self.numerical_text.setPlaceholderText('Enter comma-separated indices')
+        
+        self.ordinal_label = QLabel('Ordinal Columns:')
+        self.ordinal_text = QLineEdit()
+        self.ordinal_text.setPlaceholderText('Enter comma-separated indices')
+        
+        self.column_types_layout.addWidget(self.categorical_label)
+        self.column_types_layout.addWidget(self.categorical_text)
+        self.column_types_layout.addWidget(self.numerical_label)
+        self.column_types_layout.addWidget(self.numerical_text)
+        self.column_types_layout.addWidget(self.ordinal_label)
+        self.column_types_layout.addWidget(self.ordinal_text)
+
+        self.categorical_data_label = QLabel('')
+        self.numerical_data_label = QLabel('')
+        self.ordinal_data_label = QLabel('')  
+
         self.tune_button = QPushButton('Tune Models')
         self.tune_button.setEnabled(False)
         self.tune_button.clicked.connect(self.tune_models)
@@ -140,7 +165,11 @@ class MainWindow(QWidget):
         self.main_layout.addLayout(params_layout)
         self.main_layout.addWidget(self.load_button)
         self.main_layout.addWidget(self.preview_label)
+        self.main_layout.addLayout(self.column_types_layout)
         self.main_layout.addWidget(self.process_button)
+        self.main_layout.addWidget(self.categorical_data_label)
+        self.main_layout.addWidget(self.numerical_data_label)
+        self.main_layout.addWidget(self.ordinal_data_label)
         self.main_layout.addWidget(self.tune_button)
         self.main_layout.addWidget(self.best_knn_label)
         self.main_layout.addWidget(self.best_tree_label)
@@ -202,15 +231,36 @@ class MainWindow(QWidget):
             QMessageBox.warning(self, 'No File Selected', 'Please select a dataset file.')
     
     def process_data(self):
-        # Prompt the user to enter column types
-        categorical_columns, numerical_columns, ordinal_columns = self.prompt_column_types()
-
+        # Retrieve column indices from the text boxes
+        categorical_columns = self.parse_column_indices(self.categorical_text.text())
+        numerical_columns = self.parse_column_indices(self.numerical_text.text())
+        ordinal_columns = self.parse_column_indices(self.ordinal_text.text())
+        
         # Create the preprocessor based on the column types
         self.preprocessor = self.create_preprocessor(categorical_columns, numerical_columns, ordinal_columns)
-
+        
+        # Display the data points for each column type
+        if len(categorical_columns) > 0:
+            self.categorical_data_label.setText(f"Categorical columns: {self.X[0][categorical_columns]}")
+        else:
+            self.categorical_data_label.setText("Categorical columns: None")
+        
+        if len(numerical_columns) > 0:
+            self.numerical_data_label.setText(f"Numerical columns: {self.X[0][numerical_columns]}")
+        else:
+            self.numerical_data_label.setText("Numerical columns: None")
+        
+        if len(ordinal_columns) > 0:
+            self.ordinal_data_label.setText(f"Ordinal columns: {self.X[0][ordinal_columns]}")
+        else:
+            self.ordinal_data_label.setText("Ordinal columns: None")
+        
         QMessageBox.information(self, 'Data Processed', 'Data has been processed successfully.')
         self.tune_button.setEnabled(True)  # Enable the "Tune Models" button
 
+    def parse_column_indices(self, text):
+        return list(map(int, text.split(','))) if text.strip() else []
+    
     def prompt_column_types(self):
         # Create a dialog or input fields for the user to enter column types
         # You can use QInputDialog or create a custom dialog
@@ -282,7 +332,7 @@ class MainWindow(QWidget):
 
     
     def train_models(self):
-        self.training_thread = TrainingThread(self.X, self.y, k=5, seed=42, preprocessor=self.preprocessor,
+        self.training_thread = TrainingThread(self.X, self.y, k=5, seed=2108, preprocessor=self.preprocessor,
                                             best_knn=self.best_knn, best_tree=self.best_tree, best_softmax=self.best_softmax)
         self.training_thread.model_progress.connect(self.update_progress)
         self.training_thread.model_scores.connect(self.display_scores)
