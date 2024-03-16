@@ -304,11 +304,11 @@ class MainWindow(QWidget):
     
     
     def tune_models(self):
+        # Preparation of data and preprocessor should already be done
         self.tuning_thread = TuningThread(self.X, self.y, self.preprocessor)
         self.tuning_thread.tuning_completed.connect(self.on_tuning_completed)
         self.tuning_thread.start()
-        
-        self.tune_button.setEnabled(False)
+        self.tune_button.setEnabled(False)  # Disable the buttons while tuning is in progress
         self.train_button.setEnabled(False)
     
     def on_tuning_completed(self, best_knn, best_tree, best_softmax):
@@ -424,40 +424,80 @@ class TrainingThread(QThread):
 class TuningThread(QThread):
     tuning_completed = pyqtSignal(object, object, object)
     
-    def __init__(self, X, y, preprocessor, parent=None):
+    def __init__(self, X, y, preprocessor, model_params_grids=None, parent=None):
         super().__init__(parent)
         self.X = X
         self.y = y
         self.preprocessor = preprocessor
+        if model_params_grids is not None:
+            self.model_params_grids = model_params_grids # Use provided grids or default to empty dict
+        else: self.model_params_grids = {}
+        self.best_models = {}  # To store the best model from each tuning thread
+        self.model_names = ['KNN', 'Classification Tree', 'Softmax Regression']
     
     def run(self):
         X_train, X_val, y_train, y_val = train_test_split(self.X, self.y, test_size=0.2, seed=2108)
         
-        # Create instances of the models
-        knn_model = KNearestNeighbours()
-        tree_model = ClassificationTree()
-        softmax_model = SoftmaxRegression()
-        
-        # Create GridSearch objects for each model
-        knn_grid_search = GridSearch(knn_model)
-        tree_grid_search = GridSearch(tree_model)
-        softmax_grid_search = GridSearch(softmax_model)
-        
         X_train = self.preprocessor.fit_transform(X_train)
         X_val = self.preprocessor.transform(X_val)
 
+        models = {
+            'KNN': KNearestNeighbours(),
+            'Classification Tree': ClassificationTree(),
+            'Softmax Regression': SoftmaxRegression()
+        }
+        
+        threads = []
+        for model_name, model in models.items():
+            thread = ModelTuningThread(
+                model_name=model_name, 
+                model=model, 
+                X_train=X_train, 
+                y_train=y_train, 
+                X_val=X_val, 
+                y_val=y_val,  
+                grid_search_params=self.model_params_grids.get(model_name, None)  # Safely get params or None
+            )
+            thread.tuning_completed.connect(self.on_tuning_completed)
+            threads.append(thread)
+            thread.start()
+        
+        for thread in threads:
+           thread.wait()  # Wait for all threads to complete
 
-        # Perform grid search for each model
-        knn_grid_search.fit(X_train, y_train, X_val, y_val)
-        tree_grid_search.fit(X_train, y_train, X_val, y_val)
-        softmax_grid_search.fit(X_train, y_train, X_val, y_val)
+    def on_tuning_completed(self, model_name, best_model):
+        self.best_models[model_name] = best_model
+        # Now using self.model_names to check if all models have completed tuning
+        print(f"Tuning completed for {model_name}")
         
-        # Get the best models
-        best_knn = knn_grid_search.best_model_
-        best_tree = tree_grid_search.best_model_
-        best_softmax = softmax_grid_search.best_model_
+        if len(self.best_models) == len(self.model_names):
+            # Emit the tuning_completed signal with the best models
+            self.tuning_completed.emit(self.best_models.get('KNN'), self.best_models.get('Classification Tree'), self.best_models.get('Softmax Regression'))
+
+
+class ModelTuningThread(QThread):
+    tuning_completed = pyqtSignal(str, object)  # Emits model name and best model
+    
+    def __init__(self, model_name, model, X_train, y_train, X_val, y_val, grid_search_params=None, parent=None):
+        super().__init__(parent)
+        self.model_name = model_name
+        self.model = model
+        self.grid_search_params = grid_search_params  # Now optional
+        self.X_train = X_train
+        self.y_train = y_train
+        self.X_val = X_val
+        self.y_val = y_val
+
+    
+    def run(self):
         
-        self.tuning_completed.emit(best_knn, best_tree, best_softmax)
+        # Perform grid search
+        grid_search = GridSearch(self.model, self.grid_search_params)
+        grid_search.fit(self.X_train, self.y_train, self.X_val, self.y_val)
+        
+        # Emit the best model found
+        self.tuning_completed.emit(self.model_name, grid_search.best_model_)
+        print(f"Tuning completed for {self.model_name}")
 
 def main():
     app = QApplication(sys.argv)
