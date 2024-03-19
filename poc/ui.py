@@ -22,6 +22,7 @@ class ConfusionMatrixPlot(FigureCanvas):
         super().__init__(fig)
         self.axes = None  # Initialize axes later based on the number of matrices
 
+    # Use Matplotlib version 3.7.3! s
     def plot_confusion_matrices(self, y_true, y_preds, labels, titles):
         # Clear existing axes if they exist
         if self.axes is not None:
@@ -39,6 +40,7 @@ class ConfusionMatrixPlot(FigureCanvas):
 
         for i, (y_pred, title) in enumerate(zip(y_preds, titles)):
             cm = confusion_matrix(y_true, y_pred)
+            print(cm)
             sns.heatmap(cm, annot=True, cmap=colours[i%3], xticklabels=labels, yticklabels=labels,
                         square=True, cbar=False, fmt='d', ax=self.axes[i])
             self.axes[i].set_xlabel('Predicted')
@@ -55,7 +57,7 @@ class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle('Dataset Loader')
-        self.setGeometry(100, 100, 800, 600)  
+        self.setGeometry(100, 100, 1250, 900)  
         self.init_ui()
     
     def init_ui(self):
@@ -146,6 +148,9 @@ class MainWindow(QWidget):
         self.best_knn_label = QLabel('')
         self.best_tree_label = QLabel('')
         self.best_softmax_label = QLabel('')
+        
+        self.tuning_plot_widget = TuningPlotWidget(self)
+
 
         self.abort_button = QPushButton('Abort')
         self.abort_button.setVisible(False)
@@ -174,6 +179,7 @@ class MainWindow(QWidget):
         self.main_layout.addWidget(self.best_knn_label)
         self.main_layout.addWidget(self.best_tree_label)
         self.main_layout.addWidget(self.best_softmax_label)
+        self.main_layout.addWidget(self.tuning_plot_widget)
         self.main_layout.addWidget(self.train_button)
         self.main_layout.addWidget(self.abort_button)
         self.main_layout.addWidget(self.knn_label)
@@ -311,18 +317,22 @@ class MainWindow(QWidget):
         self.tune_button.setEnabled(False)  # Disable the buttons while tuning is in progress
         self.train_button.setEnabled(False)
     
-    def on_tuning_completed(self, best_knn, best_tree, best_softmax):
+    def on_tuning_completed(self, best_knn, best_tree, best_softmax, knn_grid_search, tree_grid_search, softmax_grid_search):
         self.best_knn = best_knn
         self.best_tree = best_tree
         self.best_softmax = best_softmax
-        
+
         # Display the best model parameters
-        self.best_knn_label.setText(f"KNN: K={best_knn.k}")
-        self.best_tree_label.setText(f"Classification Tree: Max Depth={best_tree.max_depth}, Min Size={best_tree.min_size}")
-        self.best_softmax_label.setText(f"Softmax Regression: Learning Rate={best_softmax.learning_rate}, N Iterations={best_softmax.n_iterations}")
+        self.best_knn_label.setText(f"KNN: K={self.best_knn.k}")
+        self.best_tree_label.setText(f"Classification Tree: Max Depth={self.best_tree.max_depth}, Min Size={self.best_tree.min_size}")
+        self.best_softmax_label.setText(f"Softmax Regression: Learning Rate={self.best_softmax.learning_rate}, N Iterations={self.best_softmax.n_iterations}")
+
+        # Plot the tuning results
+        self.tuning_plot_widget.plot_tuning_results(knn_grid_search, tree_grid_search, softmax_grid_search)
 
         QMessageBox.information(self, 'Tuning Complete', 'Models have been tuned successfully.')
         self.train_button.setEnabled(True)  # Enable the "Train Models" button
+
     
     def abort_training(self):
         self.training_thread.abort()
@@ -422,7 +432,8 @@ class TrainingThread(QThread):
         self.training_aborted = True
 
 class TuningThread(QThread):
-    tuning_completed = pyqtSignal(object, object, object)
+    tuning_completed = pyqtSignal(object, object, object, object, object, object)
+
     
     def __init__(self, X, y, preprocessor, model_params_grids=None, parent=None):
         super().__init__(parent)
@@ -434,6 +445,9 @@ class TuningThread(QThread):
         else: self.model_params_grids = {}
         self.best_models = {}  # To store the best model from each tuning thread
         self.model_names = ['KNN', 'Classification Tree', 'Softmax Regression']
+        self.knn_grid_search = None
+        self.tree_grid_search = None
+        self.softmax_grid_search = None
     
     def run(self):
         X_train, X_val, y_train, y_val = train_test_split(self.X, self.y, test_size=0.2, seed=2108)
@@ -465,19 +479,28 @@ class TuningThread(QThread):
         for thread in threads:
            thread.wait()  # Wait for all threads to complete
 
-    def on_tuning_completed(self, model_name, best_model):
+    def on_tuning_completed(self, model_name, best_model, grid_search):
+        if model_name == 'KNN':
+            self.knn_grid_search = grid_search
+        elif model_name == 'Classification Tree':
+            self.tree_grid_search = grid_search
+        elif model_name == 'Softmax Regression':
+            self.softmax_grid_search = grid_search
+
         self.best_models[model_name] = best_model
-        # Now using self.model_names to check if all models have completed tuning
         print(f"Tuning completed for {model_name}")
-        
+
         if len(self.best_models) == len(self.model_names):
-            # Emit the tuning_completed signal with the best models
-            self.tuning_completed.emit(self.best_models.get('KNN'), self.best_models.get('Classification Tree'), self.best_models.get('Softmax Regression'))
+            # Emit the tuning_completed signal with the best models and GridSearch objects
+            self.tuning_completed.emit(
+                self.best_models.get('KNN'), self.best_models.get('Classification Tree'), self.best_models.get('Softmax Regression'),
+                self.knn_grid_search, self.tree_grid_search, self.softmax_grid_search
+            )
 
 
 class ModelTuningThread(QThread):
-    tuning_completed = pyqtSignal(str, object)  # Emits model name and best model
-    
+    tuning_completed = pyqtSignal(str, object, object)  # Emits model name, best model, and GridSearch object
+
     def __init__(self, model_name, model, X_train, y_train, X_val, y_val, grid_search_params=None, parent=None):
         super().__init__(parent)
         self.model_name = model_name
@@ -487,17 +510,71 @@ class ModelTuningThread(QThread):
         self.y_train = y_train
         self.X_val = X_val
         self.y_val = y_val
+        self.grid_search = None  # Add this line to store the GridSearch object
 
     
     def run(self):
-        
         # Perform grid search
-        grid_search = GridSearch(self.model, self.grid_search_params)
-        grid_search.fit(self.X_train, self.y_train, self.X_val, self.y_val)
-        
-        # Emit the best model found
-        self.tuning_completed.emit(self.model_name, grid_search.best_model_)
+        self.grid_search = GridSearch(self.model, self.grid_search_params)
+        self.grid_search.fit(self.X_train, self.y_train, self.X_val, self.y_val)
+
+        # Emit the best model and GridSearch object
+        self.tuning_completed.emit(self.model_name, self.grid_search.best_model_, self.grid_search)
         print(f"Tuning completed for {self.model_name}")
+
+class TuningPlotWidget(QWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.layout = QVBoxLayout(self)
+        self.figure = Figure(figsize=(10, 3), dpi=100)  # Adjust the figure size here
+        self.canvas = FigureCanvas(self.figure)
+        self.layout.addWidget(self.canvas)
+
+    def plot_tuning_results(self, knn_grid_search, tree_grid_search, softmax_grid_search):
+        self.figure.clear()
+        
+        # Create subplots with adjusted width and height ratios
+        gs = self.figure.add_gridspec(1, 3, width_ratios=[1, 1, 1], height_ratios=[1])
+        ax1 = self.figure.add_subplot(gs[0])
+        ax2 = self.figure.add_subplot(gs[1])
+        ax3 = self.figure.add_subplot(gs[2])
+
+        # Plot KNN line graph
+        ax1.plot(knn_grid_search.param_grid['k'], knn_grid_search.scores_, marker='o', linestyle='-')
+        ax1.set_title('KNN Tuning Results')
+        ax1.set_xlabel('K')
+        ax1.set_ylabel('Score')
+        ax1.grid(True)
+
+        # Plot Classification Tree heatmap
+        tree_scores_table = self.reshape_scores(tree_grid_search.scores_, tree_grid_search.param_grid)
+        sns.heatmap(tree_scores_table, annot=True, cmap='coolwarm', fmt='.3f',
+                    xticklabels=tree_grid_search.param_grid['min_size'],
+                    yticklabels=tree_grid_search.param_grid['max_depth'],
+                    ax=ax2, cbar_kws={'label': 'Score'})
+        ax2.set_title('Classification Tree Tuning Results')
+        ax2.set_xlabel('Min Size')
+        ax2.set_ylabel('Max Depth')
+
+        # Plot Softmax Regression heatmap
+        softmax_scores_table = self.reshape_scores(softmax_grid_search.scores_, softmax_grid_search.param_grid)
+        sns.heatmap(softmax_scores_table, annot=True, cmap='coolwarm', fmt='.3f',
+                    xticklabels=softmax_grid_search.param_grid['n_iterations'],
+                    yticklabels=softmax_grid_search.param_grid['learning_rate'],
+                    ax=ax3, cbar_kws={'label': 'Score'})
+        ax3.set_title('Softmax Regression Tuning Results')
+        ax3.set_xlabel('N Iterations')
+        ax3.set_ylabel('Learning Rate')
+
+        self.figure.tight_layout()
+        self.canvas.draw()
+
+    def reshape_scores(self, scores, param_grid):
+        # Reshape scores into a 2D array based on parameter grid
+        param_names = list(param_grid.keys())
+        param_values = [param_grid[name] for name in param_names]
+        scores_table = np.reshape(scores, (len(param_values[0]), len(param_values[1])))
+        return scores_table
 
 def main():
     app = QApplication(sys.argv)

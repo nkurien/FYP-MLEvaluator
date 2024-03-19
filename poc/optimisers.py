@@ -188,6 +188,9 @@ class GridSearch:
             'param_grid': self.param_grid,
             'scoring': self.scoring
         }
+    
+    def get_scores(self):
+     return self.scores_
 
     def set_params(self, **params):
         """
@@ -265,7 +268,8 @@ class GridSearch:
                 row_idx = np.where(param_values[0] == param_combinations[i][0])[0][0]
                 col_idx = np.where(param_values[1] == param_combinations[i][1])[0][0]
                 scores_table[row_idx, col_idx] = scores[i]
-
+            
+            print(scores_table)
             # Plot the heatmap
             plt.figure(figsize=(8, 6))
             sns.heatmap(scores_table, annot=True, cmap='coolwarm', fmt='.3f',
