@@ -237,49 +237,64 @@ class MainWindow(QWidget):
             QMessageBox.warning(self, 'No File Selected', 'Please select a dataset file.')
     
     def process_data(self):
-        # Retrieve column indices from the text boxes
-        categorical_columns = self.parse_column_indices(self.categorical_text.text())
-        numerical_columns = self.parse_column_indices(self.numerical_text.text())
-        ordinal_columns = self.parse_column_indices(self.ordinal_text.text())
-        
-        # Create the preprocessor based on the column types
-        self.preprocessor = self.create_preprocessor(categorical_columns, numerical_columns, ordinal_columns)
-        
-        # Display the data points for each column type
-        if len(categorical_columns) > 0:
-            self.categorical_data_label.setText(f"Categorical columns: {self.X[0][categorical_columns]}")
-        else:
-            self.categorical_data_label.setText("Categorical columns: None")
-        
-        if len(numerical_columns) > 0:
-            self.numerical_data_label.setText(f"Numerical columns: {self.X[0][numerical_columns]}")
-        else:
-            self.numerical_data_label.setText("Numerical columns: None")
-        
-        if len(ordinal_columns) > 0:
-            self.ordinal_data_label.setText(f"Ordinal columns: {self.X[0][ordinal_columns]}")
-        else:
-            self.ordinal_data_label.setText("Ordinal columns: None")
-        
-        QMessageBox.information(self, 'Data Processed', 'Data has been processed successfully.')
-        self.tune_button.setEnabled(True)  # Enable the "Tune Models" button
+        try:
+            # Retrieve column indices from the text boxes
+            categorical_columns = self.parse_column_indices(self.categorical_text.text())
+            numerical_columns = self.parse_column_indices(self.numerical_text.text())
+            ordinal_columns = self.parse_column_indices(self.ordinal_text.text())
+
+            # Check for 'all' input and set columns accordingly
+            if categorical_columns == ['all']:
+                categorical_columns = list(range(self.X.shape[1]))
+            if numerical_columns == ['all']:
+                numerical_columns = list(range(self.X.shape[1]))
+            if ordinal_columns == ['all']:
+                ordinal_columns = list(range(self.X.shape[1]))
+
+            # Check for duplicate column indices
+            all_columns = categorical_columns + numerical_columns + ordinal_columns
+            if len(set(all_columns)) != len(all_columns):
+                raise ValueError("Duplicate column indices found.")
+
+            # Check if column indices are within valid range
+            max_column_index = self.X.shape[1] - 1
+            if any(col > max_column_index for col in all_columns):
+                raise ValueError(f"Column index out of range. Maximum column index is {max_column_index}.")
+
+            # Create the preprocessor based on the column types
+            self.preprocessor = self.create_preprocessor(categorical_columns, numerical_columns, ordinal_columns)
+
+            # Display the data points for each column type
+            if len(categorical_columns) > 0:
+                self.categorical_data_label.setText(f"Categorical columns: {self.X[0][categorical_columns]}")
+            else:
+                self.categorical_data_label.setText("Categorical columns: None")
+
+            if len(numerical_columns) > 0:
+                self.numerical_data_label.setText(f"Numerical columns: {self.X[0][numerical_columns]}")
+            else:
+                self.numerical_data_label.setText("Numerical columns: None")
+
+            if len(ordinal_columns) > 0:
+                self.ordinal_data_label.setText(f"Ordinal columns: {self.X[0][ordinal_columns]}")
+            else:
+                self.ordinal_data_label.setText("Ordinal columns: None")
+
+            QMessageBox.information(self, 'Data Processed', 'Data has been processed successfully.')
+            self.tune_button.setEnabled(True)  # Enable the "Tune Models" button
+
+        except ValueError as e:
+            QMessageBox.warning(self, 'Invalid Input', str(e))
 
     def parse_column_indices(self, text):
-        return list(map(int, text.split(','))) if text.strip() else []
+        if text.strip().lower() == 'all':
+            return ['all']
+        else:
+            try:
+                return list(map(int, text.split(','))) if text.strip() else []
+            except ValueError:
+                raise ValueError("Invalid column indices. Please enter valid integers separated by commas.")
     
-    def prompt_column_types(self):
-        # Create a dialog or input fields for the user to enter column types
-        # You can use QInputDialog or create a custom dialog
-        # For simplicity, let's assume the user enters comma-separated indices for each type
-        categorical_input, ok = QInputDialog.getText(self, 'Categorical Columns', 'Enter comma-separated indices of categorical columns:')
-        numerical_input, ok = QInputDialog.getText(self, 'Numerical Columns', 'Enter comma-separated indices of numerical columns:')
-        ordinal_input, ok = QInputDialog.getText(self, 'Ordinal Columns', 'Enter comma-separated indices of ordinal columns:')
-
-        categorical_columns = list(map(int, categorical_input.split(','))) if categorical_input else []
-        numerical_columns = list(map(int, numerical_input.split(','))) if numerical_input else []
-        ordinal_columns = list(map(int, ordinal_input.split(','))) if ordinal_input else []
-
-        return categorical_columns, numerical_columns, ordinal_columns
 
     def create_preprocessor(self, categorical_columns, numerical_columns, ordinal_columns):
         # Create the individual preprocessing pipelines

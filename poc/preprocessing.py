@@ -582,6 +582,12 @@ class NumericConverter:
         return self
 
     def transform(self, X):
+        if isinstance(X, list):
+            X = np.array(X)
+
+        if X.ndim == 1:
+            X = X.reshape(-1, 1)
+
         X_numeric = np.empty_like(X, dtype=float)
         for i in range(X.shape[1]):
             try:
