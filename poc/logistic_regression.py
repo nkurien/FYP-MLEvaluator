@@ -67,7 +67,7 @@ class LogisticRegression:
         return original_labels
     
 class SoftmaxRegression:
-    def __init__(self, learning_rate=0.01, n_iterations=1000, ):
+    def __init__(self, learning_rate=0.01, n_iterations=1000, lambda_ = 0.01):
         self.learning_rate = learning_rate
         self.n_iterations = n_iterations
         self.weights = None
@@ -75,6 +75,9 @@ class SoftmaxRegression:
         self.label_map = None
         self.loss_history = []  # To store the loss at each iteration
         self.name = "Softmax Regression"
+
+        self.lambda_ = lambda_  # Regularization strength
+
     
     def softmax(self, z):
         e_z = np.exp(z - np.max(z, axis=1, keepdims=True))
@@ -85,8 +88,9 @@ class SoftmaxRegression:
         Computes the categorical cross-entropy loss.
         """
         epsilon = 1e-15  # To prevent log(0)
-        y_pred = np.clip(y_pred, epsilon, 1 - epsilon)
-        return -np.mean(y_true * np.log(y_pred))
+        l2_penalty = (self.lambda_ / 2) * np.sum(np.square(self.weights))
+        return -np.mean(y_true * np.log(y_pred)) + l2_penalty
+
     
     def gradient_descent_step(self, X, y_one_hot, probabilities):
         """
@@ -96,6 +100,9 @@ class SoftmaxRegression:
         # Compute the gradient on scores
         dw = (1 / n_samples) * np.dot(X.T, (probabilities - y_one_hot))
         db = (1 / n_samples) * np.sum(probabilities - y_one_hot, axis=0, keepdims=True)
+        
+        # Add L2 regularization gradient except for the bias term
+        dw += self.lambda_ * self.weights
         
         # Update parameters
         self.weights -= self.learning_rate * dw

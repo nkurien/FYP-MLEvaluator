@@ -102,17 +102,17 @@ class GridSearch:
         """
         if isinstance(self.model, KNearestNeighbours):
             param_grid = {
-                'k': [1, 3, 5, 7, 9, 10, 20]
+                'k': [1, 3, 5, 7, 9, 10, 15]
             }
         elif isinstance(self.model, ClassificationTree):
             param_grid = {
                 'max_depth': [3, 5, 10, 15, 20],
-                'min_size': [2, 5, 10]
+                'min_size': [2, 5, 10, 20]
             }
         elif isinstance(self.model, SoftmaxRegression):
             param_grid = {
-                'learning_rate': [0.01, 0.1, 1],
-                'n_iterations': [100, 500, 1000, 5000]
+                'n_iterations': [100, 500, 1000, 5000],
+                'learning_rate': [0.001,0.01, 0.1, 1, 10]
             }
         else:
             raise ValueError(f"Unsupported model type: {type(self.model)}")

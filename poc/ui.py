@@ -325,12 +325,17 @@ class MainWindow(QWidget):
     
     
     def tune_models(self):
-        # Preparation of data and preprocessor should already be done
-        self.tuning_thread = TuningThread(self.X, self.y, self.preprocessor)
-        self.tuning_thread.tuning_completed.connect(self.on_tuning_completed)
-        self.tuning_thread.start()
-        self.tune_button.setEnabled(False)  # Disable the buttons while tuning is in progress
-        self.train_button.setEnabled(False)
+        try:
+            # Preparation of data and preprocessor should already be done
+            self.tuning_thread = TuningThread(self.X, self.y, self.preprocessor)
+            self.tuning_thread.tuning_completed.connect(self.on_tuning_completed)
+            self.tuning_thread.tuning_error.connect(self.on_tuning_error)
+            self.tuning_thread.start()
+            self.tune_button.setEnabled(False)  # Disable the buttons while tuning is in progress
+            self.train_button.setEnabled(False)
+        except ValueError as e:
+            QMessageBox.warning(self, 'Tuning Error', str(e) + '\nPlease check if the columns were inputted correctly during the preprocessing phase.')
+
     
     def on_tuning_completed(self, best_knn, best_tree, best_softmax, knn_grid_search, tree_grid_search, softmax_grid_search):
         self.best_knn = best_knn
@@ -347,6 +352,10 @@ class MainWindow(QWidget):
 
         QMessageBox.information(self, 'Tuning Complete', 'Models have been tuned successfully.')
         self.train_button.setEnabled(True)  # Enable the "Train Models" button
+    
+    def on_tuning_error(self, error_message):
+        QMessageBox.warning(self, 'Tuning Error', error_message + '\nPlease check if the columns were inputted correctly during the preprocessing phase.')
+
 
     
     def abort_training(self):
@@ -448,7 +457,7 @@ class TrainingThread(QThread):
 
 class TuningThread(QThread):
     tuning_completed = pyqtSignal(object, object, object, object, object, object)
-
+    tuning_error = pyqtSignal(str)
     
     def __init__(self, X, y, preprocessor, model_params_grids=None, parent=None):
         super().__init__(parent)
@@ -465,34 +474,38 @@ class TuningThread(QThread):
         self.softmax_grid_search = None
     
     def run(self):
-        X_train, X_val, y_train, y_val = train_test_split(self.X, self.y, test_size=0.2, seed=2108)
-        
-        X_train = self.preprocessor.fit_transform(X_train)
-        X_val = self.preprocessor.transform(X_val)
+        try:
+            X_train, X_val, y_train, y_val = train_test_split(self.X, self.y, test_size=0.2, seed=2345)
+            
+            X_train = self.preprocessor.fit_transform(X_train)
+            X_val = self.preprocessor.transform(X_val)
 
-        models = {
-            'KNN': KNearestNeighbours(),
-            'Classification Tree': ClassificationTree(),
-            'Softmax Regression': SoftmaxRegression()
-        }
-        
-        threads = []
-        for model_name, model in models.items():
-            thread = ModelTuningThread(
-                model_name=model_name, 
-                model=model, 
-                X_train=X_train, 
-                y_train=y_train, 
-                X_val=X_val, 
-                y_val=y_val,  
-                grid_search_params=self.model_params_grids.get(model_name, None)  # Safely get params or None
-            )
-            thread.tuning_completed.connect(self.on_tuning_completed)
-            threads.append(thread)
-            thread.start()
-        
-        for thread in threads:
-           thread.wait()  # Wait for all threads to complete
+            models = {
+                'KNN': KNearestNeighbours(),
+                'Classification Tree': ClassificationTree(),
+                'Softmax Regression': SoftmaxRegression()
+            }
+            
+            threads = []
+            for model_name, model in models.items():
+                thread = ModelTuningThread(
+                    model_name=model_name, 
+                    model=model, 
+                    X_train=X_train, 
+                    y_train=y_train, 
+                    X_val=X_val, 
+                    y_val=y_val,  
+                    grid_search_params=self.model_params_grids.get(model_name, None)  # Safely get params or None
+                )
+                thread.tuning_completed.connect(self.on_tuning_completed)
+                threads.append(thread)
+                thread.start()
+            
+            for thread in threads:
+                thread.wait()  # Wait for all threads to complete
+        except ValueError as e:
+            self.tuning_error.emit(str(e))
+
 
     def on_tuning_completed(self, model_name, best_model, grid_search):
         if model_name == 'KNN':
@@ -574,8 +587,8 @@ class TuningPlotWidget(QWidget):
         # Plot Softmax Regression heatmap
         softmax_scores_table = self.reshape_scores(softmax_grid_search.scores_, softmax_grid_search.param_grid)
         sns.heatmap(softmax_scores_table, annot=True, cmap='coolwarm', fmt='.3f',
-                    xticklabels=softmax_grid_search.param_grid['n_iterations'],
-                    yticklabels=softmax_grid_search.param_grid['learning_rate'],
+                    xticklabels=softmax_grid_search.param_grid['learning_rate'],
+                    yticklabels=softmax_grid_search.param_grid['n_iterations'],
                     ax=ax3, cbar_kws={'label': 'Score'})
         ax3.set_title('Softmax Regression Tuning Results')
         ax3.set_xlabel('N Iterations')
