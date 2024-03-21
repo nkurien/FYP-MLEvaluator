@@ -1,6 +1,6 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QHBoxLayout, QFileDialog, QMessageBox, QCheckBox, QScrollArea,QProgressBar, QInputDialog
-from PyQt5.QtCore import Qt, QThread, pyqtSignal
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QHBoxLayout, QFileDialog, QMessageBox, QCheckBox, QScrollArea,QProgressBar, QInputDialog, QToolButton, QFrame,QMainWindow
+from PyQt5.QtCore import Qt, QThread, pyqtSignal, QPropertyAnimation, QEasingCurve
 from preprocessing import load_dataset
 from knn import KNearestNeighbours
 from classification_tree import ClassificationTree
@@ -60,7 +60,7 @@ class MainWindow(QWidget):
         self.setWindowTitle('Dataset Loader')
         self.setGeometry(100, 100, 1250, 900)  
         self.init_ui()
-    
+        
     def init_ui(self):
         self.main_layout = QVBoxLayout()
 
@@ -108,7 +108,7 @@ class MainWindow(QWidget):
         self.preview_label.setAlignment(Qt.AlignLeft | Qt.AlignTop)
         self.preview_label.setWordWrap(True)
 
-        self.train_button = QPushButton('Train Models')
+        self.train_button = QPushButton('Evaluate Models')
         self.train_button.setEnabled(False)
         self.train_button.clicked.connect(self.train_models)
         self.main_layout.addWidget(self.progress_bar)
@@ -351,12 +351,18 @@ class MainWindow(QWidget):
             # Preparation of data and preprocessor should already be done
             self.tuning_thread = TuningThread(self.X, self.y, self.preprocessor)
             self.tuning_thread.tuning_completed.connect(self.on_tuning_completed)
+            self.tuning_thread.tuning_progress.connect(self.update_progress)  # Connect progress signal
             self.tuning_thread.tuning_error.connect(self.on_tuning_error)
             self.tuning_thread.start()
+            print("Tuning started")
             self.tune_button.setEnabled(False)  # Disable the buttons while tuning is in progress
             self.train_button.setEnabled(False)
+            self.abort_button.setVisible(True)  # Show the abort button
+            self.abort_button.clicked.disconnect()  # Disconnect previous connection
+            self.abort_button.clicked.connect(self.abort_tuning)  # Connect abort button to tuning abort
         except ValueError as e:
             QMessageBox.warning(self, 'Tuning Error', str(e) + '\nPlease check if the columns were inputted correctly during the preprocessing phase.')
+
 
     
     def on_tuning_completed(self, best_knn, best_tree, best_softmax, knn_grid_search, tree_grid_search, softmax_grid_search):
@@ -374,9 +380,19 @@ class MainWindow(QWidget):
 
         QMessageBox.information(self, 'Tuning Complete', 'Models have been tuned successfully.')
         self.train_button.setEnabled(True)  # Enable the "Train Models" button
+        self.abort_button.setVisible(False)  # Hide the abort button
+        self.progress_bar.setValue(0)  # Reset progress bar to 0%
     
     def on_tuning_error(self, error_message):
         QMessageBox.warning(self, 'Tuning Error', error_message + '\nPlease check if the columns were inputted correctly during the preprocessing phase.')
+    
+    def abort_tuning(self):
+        self.tuning_thread.abort()
+        self.abort_button.setVisible(False)
+        self.tune_button.setEnabled(True)
+        QMessageBox.information(self, 'Tuning Aborted', 'Tuning has been aborted.')
+        print("Tuning Aborted")
+        self.progress_bar.setValue(0)  # Reset progress bar to 0%
 
 
     
@@ -396,6 +412,8 @@ class MainWindow(QWidget):
         self.training_thread.start()
         
         self.abort_button.setVisible(True)
+        self.abort_button.clicked.disconnect()  # Disconnect previous connection
+        self.abort_button.clicked.connect(self.abort_training)  # Connect abort button to training abort
         self.train_button.setEnabled(False)
         self.progress_bar.setValue(0)
     
@@ -404,10 +422,13 @@ class MainWindow(QWidget):
     
     def display_scores(self, model_name, scores):
         if model_name == 'KNN':
+            self.knn_scores = scores
             self.knn_label.setText(f'KNN Accuracy Scores:\n{scores}')
         elif model_name == 'Classification Tree':
+            self.tree_scores = scores
             self.tree_label.setText(f'Classification Tree Accuracy Scores:\n{scores}')
         elif model_name == 'Softmax Regression':
+            self.softmax_scores = scores
             self.softmax_label.setText(f'Softmax Regression Accuracy Scores:\n{scores}')
     
     def plot_confusion_matrix(self, y_true, y_pred, labels, model_name):
@@ -416,18 +437,31 @@ class MainWindow(QWidget):
     def on_training_completed(self, scores, y_true, y_preds, labels, knn_metrics, tree_metrics, softmax_metrics):
         self.confusion_matrix_plot.plot_confusion_matrices(y_true, y_preds, labels, ['KNN', 'Classification Tree', 'Softmax Regression'])
         QMessageBox.information(self, 'Training Complete', 'Models have been trained successfully.')
-        self.display_metrics(knn_metrics, tree_metrics, softmax_metrics)
-        # Set visibility of metrics labels to True
+        
+        knn_mean_score = np.mean(self.knn_scores)
+        tree_mean_score = np.mean(self.tree_scores)
+        softmax_mean_score = np.mean(self.softmax_scores)
+        
+        self.display_metrics(knn_metrics, tree_metrics, softmax_metrics, knn_mean_score, tree_mean_score, softmax_mean_score)
+        
         self.knn_metrics_label.setVisible(True)
         self.tree_metrics_label.setVisible(True)
         self.softmax_metrics_label.setVisible(True)
         self.abort_button.setVisible(False)
         self.train_button.setEnabled(True)
     
-    def display_metrics(self, knn_metrics, tree_metrics, softmax_metrics):
-        knn_metrics_text = 'KNN Metrics:\n' + '\n'.join([f'{metric}: {value:.3f}' for metric, value in knn_metrics.items()])
-        tree_metrics_text = 'Classification Tree Metrics:\n' + '\n'.join([f'{metric}: {value:.3f}' for metric, value in tree_metrics.items()])
-        softmax_metrics_text = 'Softmax Regression Metrics:\n' + '\n'.join([f'{metric}: {value:.3f}' for metric, value in softmax_metrics.items()])
+    def display_metrics(self, knn_metrics, tree_metrics, softmax_metrics, knn_mean_score, tree_mean_score, softmax_mean_score):
+        knn_metrics_text = 'KNN Metrics:\n' + \
+                        f'accuracy: {knn_mean_score:.3f}\n' + \
+                        '\n'.join([f'{metric}: {value:.3f}' for metric, value in knn_metrics.items()])
+        
+        tree_metrics_text = 'Classification Tree Metrics:\n' + \
+                            f'accuracy: {tree_mean_score:.3f}\n' + \
+                            '\n'.join([f'{metric}: {value:.3f}' for metric, value in tree_metrics.items()])
+        
+        softmax_metrics_text = 'Softmax Regression Metrics:\n' + \
+                            f'accuracy: {softmax_mean_score:.3f}\n' + \
+                            '\n'.join([f'{metric}: {value:.3f}' for metric, value in softmax_metrics.items()])
         
         self.knn_metrics_label.setText(knn_metrics_text)
         self.tree_metrics_label.setText(tree_metrics_text)
@@ -506,6 +540,7 @@ class TrainingThread(QThread):
 class TuningThread(QThread):
     tuning_completed = pyqtSignal(object, object, object, object, object, object)
     tuning_error = pyqtSignal(str)
+    tuning_progress = pyqtSignal(int)  # Add the tuning_progress signal
     
     def __init__(self, X, y, preprocessor, model_params_grids=None, parent=None):
         super().__init__(parent)
@@ -520,6 +555,8 @@ class TuningThread(QThread):
         self.knn_grid_search = None
         self.tree_grid_search = None
         self.softmax_grid_search = None
+        self.tuning_aborted = False  # Flag to indicate if tuning is aborted
+
     
     def run(self):
         try:
@@ -536,6 +573,9 @@ class TuningThread(QThread):
             
             threads = []
             for model_name, model in models.items():
+                if self.tuning_aborted:  # Check if tuning is aborted
+                    break
+                
                 thread = ModelTuningThread(
                     model_name=model_name, 
                     model=model, 
@@ -543,14 +583,24 @@ class TuningThread(QThread):
                     y_train=y_train, 
                     X_val=X_val, 
                     y_val=y_val,  
-                    grid_search_params=self.model_params_grids.get(model_name, None)  # Safely get params or None
+                    grid_search_params=self.model_params_grids.get(model_name, None)
                 )
                 thread.tuning_completed.connect(self.on_tuning_completed)
                 threads.append(thread)
                 thread.start()
             
+            total_threads = len(threads)
+            completed_threads = 0
+
             for thread in threads:
-                thread.wait()  # Wait for all threads to complete
+                if self.tuning_aborted:  # Check if tuning is aborted
+                    break
+                
+                thread.wait()  # Wait for the thread to complete
+                completed_threads += 1
+                progress = int((completed_threads / total_threads) * 100)
+                self.tuning_progress.emit(progress)  # Emit the progress update
+
         except ValueError as e:
             self.tuning_error.emit(str(e))
 
@@ -572,6 +622,9 @@ class TuningThread(QThread):
                 self.best_models.get('KNN'), self.best_models.get('Classification Tree'), self.best_models.get('Softmax Regression'),
                 self.knn_grid_search, self.tree_grid_search, self.softmax_grid_search
             )
+
+    def abort(self):
+        self.tuning_aborted = True  # Set the abort flag
 
 
 class ModelTuningThread(QThread):
@@ -629,7 +682,7 @@ class TuningPlotWidget(QWidget):
                     yticklabels=tree_grid_search.param_grid['max_depth'],
                     ax=ax2, cbar_kws={'label': 'Score'})
         ax2.set_title('Classification Tree Tuning Results')
-        ax2.set_xlabel('Min Size')
+        ax2.set_xlabel('Min Leaf Size')
         ax2.set_ylabel('Max Depth')
 
         # Plot Softmax Regression heatmap
