@@ -527,12 +527,18 @@ class LabelEncoder:
 
     def fit(self, y):
         """Fit label encoder to labels."""
+        # Convert input to NumPy array if it's a list
+        if isinstance(y, list):
+            y = np.array(y)
+
         # Check for higher-dimensional inputs
         if y.ndim > 2:
             raise ValueError("LabelEncoder expects input with 1 or 2 dimensions, got {}.".format(y.ndim))
+
         # Flatten y to 1D if it's 2D (shape: [n_samples, 1])
         if y.ndim == 2 and y.shape[1] == 1:
             y = y.ravel()
+
         self.classes_ = np.unique(y)
         self.mapping_ = {label: idx for idx, label in enumerate(self.classes_)}
         self.inverse_mapping_ = {idx: label for label, idx in self.mapping_.items()}
@@ -540,11 +546,16 @@ class LabelEncoder:
 
     def transform(self, y):
         """Transform labels to normalized encoding."""
+        # Convert input to NumPy array if it's a list
+        if isinstance(y, list):
+            y = np.array(y)
+
         # Check and flatten as in fit
         if y.ndim > 2:
             raise ValueError("LabelEncoder expects input with 1 or 2 dimensions, got {}.".format(y.ndim))
         if y.ndim == 2 and y.shape[1] == 1:
             y = y.ravel()
+
         return np.array([self.mapping_.get(label, -1) for label in y])  # Assuming unseen_label is -1
 
     def inverse_transform(self, y):
@@ -556,6 +567,7 @@ class LabelEncoder:
             raise ValueError("LabelEncoder expects input with 1 or 2 dimensions, got {}.".format(y.ndim))
         if y.ndim == 2 and y.shape[1] == 1:
             y = y.ravel()
+
         return np.array([self.inverse_mapping_.get(label) for label in y])
 
     def fit_transform(self, y):

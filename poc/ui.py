@@ -13,6 +13,7 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 from sklearn.metrics import confusion_matrix
+from metrics import calculate_metrics
 import seaborn as sns
 import numpy as np
 
@@ -163,6 +164,26 @@ class MainWindow(QWidget):
 
         self.confusion_matrix_plot = ConfusionMatrixPlot(self, width=15, height=4, dpi=100)
 
+        self.metrics_layout = QHBoxLayout()
+        
+        self.knn_metrics_label = QLabel('KNN Metrics:')
+        self.knn_metrics_label.setAlignment(Qt.AlignLeft)
+        self.knn_metrics_label.setVisible(False)  # Set initial visibility to False
+        self.knn_metrics_label.setTextInteractionFlags(Qt.TextSelectableByMouse)
+        self.metrics_layout.addWidget(self.knn_metrics_label)
+        
+        self.tree_metrics_label = QLabel('Classification Tree Metrics:')
+        self.tree_metrics_label.setAlignment(Qt.AlignCenter)
+        self.tree_metrics_label.setVisible(False)  # Set initial visibility to False
+        self.tree_metrics_label.setTextInteractionFlags(Qt.TextSelectableByMouse)
+        self.metrics_layout.addWidget(self.tree_metrics_label)
+        
+        self.softmax_metrics_label = QLabel('Softmax Regression Metrics:')
+        self.softmax_metrics_label.setAlignment(Qt.AlignRight)
+        self.softmax_metrics_label.setVisible(False)  # Set initial visibility to False
+        self.softmax_metrics_label.setTextInteractionFlags(Qt.TextSelectableByMouse)
+        self.metrics_layout.addWidget(self.softmax_metrics_label)
+
 
         # Adding widgets to the main layout
        # Adding widgets to the main_layout, which is set to the scroll_widget
@@ -186,6 +207,7 @@ class MainWindow(QWidget):
         self.main_layout.addWidget(self.tree_label)
         self.main_layout.addWidget(self.softmax_label)
         self.main_layout.addWidget(self.confusion_matrix_plot)
+        self.main_layout.addLayout(self.metrics_layout)
 
 
         self.setLayout(layout)
@@ -391,16 +413,30 @@ class MainWindow(QWidget):
     def plot_confusion_matrix(self, y_true, y_pred, labels, model_name):
         self.confusion_matrix_plot.plot_confusion_matrices(y_true, [y_pred], labels, [model_name])
     
-    def on_training_completed(self, scores, y_true, y_preds, labels):
+    def on_training_completed(self, scores, y_true, y_preds, labels, knn_metrics, tree_metrics, softmax_metrics):
         self.confusion_matrix_plot.plot_confusion_matrices(y_true, y_preds, labels, ['KNN', 'Classification Tree', 'Softmax Regression'])
         QMessageBox.information(self, 'Training Complete', 'Models have been trained successfully.')
+        self.display_metrics(knn_metrics, tree_metrics, softmax_metrics)
+        # Set visibility of metrics labels to True
+        self.knn_metrics_label.setVisible(True)
+        self.tree_metrics_label.setVisible(True)
+        self.softmax_metrics_label.setVisible(True)
         self.abort_button.setVisible(False)
         self.train_button.setEnabled(True)
+    
+    def display_metrics(self, knn_metrics, tree_metrics, softmax_metrics):
+        knn_metrics_text = 'KNN Metrics:\n' + '\n'.join([f'{metric}: {value:.3f}' for metric, value in knn_metrics.items()])
+        tree_metrics_text = 'Classification Tree Metrics:\n' + '\n'.join([f'{metric}: {value:.3f}' for metric, value in tree_metrics.items()])
+        softmax_metrics_text = 'Softmax Regression Metrics:\n' + '\n'.join([f'{metric}: {value:.3f}' for metric, value in softmax_metrics.items()])
+        
+        self.knn_metrics_label.setText(knn_metrics_text)
+        self.tree_metrics_label.setText(tree_metrics_text)
+        self.softmax_metrics_label.setText(softmax_metrics_text)
     
 class TrainingThread(QThread):
     model_progress = pyqtSignal(int)
     model_scores = pyqtSignal(str, list)
-    training_completed = pyqtSignal(list, list, list, list)
+    training_completed = pyqtSignal(list, list, list, list, dict, dict, dict)  # Add dictionaries for metrics
     
     def __init__(self, X, y, k, seed, preprocessor, best_knn, best_tree, best_softmax, parent=None):
         super().__init__(parent)
@@ -416,6 +452,9 @@ class TrainingThread(QThread):
     
     def run(self):
         # Create instances of the models
+        knn_metrics = {}
+        tree_metrics = {}
+        softmax_metrics = {}
         models = [
             ('KNN', self.best_knn),
             ('Classification Tree', self.best_tree),
@@ -445,12 +484,21 @@ class TrainingThread(QThread):
             y_true, y_pred = k_folds_predictions(model, self.X, self.y, self.k, self.seed, self.preprocessor)
             y_preds.append(y_pred)
             
+            #Calculate and save metrics from k-folds matrix
+            if model_name == 'KNN':
+                knn_metrics = calculate_metrics(y_true, y_pred)
+            elif model_name == 'Classification Tree':
+                tree_metrics = calculate_metrics(y_true, y_pred)
+            elif model_name == 'Softmax Regression':
+                softmax_metrics = calculate_metrics(y_true, y_pred)
+
             # Update progress
             progress = int((i + 1) / num_models * 100)
             self.model_progress.emit(progress)
         
         if not self.training_aborted:
-            self.training_completed.emit(scores, y_true, y_preds, labels)
+            self.training_completed.emit(scores, y_true, y_preds, labels, knn_metrics, tree_metrics, softmax_metrics)
+
     
     def abort(self):
         self.training_aborted = True
@@ -475,7 +523,7 @@ class TuningThread(QThread):
     
     def run(self):
         try:
-            X_train, X_val, y_train, y_val = train_test_split(self.X, self.y, test_size=0.2, seed=2345)
+            X_train, X_val, y_train, y_val = train_test_split(self.X, self.y, test_size=0.2, seed=3456)
             
             X_train = self.preprocessor.fit_transform(X_train)
             X_val = self.preprocessor.transform(X_val)
@@ -591,8 +639,8 @@ class TuningPlotWidget(QWidget):
                     yticklabels=softmax_grid_search.param_grid['n_iterations'],
                     ax=ax3, cbar_kws={'label': 'Score'})
         ax3.set_title('Softmax Regression Tuning Results')
-        ax3.set_xlabel('N Iterations')
-        ax3.set_ylabel('Learning Rate')
+        ax3.set_xlabel('Learning Rate')
+        ax3.set_ylabel('N Iterations')
 
         self.figure.tight_layout()
         self.canvas.draw()

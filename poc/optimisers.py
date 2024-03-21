@@ -112,7 +112,7 @@ class GridSearch:
         elif isinstance(self.model, SoftmaxRegression):
             param_grid = {
                 'n_iterations': [100, 500, 1000, 5000],
-                'learning_rate': [0.001,0.01, 0.1, 1, 10]
+                'learning_rate': [0.001,0.01, 0.1, 1]
             }
         else:
             raise ValueError(f"Unsupported model type: {type(self.model)}")

@@ -1,4 +1,5 @@
 import numpy as np
+from preprocessing import LabelEncoder
 
 def calculate_confusion_matrix(y_true, y_pred, classes):
     """
@@ -35,16 +36,21 @@ def calculate_metrics_from_cm(cm):
     FN = np.sum(cm, axis=1) - TP
     TN = np.sum(cm) - (FP + FN + TP)
     
-    precision = np.mean(TP / (TP + FP))
-    recall = np.mean(TP / (TP + FN))
-    f1_score = 2 * (precision * recall) / (precision + recall)
-    specificity = np.mean(TN / (TN + FP))
+    # Avoid division by zero using np.divide with the where parameter
+    precision = np.divide(TP, TP + FP, where=((TP + FP) != 0))
+    recall = np.divide(TP, TP + FN, where=((TP + FN) != 0))
     
+    # Handle F1 score calculation with potential zero denominator
+    f1_score = 2 * (precision * recall) / (precision + recall + (precision + recall == 0))
+    
+    specificity = np.divide(TN, TN + FP, where=((TN + FP) != 0))
+    
+    # Use nanmean to calculate the mean while ignoring NaN values
     return {
-        'precision': precision,
-        'recall': recall,
-        'f1_score': f1_score,
-        'specificity': specificity
+        'precision': np.nanmean(precision),
+        'recall': np.nanmean(recall),
+        'f1_score': np.nanmean(f1_score),
+        'specificity': np.nanmean(specificity)
     }
 
 def calculate_metrics(y_true, y_pred):
@@ -59,6 +65,11 @@ def calculate_metrics(y_true, y_pred):
     Returns:
     - metrics: dict containing precision, recall, F1 score, and specificity.
     """
+    # Convert string inputs to numeric using NumericConverter
+    converter = LabelEncoder()
+    y_true = converter.fit_transform(y_true)
+    y_pred = converter.transform(y_pred)
+    
     classes = np.unique(np.concatenate((y_true, y_pred)))
     cm = calculate_confusion_matrix(y_true, y_pred, classes)
     metrics = calculate_metrics_from_cm(cm)
