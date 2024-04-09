@@ -286,3 +286,5 @@ I've finally been working on the interface and showing this functionality on the
 Today I've managed to make the UI far more robust with threading using QThread from PyQT5's library. The interface can take a numerical dataset, and uses a numerical preprocessor to handle missing points and scale the data. The models are then trained and evaluated with 5-Folds Cross-Validation and the results are displayed with confusion matrices below. It's been time consuming getting this to work robustly and passing signals between the thread and the window.  
 I still need to work on implementing the CombinedPreprocessor so that I can throw more datasets at this, and then working on getting this to work on a validating set that can actually tune the models. The models are chosen rather ad-hoc for now. I'd really like to somehow quickly implement grid-search in the poc side so that I can tune an ideal instance of each model before they're evaluated.  
 I want this interface to show more metrics from the datasets the models have been trained on, for further performance analysis. 
+
+## 19th March
