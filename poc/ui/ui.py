@@ -1,19 +1,14 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QHBoxLayout, QFileDialog, QMessageBox, QCheckBox, QScrollArea,QProgressBar, QInputDialog, QToolButton, QFrame,QMainWindow
-from PyQt5.QtCore import Qt, QThread, pyqtSignal, QPropertyAnimation, QEasingCurve
+from PyQt5.QtWidgets import QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QHBoxLayout, QFileDialog, QMessageBox, QCheckBox, QScrollArea,QProgressBar, QInputDialog, QToolButton, QFrame,QMainWindow
+from PyQt5.QtCore import Qt
 from data_processing.preprocessing import load_dataset
-from models.knn import KNearestNeighbours
-from models.classification_tree import ClassificationTree
-from models.logistic_regression import SoftmaxRegression
-from data_processing.cross_validation import k_folds_accuracy_scores, k_folds_predictions
 from data_processing.preprocessing import PreprocessingPipeline, CombinedPreprocessor, SimpleImputer, MinMaxScaler, NumericConverter, OrdinalEncoder, OneHotEncoder
-from data_processing.train_test_split import train_test_split
-from models.optimisers import GridSearch
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 from sklearn.metrics import confusion_matrix
-from data_processing.metrics import calculate_metrics
+from controllers.training_thread import TrainingThread
+from controllers.tuning_thread import TuningThread
 import seaborn as sns
 import numpy as np
 
@@ -463,191 +458,6 @@ class MainWindow(QWidget):
         self.knn_metrics_label.setText(knn_metrics_text)
         self.tree_metrics_label.setText(tree_metrics_text)
         self.softmax_metrics_label.setText(softmax_metrics_text)
-
-   
-class TrainingThread(QThread):
-    model_progress = pyqtSignal(int)
-    model_scores = pyqtSignal(str, list)
-    training_completed = pyqtSignal(list, list, list, list, dict, dict, dict)  # Add dictionaries for metrics
-    
-    def __init__(self, X, y, k, seed, preprocessor, best_knn, best_tree, best_softmax, parent=None):
-        super().__init__(parent)
-        self.X = X
-        self.y = y
-        self.k = k
-        self.seed = seed
-        self.preprocessor = preprocessor
-        self.best_knn = best_knn
-        self.best_tree = best_tree
-        self.best_softmax = best_softmax
-        self.training_aborted = False
-    
-    def run(self):
-        # Create instances of the models
-        knn_metrics = {}
-        tree_metrics = {}
-        softmax_metrics = {}
-        models = [
-            ('KNN', self.best_knn),
-            ('Classification Tree', self.best_tree),
-            ('Softmax Regression', self.best_softmax)
-        ]
-        
-        # Create the preprocessor within the training thread
-       # preprocessor = PreprocessingPipeline([
-       #     ("imputer", SimpleImputer(strategy="mean")),
-       #    ("converter", NumericConverter()),
-       #     ("scaler", MinMaxScaler())
-       # ])
-        
-        labels = np.unique(self.y).tolist()  # Convert labels to a list
-        num_models = len(models)
-        y_preds = []
-        
-        for i, (model_name, model) in enumerate(models):
-            if self.training_aborted:
-                break
-            
-            # Perform cross-validation and get accuracy scores
-            scores = k_folds_accuracy_scores(model, self.X, self.y, self.k, self.seed, self.preprocessor)
-            self.model_scores.emit(model_name, scores)
-            
-            # Get the predicted labels for confusion matrix
-            y_true, y_pred = k_folds_predictions(model, self.X, self.y, self.k, self.seed, self.preprocessor)
-            y_preds.append(y_pred)
-            
-            #Calculate and save metrics from k-folds matrix
-            if model_name == 'KNN':
-                knn_metrics = calculate_metrics(y_true, y_pred)
-            elif model_name == 'Classification Tree':
-                tree_metrics = calculate_metrics(y_true, y_pred)
-            elif model_name == 'Softmax Regression':
-                softmax_metrics = calculate_metrics(y_true, y_pred)
-
-            # Update progress
-            progress = int((i + 1) / num_models * 100)
-            self.model_progress.emit(progress)
-        
-        if not self.training_aborted:
-            self.training_completed.emit(scores, y_true, y_preds, labels, knn_metrics, tree_metrics, softmax_metrics)
-
-    
-    def abort(self):
-        self.training_aborted = True
-
-class TuningThread(QThread):
-    tuning_completed = pyqtSignal(object, object, object, object, object, object)
-    tuning_error = pyqtSignal(str)
-    tuning_progress = pyqtSignal(int)  # Add the tuning_progress signal
-    
-    def __init__(self, X, y, preprocessor, model_params_grids=None, parent=None):
-        super().__init__(parent)
-        self.X = X
-        self.y = y
-        self.preprocessor = preprocessor
-        if model_params_grids is not None:
-            self.model_params_grids = model_params_grids # Use provided grids or default to empty dict
-        else: self.model_params_grids = {}
-        self.best_models = {}  # To store the best model from each tuning thread
-        self.model_names = ['KNN', 'Classification Tree', 'Softmax Regression']
-        self.knn_grid_search = None
-        self.tree_grid_search = None
-        self.softmax_grid_search = None
-        self.tuning_aborted = False  # Flag to indicate if tuning is aborted
-
-    
-    def run(self):
-        try:
-            X_train, X_val, y_train, y_val = train_test_split(self.X, self.y, test_size=0.2, seed=3456)
-            
-            X_train = self.preprocessor.fit_transform(X_train)
-            X_val = self.preprocessor.transform(X_val)
-
-            models = {
-                'KNN': KNearestNeighbours(),
-                'Classification Tree': ClassificationTree(),
-                'Softmax Regression': SoftmaxRegression()
-            }
-            
-            threads = []
-            for model_name, model in models.items():
-                if self.tuning_aborted:  # Check if tuning is aborted
-                    break
-                
-                thread = ModelTuningThread(
-                    model_name=model_name, 
-                    model=model, 
-                    X_train=X_train, 
-                    y_train=y_train, 
-                    X_val=X_val, 
-                    y_val=y_val,  
-                    grid_search_params=self.model_params_grids.get(model_name, None)
-                )
-                thread.tuning_completed.connect(self.on_tuning_completed)
-                threads.append(thread)
-                thread.start()
-            
-            total_threads = len(threads)
-            completed_threads = 0
-
-            for thread in threads:
-                if self.tuning_aborted:  # Check if tuning is aborted
-                    break
-                
-                thread.wait()  # Wait for the thread to complete
-                completed_threads += 1
-                progress = int((completed_threads / total_threads) * 100)
-                self.tuning_progress.emit(progress)  # Emit the progress update
-
-        except ValueError as e:
-            self.tuning_error.emit(str(e))
-
-
-    def on_tuning_completed(self, model_name, best_model, grid_search):
-        if model_name == 'KNN':
-            self.knn_grid_search = grid_search
-        elif model_name == 'Classification Tree':
-            self.tree_grid_search = grid_search
-        elif model_name == 'Softmax Regression':
-            self.softmax_grid_search = grid_search
-
-        self.best_models[model_name] = best_model
-        print(f"Tuning completed for {model_name}")
-
-        if len(self.best_models) == len(self.model_names):
-            # Emit the tuning_completed signal with the best models and GridSearch objects
-            self.tuning_completed.emit(
-                self.best_models.get('KNN'), self.best_models.get('Classification Tree'), self.best_models.get('Softmax Regression'),
-                self.knn_grid_search, self.tree_grid_search, self.softmax_grid_search
-            )
-
-    def abort(self):
-        self.tuning_aborted = True  # Set the abort flag
-
-
-class ModelTuningThread(QThread):
-    tuning_completed = pyqtSignal(str, object, object)  # Emits model name, best model, and GridSearch object
-
-    def __init__(self, model_name, model, X_train, y_train, X_val, y_val, grid_search_params=None, parent=None):
-        super().__init__(parent)
-        self.model_name = model_name
-        self.model = model
-        self.grid_search_params = grid_search_params  # Now optional
-        self.X_train = X_train
-        self.y_train = y_train
-        self.X_val = X_val
-        self.y_val = y_val
-        self.grid_search = None  # Add this line to store the GridSearch object
-
-    
-    def run(self):
-        # Perform grid search
-        self.grid_search = GridSearch(self.model, self.grid_search_params)
-        self.grid_search.fit(self.X_train, self.y_train, self.X_val, self.y_val)
-
-        # Emit the best model and GridSearch object
-        self.tuning_completed.emit(self.model_name, self.grid_search.best_model_, self.grid_search)
-        print(f"Tuning completed for {self.model_name}")
 
 class TuningPlotWidget(QWidget):
     def __init__(self, parent=None):
