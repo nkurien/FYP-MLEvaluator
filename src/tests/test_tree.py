@@ -2,7 +2,7 @@ import unittest
 import numpy as np
 import sys
 sys.path.append("..")
-from classification_tree import ClassificationTree  # Assuming the class is in classification_tree.py
+from models.classification_tree import ClassificationTree  # Assuming the class is in classification_tree.py
 
 class TestClassificationTree(unittest.TestCase):
 

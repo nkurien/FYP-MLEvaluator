@@ -2,7 +2,7 @@ import unittest
 import numpy as np
 import sys
 sys.path.append("..")
-from train_test_split import train_test_split  # Adjust the import according to your project structure
+from data_processing.train_test_split import train_test_split  # Adjust the import according to your project structure
 
 class TestTrainTestSplit(unittest.TestCase):
 

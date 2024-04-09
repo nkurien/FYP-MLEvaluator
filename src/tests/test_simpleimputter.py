@@ -2,7 +2,7 @@ import unittest
 import numpy as np
 import sys
 sys.path.append("..")
-from preprocessing import SimpleImputer
+from data_processing.preprocessing import SimpleImputer
 
 class TestSimpleImputer(unittest.TestCase):
     def setUp(self):

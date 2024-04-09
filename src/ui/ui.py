@@ -1,24 +1,21 @@
 import sys
-from PyQt5.QtWidgets import QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QHBoxLayout, QFileDialog, QMessageBox, QCheckBox, QScrollArea,QProgressBar, QInputDialog, QToolButton, QFrame,QMainWindow
+from PyQt5.QtWidgets import QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QHBoxLayout, QFileDialog, QMessageBox, QCheckBox, QScrollArea,QProgressBar
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QIcon
 from data_processing.preprocessing import load_dataset
-from data_processing.preprocessing import PreprocessingPipeline, CombinedPreprocessor, SimpleImputer, MinMaxScaler, NumericConverter, OrdinalEncoder, OneHotEncoder
-import matplotlib.pyplot as plt
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.figure import Figure
 from controllers.training_thread import TrainingThread
 from controllers.tuning_thread import TuningThread
+from controllers.preprocessing_handler import PreprocessingHandler
 from ui.confusion_matrix import ConfusionMatrixPlot
 from ui.tuning_widget import TuningPlotWidget
-import seaborn as sns
 import numpy as np
-
 
 class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle('Dataset Loader')
-        self.setGeometry(100, 100, 1250, 900)  
+        self.setWindowTitle('Model Evaluator')
+        self.setGeometry(100, 100, 1250, 900) 
+        self.setWindowIcon(QIcon('resources/icon.png'))
         self.init_ui()
         
     def init_ui(self):
@@ -219,6 +216,7 @@ class MainWindow(QWidget):
             QMessageBox.warning(self, 'No File Selected', 'Please select a dataset file.')
     
     def process_data(self):
+        handler = PreprocessingHandler()
         try:
             # Retrieve column indices from the text boxes
             categorical_columns = self.parse_column_indices(self.categorical_text.text())
@@ -244,7 +242,9 @@ class MainWindow(QWidget):
                 raise ValueError(f"Column index out of range. Maximum column index is {max_column_index}.")
 
             # Create the preprocessor based on the column types
-            self.preprocessor = self.create_preprocessor(categorical_columns, numerical_columns, ordinal_columns)
+            handler.set_data(self.X)
+            handler.set_column_indices(categorical_columns, numerical_columns, ordinal_columns)
+            self.preprocessor = handler.create_preprocessor()
 
             # Display the data points for each column type
             if len(categorical_columns) > 0:
@@ -276,35 +276,6 @@ class MainWindow(QWidget):
                 return list(map(int, text.split(','))) if text.strip() else []
             except ValueError:
                 raise ValueError("Invalid column indices. Please enter valid integers separated by commas.")
-    
-
-    def create_preprocessor(self, categorical_columns, numerical_columns, ordinal_columns):
-        # Create the individual preprocessing pipelines
-        categorical_pipeline = PreprocessingPipeline([
-            ("imputer", SimpleImputer(strategy="most_frequent")),
-            ("encoder", OneHotEncoder())
-        ])
-
-        numerical_pipeline = PreprocessingPipeline([
-            ("imputer", SimpleImputer(strategy="mean")),
-            ("converter", NumericConverter()),
-            ("scaler", MinMaxScaler())
-        ])
-
-        ordinal_pipeline = PreprocessingPipeline([
-            ("imputer", SimpleImputer(strategy="most_frequent")),
-            ("encoder", OrdinalEncoder())
-        ])
-
-        # Create the combined preprocessor
-        preprocessor = CombinedPreprocessor(
-            num = (numerical_pipeline, numerical_columns),
-            cat = (categorical_pipeline, categorical_columns),
-            ord = (ordinal_pipeline, ordinal_columns)
-        )
-
-        return preprocessor
-    
     
     def tune_models(self):
         try:
@@ -353,8 +324,6 @@ class MainWindow(QWidget):
         QMessageBox.information(self, 'Tuning Aborted', 'Tuning has been aborted.')
         print("Tuning Aborted")
         self.progress_bar.setValue(0)  # Reset progress bar to 0%
-
-
     
     def abort_training(self):
         self.training_thread.abort()

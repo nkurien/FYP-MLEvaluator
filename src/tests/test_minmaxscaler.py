@@ -3,8 +3,8 @@ import numpy as np
 import sys
 sys.path.append("..")
 from sklearn.datasets import load_iris
-from train_test_split import train_test_split
-from preprocessing import MinMaxScaler
+from data_processing.train_test_split import train_test_split
+from data_processing.preprocessing import MinMaxScaler
 
 class TestMinMaxScaler(unittest.TestCase):
 

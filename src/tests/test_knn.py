@@ -1,7 +1,7 @@
 import unittest
 import sys
 sys.path.append("..")
-from knn import KNearestNeighbours
+from models.knn import KNearestNeighbours
 import numpy as np
 
 class TestKNearestNeighbours(unittest.TestCase):

@@ -2,9 +2,9 @@ import unittest
 import numpy as np
 import sys
 sys.path.append("..")
-from cross_validation import _k_folds, k_folds_accuracy_scores, k_folds_accuracy_score
-from classification_tree import ClassificationTree
-from knn import KNearestNeighbours
+from data_processing.cross_validation import _k_folds, k_folds_accuracy_scores, k_folds_accuracy_score
+from models.classification_tree import ClassificationTree
+from models.knn import KNearestNeighbours
 
 class MockModel:
     def fit(self, X, y):
