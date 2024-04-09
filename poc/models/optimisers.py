@@ -3,9 +3,9 @@ from itertools import product
 import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
-from knn import KNearestNeighbours
-from classification_tree import ClassificationTree
-from logistic_regression import SoftmaxRegression
+from models.knn import KNearestNeighbours
+from models.classification_tree import ClassificationTree
+from models.logistic_regression import SoftmaxRegression
 
 
 class GridSearch:

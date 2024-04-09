@@ -1,6 +1,8 @@
 import numpy as np
-from train_test_split import train_test_split as split
-from preprocessing import LabelEncoder
+import sys
+sys.path.append("..")
+from data_processing.train_test_split import train_test_split as split
+from data_processing.preprocessing import LabelEncoder
 
 class ClassificationTree:
     """

@@ -1,5 +1,5 @@
 import numpy as np
-from preprocessing import LabelEncoder
+from data_processing.preprocessing import LabelEncoder
 
 def calculate_confusion_matrix(y_true, y_pred, classes):
     """

@@ -1,5 +1,7 @@
 import numpy as np
-import train_test_split as split
+import sys
+sys.path.append("..")
+import data_processing.train_test_split as split
 
 
 def _k_folds(X, y, k=5, seed=None) :

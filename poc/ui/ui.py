@@ -1,19 +1,19 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QHBoxLayout, QFileDialog, QMessageBox, QCheckBox, QScrollArea,QProgressBar, QInputDialog, QToolButton, QFrame,QMainWindow
 from PyQt5.QtCore import Qt, QThread, pyqtSignal, QPropertyAnimation, QEasingCurve
-from preprocessing import load_dataset
-from knn import KNearestNeighbours
-from classification_tree import ClassificationTree
-from logistic_regression import SoftmaxRegression
-from cross_validation import k_folds_accuracy_scores, k_folds_predictions
-from preprocessing import PreprocessingPipeline, CombinedPreprocessor, SimpleImputer, MinMaxScaler, NumericConverter, OrdinalEncoder, OneHotEncoder
-from train_test_split import train_test_split
-from optimisers import GridSearch
+from data_processing.preprocessing import load_dataset
+from models.knn import KNearestNeighbours
+from models.classification_tree import ClassificationTree
+from models.logistic_regression import SoftmaxRegression
+from data_processing.cross_validation import k_folds_accuracy_scores, k_folds_predictions
+from data_processing.preprocessing import PreprocessingPipeline, CombinedPreprocessor, SimpleImputer, MinMaxScaler, NumericConverter, OrdinalEncoder, OneHotEncoder
+from data_processing.train_test_split import train_test_split
+from models.optimisers import GridSearch
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 from sklearn.metrics import confusion_matrix
-from metrics import calculate_metrics
+from data_processing.metrics import calculate_metrics
 import seaborn as sns
 import numpy as np
 
@@ -50,9 +50,6 @@ class ConfusionMatrixPlot(FigureCanvas):
 
         self.figure.tight_layout()  # Adjust layout to fit everything
         self.draw()  # Redraw the canvas with the new content
-
-
-
 
 class MainWindow(QWidget):
     def __init__(self):
@@ -466,7 +463,8 @@ class MainWindow(QWidget):
         self.knn_metrics_label.setText(knn_metrics_text)
         self.tree_metrics_label.setText(tree_metrics_text)
         self.softmax_metrics_label.setText(softmax_metrics_text)
-    
+
+   
 class TrainingThread(QThread):
     model_progress = pyqtSignal(int)
     model_scores = pyqtSignal(str, list)
@@ -704,13 +702,4 @@ class TuningPlotWidget(QWidget):
         param_values = [param_grid[name] for name in param_names]
         scores_table = np.reshape(scores, (len(param_values[0]), len(param_values[1])))
         return scores_table
-
-def main():
-    app = QApplication(sys.argv)
-    window = MainWindow()
-    window.show()
-    sys.exit(app.exec_())
-
-if __name__ == '__main__':
-    main()
 
