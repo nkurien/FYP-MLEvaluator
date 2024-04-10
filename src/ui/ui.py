@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QHBoxLayout, QFileDialog, QMessageBox, QCheckBox, QScrollArea,QProgressBar
+from PyQt5.QtWidgets import QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QHBoxLayout, QFileDialog, QMessageBox, QCheckBox, QScrollArea,QProgressBar, QDialog
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
 from data_processing.preprocessing import load_dataset
@@ -8,6 +8,7 @@ from controllers.tuning_thread import TuningThread
 from controllers.preprocessing_handler import PreprocessingHandler
 from ui.confusion_matrix import ConfusionMatrixPlot
 from ui.tuning_widget import TuningPlotWidget
+from ui.advanced_settings import AdvancedSettingsDialog
 import numpy as np
 
 class MainWindow(QWidget):
@@ -17,6 +18,9 @@ class MainWindow(QWidget):
         self.setGeometry(100, 100, 1250, 900) 
         self.setWindowIcon(QIcon('resources/icon.png'))
         self.init_ui()
+
+        self.num_folds = 5  # Default value
+        self.training_seed = 2108 #Default
         
     def init_ui(self):
         self.main_layout = QVBoxLayout()
@@ -141,6 +145,9 @@ class MainWindow(QWidget):
         self.softmax_metrics_label.setTextInteractionFlags(Qt.TextSelectableByMouse)
         self.metrics_layout.addWidget(self.softmax_metrics_label)
 
+        self.advanced_settings_button = QPushButton("Advanced Settings")
+        self.advanced_settings_button.clicked.connect(self.open_advanced_settings) 
+
 
         # Adding widgets to the main layout
        # Adding widgets to the main_layout, which is set to the scroll_widget
@@ -160,6 +167,7 @@ class MainWindow(QWidget):
         self.main_layout.addWidget(self.tuning_plot_widget)
         self.main_layout.addWidget(self.train_button)
         self.main_layout.addWidget(self.abort_button)
+        self.main_layout.addWidget(self.advanced_settings_button)
         self.main_layout.addWidget(self.knn_label)
         self.main_layout.addWidget(self.tree_label)
         self.main_layout.addWidget(self.softmax_label)
@@ -333,7 +341,7 @@ class MainWindow(QWidget):
 
     
     def train_models(self):
-        self.training_thread = TrainingThread(self.X, self.y, k=5, seed=2108, preprocessor=self.preprocessor,
+        self.training_thread = TrainingThread(self.X, self.y, k=self.num_folds, seed=self.training_seed, preprocessor=self.preprocessor,
                                             best_knn=self.best_knn, best_tree=self.best_tree, best_softmax=self.best_softmax)
         self.training_thread.model_progress.connect(self.update_progress)
         self.training_thread.model_scores.connect(self.display_scores)
@@ -348,6 +356,21 @@ class MainWindow(QWidget):
     
     def update_progress(self, progress):
         self.progress_bar.setValue(progress)
+    
+    def open_advanced_settings(self):
+        current_settings = {
+            "num_folds": self.num_folds,
+            "seed": self.training_seed,  # Add the current seed value
+        }
+        dialog = AdvancedSettingsDialog(current_settings, self)
+        if dialog.exec_() == QDialog.Accepted:
+            settings = dialog.get_settings()
+            self.update_advanced_settings(settings)
+
+    def update_advanced_settings(self, settings):
+        # Update the corresponding variables in MainWindow
+        self.num_folds = settings["num_folds"]
+        self.seed = settings["seed"]  # Update the seed value
     
     def display_scores(self, model_name, scores):
         if model_name == 'KNN':
