@@ -88,8 +88,15 @@ class SoftmaxRegression:
         Computes the categorical cross-entropy loss.
         """
         epsilon = 1e-15  # To prevent log(0)
+        # Apply clipping to y_pred to ensure values are within (epsilon, 1-epsilon)
+        y_pred_clipped = np.clip(y_pred, epsilon, 1 - epsilon)
+        # Compute the cross-entropy loss
+        cross_entropy_loss = -np.mean(np.sum(y_true * np.log(y_pred_clipped), axis=1))
+        # Compute the L2 regularization penalty
         l2_penalty = (self.lambda_ / 2) * np.sum(np.square(self.weights))
-        return -np.mean(y_true * np.log(y_pred)) + l2_penalty
+        # Return the total loss, which is the sum of cross-entropy loss and L2 penalty
+        total_loss = cross_entropy_loss + l2_penalty
+        return total_loss
 
     
     def gradient_descent_step(self, X, y_one_hot, probabilities):

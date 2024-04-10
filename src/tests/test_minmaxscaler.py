@@ -45,10 +45,5 @@ class TestMinMaxScaler(unittest.TestCase):
         # Test if test data is scaled properly
         self.assertTrue(np.all(scaled_X_test >= 0) and np.all(scaled_X_test <= 1))
 
-
-
-
-
-
 if __name__ == '__main__':
     unittest.main()
