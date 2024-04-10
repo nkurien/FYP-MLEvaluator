@@ -145,7 +145,7 @@ class MainWindow(QWidget):
         self.softmax_metrics_label.setTextInteractionFlags(Qt.TextSelectableByMouse)
         self.metrics_layout.addWidget(self.softmax_metrics_label)
 
-        self.advanced_settings_button = QPushButton("Advanced Settings")
+        self.advanced_settings_button = QPushButton("Evaluation Settings")
         self.advanced_settings_button.clicked.connect(self.open_advanced_settings) 
 
 
@@ -370,7 +370,7 @@ class MainWindow(QWidget):
     def update_advanced_settings(self, settings):
         # Update the corresponding variables in MainWindow
         self.num_folds = settings["num_folds"]
-        self.seed = settings["seed"]  # Update the seed value
+        self.training_seed = settings["seed"]  # Update the seed value
     
     def display_scores(self, model_name, scores):
         if model_name == 'KNN':
