@@ -1,5 +1,5 @@
 # Project Diary 
-_(Updated 01/12/23)_
+_(Updated 11/04/24)_
 
  Much of my notes prior to Week 1 have been handwritten, I hope to transcribe more onto here in due time.
 
@@ -288,3 +288,44 @@ I still need to work on implementing the CombinedPreprocessor so that I can thro
 I want this interface to show more metrics from the datasets the models have been trained on, for further performance analysis. 
 
 ## 19th March
+The last couple of days have been very productive with the UI implementation, with various functionalities having been added and working together.  
+  
+ Since the last entry, I've managed to implement multiple threads working asynchronously during the tuning process. The preprocessing and tuning functionalities are working with their corresponding buttons. I've reached a point where my application now displays the grid search of the models during hyperparameter tuning.
+   
+There are still issues here and there with exception handling of data types and the progress bar doesn't work consistently. I've managed to implement the backend for the metrics calculations - I now need to add this to the UI.
+  
+## 21st March
+My supervisor meeting is today! I'll be working on displaying my metrics onto the interface before then and clearing up the issues made in the previous diary entry.  
+I'll synchronise the tuning functionality with the progress bar and the abort button. I also need to find the overall accuracy from my k-folds cross validation scores and append that to the metrics.  
+I hope to demo my app to my supervisor and take any necessary feedback with me such that I can adapt as needed.
+
+## 22nd March
+My supervisor meeting went relatively well, and my supervisor had no qualms overall over the functionality and depth of my app. Rather, he emphasised the importance of my report and how it must effectively back up and demonstrate every aspect of the application. I've lots of work to do on the report. The way that results are shown seem fine, but he reminded me to make a user manual to explain the interface to him, as this was not trivial to him.
+  
+This is the only meeting I failed to record but we did manage to talk about the report a little more and he reminded me to implement a suitable professional issues section as well.
+
+## 24th March
+Assessing what's left to implement, I very much want to add the ability for the user to change parameters in both the evaluation and tuning process. It shouldn't be too complicated for the former.
+  
+I'd very much like a logo for my project while it runs, rather than the blank white page I see on MacOS. My little sister has offered to help with this, as a design student herself, and is making mockups for the app now.
+  
+I'll be spending the next week or two, focusing more on the report than the implementation. Other modules require a lot of my attention right now so I expect a break in commits until a lot of this has been completed. My priority is shifting towards updating the interim report with new material and current progress. 
+  
+My code for the UI implementation is a mess and needs refactoring. I think I can not only refactor this but implement a design pattern called MVC. This pattern seems to fit perfectly with my application, but it would involve making some new modules to stow away the thread classes away from the UI elements. I'd probably have to change the way that some of the UI app works to keep ui.py only focused on UI elements. I generally need to tidy much in my repo.
+  
+Finally, I need to make decisions about which datasets to use in my findings and results. I'll try to select datasets that reflect a representative interpretation of the models' performance. 
+
+## 4th April
+
+I've been very bogged down by other projects and assignments but I've kept a focus on writing my report and wrapping up the app alongside. I've been giving some though of how to handle the app's distribution. I've considered building an .exe file but I'm having serious issues with running it in a stable way, with path issues. I'm having worse issues with making it work on Windows. I've also considered using PyPi and allowing the user to install it with "pip install". And finally, I suppose it's not a terrible backup plan just to let the user run the source code, but I'd rather not resort to this.  
+  
+The logo is ready! And I hope to use this in accordance with the apps as they are distributed.
+  
+I hope to refactor the repository very soon and add missing research materials before submission.
+
+## 11th April
+It's been a hectic day! It's the end of the road. I may add one more diary entry after submission for the sake of my own personal reflection. All in all, just trying to make sure I submit a stable finished product in time.
+  
+I've learned a tremendous amount from this project. Perhaps the most important lesson has been - simply just deliver. Don't worry about breaking anything, just experiment and see what sticks.
+  
+I do hope this will be the first of many future machine learning projects for myself personally, and I can imagine continuing to work on this on beyond submission.
