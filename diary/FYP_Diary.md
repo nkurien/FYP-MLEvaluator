@@ -267,44 +267,44 @@ The Softmax Regression Classifier has been implemented! I now have three working
 I began by developing a binomial classification implementation, with basic logistic regression implemented - and this made it far simpler to visualise how to put together a multi-class softmax regression classifier. Gradient descent is explicitly implemented with a loss history to track the loss with every iteration of training. 
 
 
-## 22nd February
+### 22nd February
 I've been working on the wine quality dataset in a jupyter notebook of the same name. It's a pretty challenging dataset to work with and allows me to put my three models to the test and against each other.
   
-## 6th March
+### 6th March
 I've been working on preprocessing a lot since my last entry. I've been significant delayed by other deadlines unfortunately, I need to make a headway in wrapping up this project into a final product, with an interface. 
 
-## 8th March
+### 8th March
 I've been working on testing my preprocessing tools on a dataset, so I've been working on a notebook under the name of preprocessing. I've implemented a preprocessing pipeline, as well as a one-hot and ordinal encoder and an imputter for handling missing data. The imputation has been challenging to work with, especially with many data types. I've been using a dataset from the UCI repository called 'Congressional Voting Records' which is almost entirely categorical, with missing data and no numerical data at all - so it's a good example to test out my preprocessing tools.
 
 I've noted that I might need to implement a label encoder for my models, I don't think my models have sufficient handling for when my labels are not just integers. I'm also thinking of automating the confusion matrix display function, it'll save much hassle when putting these jupyter notebooks together.
 
-## 13th March
+### 13th March
 I've made significant progress with my preprocessing module and have made a CombinedPreprocessor that can combine preprocessors for different types of data (numerical, ordinal and categorical). This works a bit similar to SKLearn's ColumnTransformer functionality, and allows transformation of specified feature columns in the dataset. Combining these transformations into one object abstraction makes it easier to pass between cross-validation functions.  
 I've finally been working on the interface and showing this functionality on the desktop. So far, the implementation is very simple and much more needs to be put together to allow all kinds of datasets to be loaded and trained upon, but I've managed to show something that isn't just a Jupyter Notebook. I hope to collect some more datasets and clean up the dataset folder a little, allow preset choices and find a way to automate the preprocessor - or simply allow the end-user to select how the dataset should be preprocessed on separate columns. It's been a fruitful week.  
 
-## 14th March
+### 14th March
 Today I've managed to make the UI far more robust with threading using QThread from PyQT5's library. The interface can take a numerical dataset, and uses a numerical preprocessor to handle missing points and scale the data. The models are then trained and evaluated with 5-Folds Cross-Validation and the results are displayed with confusion matrices below. It's been time consuming getting this to work robustly and passing signals between the thread and the window.  
 I still need to work on implementing the CombinedPreprocessor so that I can throw more datasets at this, and then working on getting this to work on a validating set that can actually tune the models. The models are chosen rather ad-hoc for now. I'd really like to somehow quickly implement grid-search in the poc side so that I can tune an ideal instance of each model before they're evaluated.  
 I want this interface to show more metrics from the datasets the models have been trained on, for further performance analysis. 
 
-## 19th March
+### 19th March
 The last couple of days have been very productive with the UI implementation, with various functionalities having been added and working together.  
   
  Since the last entry, I've managed to implement multiple threads working asynchronously during the tuning process. The preprocessing and tuning functionalities are working with their corresponding buttons. I've reached a point where my application now displays the grid search of the models during hyperparameter tuning.
    
 There are still issues here and there with exception handling of data types and the progress bar doesn't work consistently. I've managed to implement the backend for the metrics calculations - I now need to add this to the UI.
   
-## 21st March
+### 21st March
 My supervisor meeting is today! I'll be working on displaying my metrics onto the interface before then and clearing up the issues made in the previous diary entry.  
 I'll synchronise the tuning functionality with the progress bar and the abort button. I also need to find the overall accuracy from my k-folds cross validation scores and append that to the metrics.  
 I hope to demo my app to my supervisor and take any necessary feedback with me such that I can adapt as needed.
 
-## 22nd March
+### 22nd March
 My supervisor meeting went relatively well, and my supervisor had no qualms overall over the functionality and depth of my app. Rather, he emphasised the importance of my report and how it must effectively back up and demonstrate every aspect of the application. I've lots of work to do on the report. The way that results are shown seem fine, but he reminded me to make a user manual to explain the interface to him, as this was not trivial to him.
   
 This is the only meeting I failed to record but we did manage to talk about the report a little more and he reminded me to implement a suitable professional issues section as well.
 
-## 24th March
+### 24th March
 Assessing what's left to implement, I very much want to add the ability for the user to change parameters in both the evaluation and tuning process. It shouldn't be too complicated for the former.
   
 I'd very much like a logo for my project while it runs, rather than the blank white page I see on MacOS. My little sister has offered to help with this, as a design student herself, and is making mockups for the app now.
@@ -315,7 +315,7 @@ My code for the UI implementation is a mess and needs refactoring. I think I can
   
 Finally, I need to make decisions about which datasets to use in my findings and results. I'll try to select datasets that reflect a representative interpretation of the models' performance. 
 
-## 4th April
+### 4th April
 
 I've been very bogged down by other projects and assignments but I've kept a focus on writing my report and wrapping up the app alongside. I've been giving some though of how to handle the app's distribution. I've considered building an .exe file but I'm having serious issues with running it in a stable way, with path issues. I'm having worse issues with making it work on Windows. I've also considered using PyPi and allowing the user to install it with "pip install". And finally, I suppose it's not a terrible backup plan just to let the user run the source code, but I'd rather not resort to this.  
   
@@ -323,7 +323,7 @@ The logo is ready! And I hope to use this in accordance with the apps as they ar
   
 I hope to refactor the repository very soon and add missing research materials before submission.
 
-## 11th April
+### 11th April
 It's been a hectic day! It's the end of the road. I may add one more diary entry after submission for the sake of my own personal reflection. All in all, just trying to make sure I submit a stable finished product in time.
   
 I've learned a tremendous amount from this project. Perhaps the most important lesson has been - simply just deliver. Don't worry about breaking anything, just experiment and see what sticks.

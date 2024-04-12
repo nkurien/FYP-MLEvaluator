@@ -8,8 +8,8 @@ def main():
 
     # Create an instance of QApplication
     app = QApplication(sys.argv)
-    app.setWindowIcon(QIcon('/Users/nathan/Desktop/PROJECT/src/ui/resources/icon.png'))
-    app.setApplicationName("your title")
+    app.setWindowIcon(QIcon('ui/resources/icon.png'))
+    app.setApplicationName("ML Evaluation App")
 
     # Create an instance of your application's main window
     main_window = MainWindow()

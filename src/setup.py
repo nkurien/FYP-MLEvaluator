@@ -27,7 +27,7 @@ setup(
     },
     package_data={
         # Correct 'ui': ['resources/*'], if 'resources' is a directory inside 'ui'
-        'ui': ['images/*'],  # If you store your images here
+        #'ui': ['resources/*'],  # If you store your images here
     },
     tests_require=['pytest'],
     # Include any additional package data
@@ -39,14 +39,3 @@ setup(
     ],
     python_requires='>=3.9',  # Specify the minimum required Python version
 )
-
-if sys.platform == 'darwin':
-    import PyInstaller.__main__
-    PyInstaller.__main__.run([
-        '--name=Machine Learning Model Evaluator',
-        '--onefile',
-        '--windowed',
-        '--add-data=ui/resources:Resources',
-        '--icon=ui/resources/icon.icns',
-        'main.py'
-    ])
